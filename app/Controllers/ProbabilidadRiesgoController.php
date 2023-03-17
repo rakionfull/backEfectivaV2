@@ -325,27 +325,62 @@ class ProbabilidadRiesgoController extends BaseController
     }
 
     public function destroy($id){
+        $input = $this->getRequestInput($this->request);
+        $model = new ProbabilidadRiesgo();
+        $model->find($id);
+        $this->db->transBegin();
         try {
-            $input = $this->getRequestInput($this->request);
-            $model = new ProbabilidadRiesgo();
-            $result = $model->destroy($id,$input);
-            $registrosProbabilidad = count($model->where('estado','1')->findAll());
-            $modelImpacto = new ImpactoRiesgo();
-            $registrosImpacto = count($modelImpacto->where('estado','1')->findAll());
-            if($registrosImpacto == 0 && $registrosProbabilidad == 0){
-                $model->updateScene($input,null);
+            if($model){
+                if($model->delete($id)){
+                    $this->db->transRollback();
+                    $input['is_deleted'] = 1;
+                    $model->update($id,$input);
+
+                    // $result = $model->destroy($id,$input);
+                    $registrosProbabilidad = count($model->where('estado','1')->findAll());
+                    $modelImpacto = new ImpactoRiesgo();
+                    $registrosImpacto = count($modelImpacto->where('estado','1')->findAll());
+                    if($registrosImpacto == 0 && $registrosProbabilidad == 0){
+                        $model->updateScene($input,null);
+                    }
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Probabilidad eliminada'
+                        ]
+                    );
+                }else{
+                    $input['is_deleted'] = 0;
+                    $input['date_deleted'] = null;
+                    $input['id_user_deleted'] = null;
+                    $model->update($id,$input);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existe probabilidad'
+                    ]
+                );
             }
-            return $this->getResponse(
-                [
-                    'error' => false,
-                    'msg' =>  $result
-                ]
-            );
+            $this->db->transCommit();
+
         } catch (\Throwable $th) {
+            $input['is_deleted'] = 0;
+            $input['date_deleted'] = null;
+            $input['id_user_deleted'] = null;
+            $model->update($id,$input);
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' =>  'Ocurrio un error '.$th->getMessage()
+                    'msg' =>  'No se pudo eliminar'
                 ]
             );
         }

@@ -8,6 +8,20 @@ class TipoRiesgo extends Model
 {
     protected $table = 'tipo_riesgo';
 
+    protected $useSoftDeletes   = false;
+    // protected $protectFields    = true;
+    protected $primaryKey       = 'id';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
+
     public function getAll(){
         $sql = "EXEC sp_list_tipo_riesgo";
         $result = $this->db->query($sql)->getResultArray();

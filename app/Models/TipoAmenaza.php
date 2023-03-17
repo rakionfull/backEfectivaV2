@@ -7,11 +7,22 @@ use CodeIgniter\Model;
 class TipoAmenaza extends Model
 {
     protected $table            = 'tipo_amenaza';
+    protected $useSoftDeletes   = false;
+    // protected $protectFields    = true;
+    protected $primaryKey       = 'id';
     protected $allowedFields    = [
+        'id',
         'tipo',
-        'estado'
+        'estado',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
     ];
-
+    
     public function getAll(){
         $sql = "EXEC sp_list_tipo_amenaza";
         $result = $this->db->query($sql)->getResultArray();

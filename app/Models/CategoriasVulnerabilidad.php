@@ -7,9 +7,19 @@ use CodeIgniter\Model;
 class CategoriasVulnerabilidad extends Model
 {
     protected $table            = 'categoria_vulnerabilidad';
+    protected $useSoftDeletes   = false;
+    protected $primaryKey       = 'id';
     protected $allowedFields    = [
+        'id',
         'categoria',
-        'estado'
+        'estado',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
     ];
 
     public function getAll(){

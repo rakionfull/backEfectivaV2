@@ -7,9 +7,20 @@ use CodeIgniter\Model;
 class DescripcionVulnerabilidad extends Model
 {
     protected $table            = 'desc_vulnerabilidad';
+    protected $useSoftDeletes   = false;
+    protected $primaryKey       = 'id';
+
     protected $allowedFields    = [
         'idcategoria',
-        'vulnerabilidad'
+        'vulnerabilidad',
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
     ];
     public function getAll(){
         $sql = "EXEC sp_list_desc_vulnerabilidad";

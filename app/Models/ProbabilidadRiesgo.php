@@ -6,8 +6,19 @@ use CodeIgniter\Model;
 class ProbabilidadRiesgo extends Model
 {
     protected $table = 'probabilidad_riesgo';
+    protected $useSoftDeletes   = false;
+    // protected $protectFields    = true;
+    protected $primaryKey       = 'id';
+
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
 
     protected $allowedFields = [
+        'id',
         'descripcion',
         'tipo_regla',
         'tipo_valor',
@@ -18,8 +29,16 @@ class ProbabilidadRiesgo extends Model
         'valor2',
         'comentario',
         'estado',
-        'escenario'
+        'escenario',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
     ];
+
 
     public function getAll($scene){
         $sql = "EXEC sp_list_probabilidad ?";

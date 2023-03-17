@@ -93,20 +93,43 @@ class ValoracionRiesgoController extends BaseController
     }
     public function deleteValoracionRiesgo()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new MValoracionRiesgo();
+        $model->find($input[0]['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($model){
+                if($model->delete($input[0]['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $data['id_user_deleted'] = $input[0]['user'];
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Valoracion de riesgo eliminado'
+                        ]
+                    );
+                }
+            }else{
+                $input['is_deleted'] = 0;
+                $input['date_deleted'] = null;
+                $input['id_user_deleted'] = null;
+                $model->update($input[0]['id'],$input);
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No se pudo eliminar'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new MValoracionRiesgo();
-            $result = $model->deleteValoracionRiesgo($input);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $input['is_deleted'] = 0;
+            $input['date_deleted'] = null;
+            $input['id_user_deleted'] = null;
+            $model->update($input[0]['id'],$input);
             return $this->getResponse(
                 [
                     'error' => 'Valoracion de Riesgo está asignado, no es posible eliminarlo',

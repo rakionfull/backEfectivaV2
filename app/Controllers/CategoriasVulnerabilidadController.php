@@ -98,19 +98,53 @@ class CategoriasVulnerabilidadController extends BaseController
     }
 
     public function destroy($id){
+        $input = $this->getRequestInput($this->request);
+        $model = new CategoriasVulnerabilidad();
+        $model->find($id);
+        $this->db->transBegin();
         try {
-            $input = $this->getRequestInput($this->request);
-            $model = new CategoriasVulnerabilidad();
-            $result = $model->destroy($id,$input);
-            return $this->getResponse(
-                [
-                    'msg' =>  $result
-                ]
-            );
+            if($model){
+                if($model->delete($id)){
+                    $this->db->transRollback();
+                    $input['is_deleted'] = 1;
+                    $model->update($id,$input);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Categoria de vulnerabilidad eliminado'
+                        ]
+                    );
+                }else{
+                    $input['is_deleted'] = 0;
+                    $input['date_deleted'] = null;
+                    $input['id_user_deleted'] = null;
+                    $model->update($id,$input);
+                    
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (\Throwable $th) {
+            $input['is_deleted'] = 0;
+            $input['date_deleted'] = null;
+            $input['id_user_deleted'] = null;
+            $model->update($id,$input);
             return $this->getResponse(
                 [
-                    'msg' =>  'Ocurrio un error '.$th->getMessage()
+                    'msg' =>  'No se pudo eliminar'
                 ]
             );
         

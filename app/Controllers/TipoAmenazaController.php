@@ -97,19 +97,45 @@ class TipoAmenazaController extends BaseController
     }
 
     public function destroy($id){
+        $input = $this->getRequestInput($this->request);
+        $model = new TipoAmenaza();
+        $model->find($id);
         try {
-            $input = $this->getRequestInput($this->request);
-            $model = new TipoAmenaza();
-            $result = $model->destroy($id,$input);
-            return $this->getResponse(
-                [
-                    'msg' =>  $result
-                ]
-            );
+            if($model){
+                if($model->delete($id)){
+                    $this->db->transRollback();
+                    $input['is_deleted'] = 1;
+                    $model->update($id,$input);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Tipo de amenaza eleminado'
+                        ]
+                    );
+                }else{
+                    $input['is_deleted'] = 0;
+                    $input['date_deleted'] = null;
+                    $input['id_user_deleted'] = null;
+                    $model->update($id,$input);
+                    
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }
+            $this->db->transCommit();
+
         } catch (\Throwable $th) {
+            $input['is_deleted'] = 0;
+            $input['date_deleted'] = null;
+            $input['id_user_deleted'] = null;
+            $model->update($id,$input);
             return $this->getResponse(
                 [
-                    'msg' =>  'Ocurrio un error '.$th->getMessage()
+                    'msg' =>  'No se puede eliminar'
                 ]
             );
         }

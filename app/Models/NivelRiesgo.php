@@ -6,9 +6,17 @@ use CodeIgniter\Model;
 
 class NivelRiesgo extends Model
 {
-    protected $DBGroup          = 'default';
     protected $table            = 'nivel_riesgo';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
+        'id',
         'operador1',
         'operador2',
         'valor1',
@@ -16,7 +24,14 @@ class NivelRiesgo extends Model
         'color',
         'descripcion',
         'comentario',
-        'estado'
+        'estado',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
     ];
 
     public function getAll(){

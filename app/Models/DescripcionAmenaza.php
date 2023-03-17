@@ -7,9 +7,19 @@ use CodeIgniter\Model;
 class DescripcionAmenaza extends Model
 {
     protected $table            = 'desc_amenaza';
+    protected $useSoftDeletes   = false;
+    protected $primaryKey       = 'id';
     protected $allowedFields    = [
+        'id',
         'idtipo_amenaza',
-        'amenaza'
+        'amenaza',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
     ];
 
     public function getAll(){
