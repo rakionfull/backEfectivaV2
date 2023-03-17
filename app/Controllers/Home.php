@@ -102,6 +102,27 @@ class Home extends BaseController
 
            
     }
+    public function getEscenario(){
+
+        try {
+            $model = new Muser();
+                $response = [
+                  
+                    'datos' =>  $model->getEscenario()
+                ];
+                return $this->respond($response, ResponseInterface::HTTP_OK);
+        
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                    [
+                        'error' => $ex->getMessage(),
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+        }
+
+           
+    }
     public function addUser()
     {
         $rules = [

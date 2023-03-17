@@ -16,13 +16,23 @@ class Mmacroprocesos extends Model
     }
     
     //retorna todos MacroProcesos
-    public function getMacroproceso(){
+    public function getMacroproceso($dato){
 
-        $query = $this->db->query("SELECT M.id, m.macroproceso,E.empresa,A.area,U.unidad,M.estado,M.idempresa,
-        M.idarea,M.idunidad
-        from macroproceso as M inner join empresa as E on M.idempresa=e.id
-                                inner join area as A on M.idarea=A.id
-                                inner join unidades as U on M.idunidad=U.id");
+        if($dato == 0){
+            $query = $this->db->query("SELECT M.id, m.macroproceso,E.empresa,A.area,U.unidad,M.estado,M.idempresa,
+            M.idarea,M.idunidad
+            from macroproceso as M inner join empresa as E on M.idempresa=e.id
+                                    inner join area as A on M.idarea=A.id
+                                    inner join unidades as U on M.idunidad=U.id");
+        }else{
+            $query = $this->db->query("SELECT M.id, m.macroproceso,E.empresa,A.area,U.unidad,M.estado,M.idempresa,
+            M.idarea,M.idunidad
+            from macroproceso as M inner join empresa as E on M.idempresa=e.id
+                                    inner join area as A on M.idarea=A.id
+                                    inner join unidades as U on M.idunidad=U.id where E.id = {$dato}");
+        }
+
+      
         return $query->getResultArray();
     }
    

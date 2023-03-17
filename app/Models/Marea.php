@@ -16,10 +16,16 @@ class Marea extends Model
         else return false;
     }
         //retorna        
-        public function getArea(){
+        public function getArea($dato){
 
-            $query = $this->db->query("SELECT a.id,a.idempresa,e.empresa,a.area,a.estado
-            from empresa as E inner join area as A on a.idempresa = e.id");
+            if($dato == 0){
+                $query = $this->db->query("SELECT a.id,a.idempresa,e.empresa,a.area,a.estado
+                from empresa as E inner join area as A on a.idempresa = e.id");
+            } else{
+                $query = $this->db->query("SELECT a.id,a.idempresa,e.empresa,a.area,a.estado
+                from empresa as E inner join area as A on a.idempresa = e.id where a.idempresa=$dato");
+            }
+           
             return $query->getResultArray();
         }
 

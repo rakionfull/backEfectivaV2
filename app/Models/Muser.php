@@ -13,19 +13,15 @@ class Muser extends Model
         $creacion_us = date('Y-m-d H:i:s');
         $estado_us = '1';
         $change_pass = '0';
-        $is_user_negocio = 0;
-        if($data['opcion_us'] == true){
-            $is_user_negocio = 1;
-        }
-
+      
         $query=$this->db->query("INSERT INTO tb_users 
         (docident_us,nombres_us,apepat_us,apemat_us,email_us,
-        usuario_us,creacion_us,estado_us,change_pass,perfil_us,idempresa,idposicion,idarea,idunidad,is_user_negocio) VALUES
+        usuario_us,creacion_us,estado_us,change_pass,perfil_us,idempresa,idposicion,idarea,idunidad) VALUES
         ('{$data['docident_us']}','{$data['nombres_us']}',
         '{$data['apepat_us']}','{$data['apemat_us']}',
         '{$data['email_us']}','{$data['usuario_us']}',
         '{$creacion_us}','{$estado_us}','{$change_pass}','{$data['perfil_us']}',
-        '{$data['id_empresa']}','{$data['id_puesto']}','{$data['id_area']}','{$data['id_unidad']}','{$is_user_negocio}'); ") ;
+        '{$data['id_empresa']}','{$data['id_puesto']}','{$data['id_area']}','{$data['id_unidad']}'); ") ;
          
         return $query;
 
@@ -178,6 +174,10 @@ class Muser extends Model
 
         $query = $this->db->query("SELECT * FROM tb_users where estado_us='1'");
         return $query->getResultArray();
+    }
+    public function getEscenario(){
+        $query = $this->db->query("SELECT escenario FROM escenario_active");
+        return $query->getRow()->escenario;
     }
 
 }

@@ -46,9 +46,9 @@ class Mperfil extends Model
         $creacion_perfil = date('Y-m-d H:i:s');
     
         $query=$this->db->query("INSERT INTO tb_perfiles
-        (perfil,desc_perfil,est_perfil,creacion_perfil) VALUES
+        (perfil,desc_perfil,est_perfil,creacion_perfil,is_user_negocio) VALUES
         ('{$data['perfil']}','{$data['desc_perfil']}',
-        '{$data['est_perfil']}','{$creacion_perfil}'); ") ;
+        '{$data['est_perfil']}','{$creacion_perfil}','{$data['evaluador']}'); ") ;
     
     
         return $query;
@@ -60,7 +60,8 @@ class Mperfil extends Model
         perfil = '{$data['perfil']}',
         desc_perfil = '{$data['desc_perfil']}',
         est_perfil= '{$data['est_perfil']}',
-        actualizacion_perfil='{$actualizacion_perfil}'
+        actualizacion_perfil='{$actualizacion_perfil}',
+        is_user_negocio = '{$data['evaluador']}'
         where id_perfil = {$data['id_perfil']} ") ;
            
         return $query;

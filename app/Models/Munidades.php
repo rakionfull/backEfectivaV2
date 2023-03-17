@@ -16,11 +16,17 @@ class Munidades extends Model
         else return false;
     }
     //retorna todas las Unidades
-    public function getUnidades(){
-
-        $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
-        from unidades as U inner join empresa as E on U.idempresa = e.id
-						   inner join area as A on U.idarea = A.id");
+    public function getUnidades($dato){
+        if($dato == 0){
+            $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
+            from unidades as U inner join empresa as E on U.idempresa = e.id
+                               inner join area as A on U.idarea = A.id");
+        }else{
+            $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
+            from unidades as U inner join empresa as E on U.idempresa = e.id
+                               inner join area as A on U.idarea = A.id where e.id  = $dato");
+        }
+       
         return $query->getResultArray();
     }
     
