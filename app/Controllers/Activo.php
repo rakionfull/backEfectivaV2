@@ -162,12 +162,12 @@ class Activo extends BaseController
       
         
     }
-    public function getArea(){
+    public function getArea($dato){
 
         try {
             $model = new Marea();
                 $response = [
-                    'data' =>  $model->getArea()
+                    'data' =>  $model->getArea($dato)
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         
@@ -793,13 +793,13 @@ class Activo extends BaseController
         
     }
     //Unidades
-    public function getUnidades(){
+    public function getUnidades($dato){
 
         try {
             $model = new Munidades();
             $input = $this->getRequestInput($this->request);
                 $response = [
-                    'data' =>  $model->getUnidades($input)
+                    'data' =>  $model->getUnidades($dato)
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         
@@ -907,12 +907,12 @@ class Activo extends BaseController
         
     }
     //macroproceso
-    public function getMacroproceso(){
+    public function getMacroproceso($dato){
 
         try {
             $model = new Mmacroprocesos();
                 $response = [
-                    'data' =>  $model->getMacroproceso()
+                    'data' =>  $model->getMacroproceso($dato)
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         
@@ -1044,12 +1044,12 @@ class Activo extends BaseController
     }
     
     //proceso
-    public function getProceso(){
+    public function getProceso($dato){
 
         try {
             $model = new Mproceso();
                 $response = [
-                    'data' =>  $model->getProceso()
+                    'data' =>  $model->getProceso($dato)
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         
@@ -1138,12 +1138,12 @@ class Activo extends BaseController
     }
 
     //posicion y puesto
-    public function getPosicion(){
+    public function getPosicion($dato){
 
         try {
             $model = new MPosicion();
                 $response = [
-                    'data' =>  $model->getPosicion()
+                    'data' =>  $model->getPosicion($dato)
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         

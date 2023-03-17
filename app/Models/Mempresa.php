@@ -53,9 +53,6 @@ class Mempresa extends Model
         
         return $query;
     }
-    public function getEscenario($idempresa){
-        $query = $this->db->query("SELECT escenario FROM escenario_active where idEmpresa='{$idempresa}'");
-        return $query->getRow()->escenario;
-    }
+  
   
 }

@@ -42,7 +42,7 @@ class MAplicacionProbabilidad extends Model
         return $query;
     }
     public function getByCaracteristica($data){
-        $query = $this->db->query("EXEC sp_get_aplicacion_probabilidad_by_caracteristica ?",[$data['caracteristica']]);
+        $query = $this->db->query("EXEC sp_get_aplicacion_probabilidad_by_caracteristica ?,?",[$data['caracteristica'],$data['escenario']]);
         return $query->getResultArray();
     }
 }

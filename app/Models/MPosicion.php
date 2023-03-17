@@ -19,12 +19,20 @@ class MPosicion extends Model
         $query = $this->db->query("SELECT * FROM posicion_puesto where estado='1' and idempresa={$data}");
         return $query->getResultArray();
     }
-    public function getPosicion(){
+    public function getPosicion($dato){
 
-        $query = $this->db->query("SELECT PP.id as id_pos,PP.posicion_puesto,PP.idempresa,PP.idunidad,PP.idarea,
-        E.empresa,A.area,U.unidad,PP.estado FROM posicion_puesto as PP inner join empresa as E
-        on PP.idempresa=E.id inner join area as A on PP.idarea=A.id 
-        inner join unidades as U on PP.idunidad=U.id");
+        if($dato == 0){
+            $query = $this->db->query("SELECT PP.id as id_pos,PP.posicion_puesto,PP.idempresa,PP.idunidad,PP.idarea,
+            E.empresa,A.area,U.unidad,PP.estado FROM posicion_puesto as PP inner join empresa as E
+            on PP.idempresa=E.id inner join area as A on PP.idarea=A.id 
+            inner join unidades as U on PP.idunidad=U.id");
+        }else{
+            $query = $this->db->query("SELECT PP.id as id_pos,PP.posicion_puesto,PP.idempresa,PP.idunidad,PP.idarea,
+            E.empresa,A.area,U.unidad,PP.estado FROM posicion_puesto as PP inner join empresa as E
+            on PP.idempresa=E.id inner join area as A on PP.idarea=A.id 
+            inner join unidades as U on PP.idunidad=U.id where E.id={$dato}");
+        }
+       
         return $query->getResultArray();
     }
 

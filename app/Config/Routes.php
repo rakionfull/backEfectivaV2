@@ -66,6 +66,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('updatePerfil', 'Home::updatePerfil',['filter' => 'authFilter']);
     $routes->delete('deletePerfil', 'Home::deletePerfil',['filter' => 'authFilter']);
     $routes->get('getDetPerfil', 'Home::getDetPerfil',['filter' => 'authFilter']);
+    $routes->get('getEscenario', 'Home::getEscenario',['filter' => 'authFilter']);
 
     $routes->get('getPermisos', 'Home::getPermisos',['filter' => 'authFilter']);
 
@@ -90,7 +91,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->delete('deleteEmpresa', 'Activo::deleteEmpresa',['filter' => 'authFilter']);
     //crud de area
     
-    $routes->get('getArea', 'Activo::getArea',['filter' => 'authFilter']);
+    $routes->get('getArea/(:num)', 'Activo::getArea/$1',['filter' => 'authFilter']);
     $routes->post('addArea', 'Activo::addArea',['filter' => 'authFilter']);
     $routes->post('updateArea', 'Activo::updateArea',['filter' => 'authFilter']);
     $routes->get('getAreasByActivo', 'Activo::getAreasByActivo',['filter' => 'authFilter']);
@@ -133,7 +134,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->delete('deleteAspectoSeg', 'Activo::deleteAspectoSeg',['filter' => 'authFilter']);
 
     //CRUD Unidades
-    $routes->get('getUnidades', 'Activo::getUnidades',['filter' => 'authFilter']);
+    $routes->get('getUnidades/(:num)', 'Activo::getUnidades/$1',['filter' => 'authFilter']);
     $routes->get('getUnidadByActivo', 'Activo::getUnidadByActivo',['filter' => 'authFilter']);
     $routes->post('addUnidades', 'Activo::addUnidades',['filter' => 'authFilter']);
     $routes->post('updateUnidades', 'Activo::updateUnidades',['filter' => 'authFilter']);
@@ -142,14 +143,14 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     
 
     //CRUD Macroprocesos
-    $routes->get('getMacroproceso', 'Activo::getMacroproceso',['filter' => 'authFilter']);
+    $routes->get('getMacroproceso/(:num)', 'Activo::getMacroproceso/$1',['filter' => 'authFilter']);
     $routes->post('addMacroproceso', 'Activo::addMacroproceso',['filter' => 'authFilter']);
     $routes->post('updateMacroproceso', 'Activo::updateMacroproceso',['filter' => 'authFilter']);
     $routes->get('getMacroprocesoByActivo', 'Activo::getMacroprocesoByActivo',['filter' => 'authFilter']);
     $routes->delete('deleteMacroproceso', 'Activo::deleteMacroproceso',['filter' => 'authFilter']);
 
     //CRUD Procesos
-    $routes->get('getProceso', 'Activo::getProceso',['filter' => 'authFilter']);
+    $routes->get('getProceso/(:num)', 'Activo::getProceso/$1',['filter' => 'authFilter']);
     $routes->post('addProceso', 'Activo::addProceso',['filter' => 'authFilter']);
     $routes->post('updateProceso', 'Activo::updateProceso',['filter' => 'authFilter']);
     $routes->get('getProcesoByActivo', 'Activo::getProcesoByActivo',['filter' => 'authFilter']);
@@ -159,7 +160,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     //CRUD Posicion/Puesto
     $routes->post('validarPosicion', 'Activo::validarPosicion',['filter' => 'authFilter']);
     $routes->get('getPosicionByActivo', 'Activo::getPosicionByActivo',['filter' => 'authFilter']);
-    $routes->get('getPosicion', 'Activo::getPosicion',['filter' => 'authFilter']);
+    $routes->get('getPosicion/(:num)', 'Activo::getPosicion/$1',['filter' => 'authFilter']);
     $routes->get('getPosicionByArea/(:num)', 'Activo::getPosicionByArea/$1',['filter' => 'authFilter']);
     $routes->post('addPosicion', 'Activo::addPosicion',['filter' => 'authFilter']);
     $routes->post('updatePosicion', 'Activo::updatePosicion',['filter' => 'authFilter']);

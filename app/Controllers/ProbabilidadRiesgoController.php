@@ -266,10 +266,11 @@ class ProbabilidadRiesgoController extends BaseController
 
             $model = new ProbabilidadRiesgo();
             $result = $model->edit_1($input);
-        
+           
             $registrosProbabilidad = count($model->where('estado','1')->findAll());
             $modelImpacto = new ImpactoRiesgo();
             $registrosImpacto = count($modelImpacto->where('estado','1')->findAll());
+
             if($registrosImpacto == 0 && $registrosProbabilidad == 0){
                 $model->updateScene($input,null);
             }else{
@@ -279,6 +280,7 @@ class ProbabilidadRiesgoController extends BaseController
 
             return $this->getResponse(
                 [
+                    // 'data' =>  $registrosProbabilidad,
                     'error' => false,
                     'msg' =>  $result
                 ]

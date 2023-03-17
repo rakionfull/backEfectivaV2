@@ -284,20 +284,20 @@ class Login extends BaseController
     
                     $token = [];
                     $permisos = [];
+                    $escenario=$model->getEscenario();
                     if($user->change_pass == 0){
                         $token = getSignedJWTForUser($username);
                         $msg=0;
                         $mensaje = 'Cambio de contrseña 1er logeo obligatorio';
+                      
                     }else{
                         $token = getSignedJWTForUser($username);
                         $modelSesion->saveSesion($token, $user->id_us);
                         $permisos=$modelPerfil->getPermisos($user->perfil_us);
-                        $modelEmpresa = new Mempresa();
-                        if($user->idempresa != ""){
-                            $escenario=$modelEmpresa->getEscenario($user->idempresa);
-                        }else{
-                            $escenario = 1;
-                        }
+                        
+                       
+                        // $escenario=$model->getEscenario();
+                        
                        
                         log_acciones('login',$terminal,$ip,$user->id_us,0,$username);
                     }
@@ -313,7 +313,7 @@ class Login extends BaseController
                                 'escenario' => $escenario,
                                 'permisos' => $permisos,
                                 'access_token' => $token,
-                                'is_user_negocio' => $user->is_user_negocio,
+                                'is_user_negocio' => $user->negocio,
                                 'idempresa' => $user->idempresa,
                                 'idposicion' => $user->idposicion,
                                 'idarea' => $user->idarea,
@@ -334,8 +334,8 @@ class Login extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                     [
-                        'error'  => 'No se pudo iniciar sesión, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
-                        'error1' => $ex->getMessage(),
+                        //'error'  => 'No se pudo iniciar sesión, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                        'error' => $ex->getMessage(),
                     ],
                     $responseCode
                 );

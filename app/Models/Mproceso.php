@@ -17,14 +17,23 @@ class Mproceso extends Model
         else return false;
     }
     //retorna todos Proceso
-    public function getProceso(){
-
-        $query = $this->db->query("SELECT P.id,P.proceso,E.empresa,A.area,U.unidad,m.macroproceso,P.estado,
-        P.idempresa,P.idarea,P.idunidad,P.idmacroproceso
-        from proceso as P inner join empresa as E on P.idempresa=e.id
-                                inner join area as A on P.idarea=A.id
-                                inner join unidades as U on P.idunidad=U.id												   
-                                inner join macroproceso as M on P.idmacroproceso = M.id");
+    public function getProceso($dato){
+        if($dato == 0){
+            $query = $this->db->query("SELECT P.id,P.proceso,E.empresa,A.area,U.unidad,m.macroproceso,P.estado,
+            P.idempresa,P.idarea,P.idunidad,P.idmacroproceso
+            from proceso as P inner join empresa as E on P.idempresa=e.id
+                                    inner join area as A on P.idarea=A.id
+                                    inner join unidades as U on P.idunidad=U.id												   
+                                    inner join macroproceso as M on P.idmacroproceso = M.id");
+        }else{
+            $query = $this->db->query("SELECT P.id,P.proceso,E.empresa,A.area,U.unidad,m.macroproceso,P.estado,
+            P.idempresa,P.idarea,P.idunidad,P.idmacroproceso
+            from proceso as P inner join empresa as E on P.idempresa=e.id
+                                    inner join area as A on P.idarea=A.id
+                                    inner join unidades as U on P.idunidad=U.id												   
+                                    inner join macroproceso as M on P.idmacroproceso = M.id where e.id = {$dato}");
+        }
+       
         return $query->getResultArray();
     }
     
