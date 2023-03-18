@@ -32,11 +32,11 @@ class Database extends Config
      */
     public $default = [
         'DSN'      => '',
-        'hostname' => 'DESKTOP-K7LLO77\SQLEXPRESS',
-        'username' => 'sa',
-        'password' => 'sqlserver',
+        'hostname' => 'localhost',
+        'username' => 'root',
+        'password' => '',
         'database' => 'bd_efectiva',
-        'DBDriver' => 'SQLSRV',
+        'DBDriver' => 'MySQLi',
         'DBPrefix' => '',
         'pConnect' => false,
         'DBDebug'  => (ENVIRONMENT !== 'production'),
@@ -47,7 +47,7 @@ class Database extends Config
         'compress' => false,
         'strictOn' => false,
         'failover' => [],
-        'port'     => 1433,
+        'port'     => 3306,
     ];
 
     /**
