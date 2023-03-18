@@ -1,0 +1,38 @@
+[
+    {
+        "name": "closure_b14edad344706c08ebda69ebefecf9ab",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-17 16:51:20",
+        "end_at": "2023-03-17 16:51:20",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta1Correo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_b14edad344706c08ebda69ebefecf9ab",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-17 16:50:45",
+        "end_at": "2023-03-17 16:50:45",
+        "duration": "00:00:00",
+        "output": null,
+        "error": "{}",
+        "test_time": null
+    },
+    {
+        "name": "closure_b14edad344706c08ebda69ebefecf9ab",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-17 16:50:15",
+        "end_at": "2023-03-17 16:50:15",
+        "duration": "00:00:00",
+        "output": null,
+        "error": "{}",
+        "test_time": null
+    }
+]

@@ -1,0 +1,26 @@
+[
+    {
+        "name": "closure_d3432ea281c2ca0a7a254fc1d4a2013f",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 16:27:26",
+        "end_at": "2023-03-18 16:27:27",
+        "duration": "00:00:00",
+        "output": "hola mundoarray(1) {\n  [0]=>\n  array(12) {\n    [\"id\"]=>\n    int(1046)\n    [\"usuario\"]=>\n    int(58)\n    [\"estado\"]=>\n    string(10) \"En proceso\"\n    [\"plan_accion\"]=>\n    string(6) \"Plan B\"\n    [\"email_us\"]=>\n    string(15) \"oscar@gmail.com\"\n    [\"valor\"]=>\n    int(1)\n    [\"fecha_ini\"]=>\n    string(10) \"2023-03-17\"\n    [\"fecha_fin\"]=>\n    string(10) \"2023-03-20\"\n    [\"nombres_us\"]=>\n    string(12) \"Miguel Angel\"\n    [\"apepat_us\"]=>\n    string(5) \"Panta\"\n    [\"apemat_us\"]=>\n    string(9) \"Chapo\u00f1an\"\n    [\"alerta\"]=>\n    string(8) \"Alerta B\"\n  }\n}\n",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_d3432ea281c2ca0a7a254fc1d4a2013f",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 16:26:56",
+        "end_at": "2023-03-18 16:26:56",
+        "duration": "00:00:00",
+        "output": "hola mundoobject(CodeIgniter\\Database\\SQLSRV\\Result)#63 (8) {\n  [\"connID\"]=>\n  resource(267) of type (SQL Server Connection)\n  [\"resultID\"]=>\n  resource(274) of type (SQL Server Statement)\n  [\"resultArray\"]=>\n  array(0) {\n  }\n  [\"resultObject\"]=>\n  array(0) {\n  }\n  [\"customResultObject\"]=>\n  array(0) {\n  }\n  [\"currentRow\"]=>\n  int(0)\n  [\"numRows\":protected]=>\n  NULL\n  [\"rowData\"]=>\n  NULL\n}\n",
+        "error": "null",
+        "test_time": null
+    }
+]

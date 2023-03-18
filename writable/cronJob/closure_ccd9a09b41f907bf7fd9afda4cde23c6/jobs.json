@@ -1,0 +1,38 @@
+[
+    {
+        "name": "closure_ccd9a09b41f907bf7fd9afda4cde23c6",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 15:48:14",
+        "end_at": "2023-03-18 15:48:14",
+        "duration": "00:00:00",
+        "output": "hola mundo",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_ccd9a09b41f907bf7fd9afda4cde23c6",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 15:46:26",
+        "end_at": "2023-03-18 15:46:26",
+        "duration": "00:00:00",
+        "output": "hola mundo",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_ccd9a09b41f907bf7fd9afda4cde23c6",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 15:46:23",
+        "end_at": "2023-03-18 15:46:23",
+        "duration": "00:00:00",
+        "output": "hola mundo",
+        "error": "null",
+        "test_time": null
+    }
+]

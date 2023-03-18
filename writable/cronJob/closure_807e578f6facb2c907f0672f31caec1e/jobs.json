@@ -1,0 +1,14 @@
+[
+    {
+        "name": "closure_807e578f6facb2c907f0672f31caec1e",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 16:53:08",
+        "end_at": "2023-03-18 16:53:08",
+        "duration": "00:00:00",
+        "output": "object(stdClass)#64 (4) {\n  [\"id\"]=>\n  int(51)\n  [\"idplan\"]=>\n  int(1046)\n  [\"fecha_envio\"]=>\n  string(23) \"2023-03-17 00:00:00.000\"\n  [\"idusuario\"]=>\n  int(58)\n}\n",
+        "error": "null",
+        "test_time": null
+    }
+]

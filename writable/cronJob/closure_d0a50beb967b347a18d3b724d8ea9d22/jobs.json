@@ -1,0 +1,14 @@
+[
+    {
+        "name": "closure_d0a50beb967b347a18d3b724d8ea9d22",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 17:05:51",
+        "end_at": "2023-03-18 17:05:51",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta con envios anteriores del plan de accionCorreo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    }
+]

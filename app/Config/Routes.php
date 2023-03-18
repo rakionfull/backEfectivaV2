@@ -21,6 +21,7 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
+
 // The Auto Routing (Legacy) is very dangerous. It is easy to create vulnerable apps
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
@@ -45,7 +46,9 @@ $routes->post('/validaCaptcha', 'Login::validaCaptcha');
 // http://localhost:8080/register
 $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
 
+// $routes->cli('Task','Task::mensaje');
 
+  $routes->get('Task','Task::mensaje');
 // http://localhost:8080/api/
 $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('logout/(:num)', 'Login::logout/$1',['filter' => 'authFilter']);

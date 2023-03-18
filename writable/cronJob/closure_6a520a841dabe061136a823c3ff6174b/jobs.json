@@ -1,0 +1,14 @@
+[
+    {
+        "name": "closure_6a520a841dabe061136a823c3ff6174b",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 16:26:43",
+        "end_at": "2023-03-18 16:26:43",
+        "duration": "00:00:00",
+        "output": "hola mundoCodeIgniter\\Database\\SQLSRV\\Result Object\n(\n    [connID] => Resource id #267\n    [resultID] => Resource id #274\n    [resultArray] => Array\n        (\n        )\n\n    [resultObject] => Array\n        (\n        )\n\n    [customResultObject] => Array\n        (\n        )\n\n    [currentRow] => 0\n    [numRows:protected] => \n    [rowData] => \n)\n",
+        "error": "null",
+        "test_time": null
+    }
+]

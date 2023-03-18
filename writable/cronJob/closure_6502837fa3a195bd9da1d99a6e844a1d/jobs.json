@@ -1,0 +1,26 @@
+[
+    {
+        "name": "closure_6502837fa3a195bd9da1d99a6e844a1d",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 17:02:18",
+        "end_at": "2023-03-18 17:02:18",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta inicial de actividadCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_6502837fa3a195bd9da1d99a6e844a1d",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 17:01:48",
+        "end_at": "2023-03-18 17:01:48",
+        "duration": "00:00:00",
+        "output": null,
+        "error": "{}",
+        "test_time": null
+    }
+]
