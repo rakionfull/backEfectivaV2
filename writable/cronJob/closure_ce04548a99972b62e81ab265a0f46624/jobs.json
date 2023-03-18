@@ -1,0 +1,14 @@
+[
+    {
+        "name": "closure_ce04548a99972b62e81ab265a0f46624",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 16:53:46",
+        "end_at": "2023-03-18 16:53:46",
+        "duration": "00:00:00",
+        "output": "2023-03-17 00:00:00.000Es hora de la alertaCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    }
+]

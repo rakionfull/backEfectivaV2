@@ -1,0 +1,14 @@
+[
+    {
+        "name": "closure_fd119faeea8c4808823be6404d9fc12b",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 16:20:20",
+        "end_at": "2023-03-18 16:20:20",
+        "duration": "00:00:00",
+        "output": "hola mundo",
+        "error": "null",
+        "test_time": null
+    }
+]
