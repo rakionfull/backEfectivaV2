@@ -6,6 +6,25 @@ use CodeIgniter\Model;
 
 class Mmacroprocesos extends Model
 {
+    protected $table            = 'macroproceso';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
     public function validaMacroproceso($data){
         
         $query = $this->db->query("SELECT * FROM macroproceso where  macroproceso='{$data['macroproceso']}' 
@@ -23,13 +42,13 @@ class Mmacroprocesos extends Model
             M.idarea,M.idunidad
             from macroproceso as M inner join empresa as E on M.idempresa=e.id
                                     inner join area as A on M.idarea=A.id
-                                    inner join unidades as U on M.idunidad=U.id");
+                                    inner join unidades as U on M.idunidad=U.id and M.is_deleted=0");
         }else{
             $query = $this->db->query("SELECT M.id, m.macroproceso,E.empresa,A.area,U.unidad,M.estado,M.idempresa,
             M.idarea,M.idunidad
             from macroproceso as M inner join empresa as E on M.idempresa=e.id
                                     inner join area as A on M.idarea=A.id
-                                    inner join unidades as U on M.idunidad=U.id where E.id = {$dato}");
+                                    inner join unidades as U on M.idunidad=U.id where E.id = {$dato} and M.is_deleted=0");
         }
 
       

@@ -6,6 +6,25 @@ use CodeIgniter\Model;
 
 class Mtipoactivo extends Model
 {
+    protected $table = 'tipo_activo';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
 
     public function validarTipoActivo($data){
       
@@ -16,7 +35,7 @@ class Mtipoactivo extends Model
     } 
     public function getTipoActivoByActivo(){
 
-        $query = $this->db->query("SELECT * FROM tipo_activo where estado='1'");
+        $query = $this->db->query("SELECT * FROM tipo_activo where estado='1' and is_deleted=0");
         return $query->getResultArray();
     }
     public function getTipoActivo(){

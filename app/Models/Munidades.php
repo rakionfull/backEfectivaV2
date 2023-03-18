@@ -6,7 +6,25 @@ use CodeIgniter\Model;
 
 class Munidades extends Model
 {
-  
+    protected $table            = 'unidades';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
     public function validaUnidad($data){
         
         $query = $this->db->query("SELECT * FROM unidades where  idempresa='{$data['idempresa']}' 
@@ -20,11 +38,11 @@ class Munidades extends Model
         if($dato == 0){
             $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
             from unidades as U inner join empresa as E on U.idempresa = e.id
-                               inner join area as A on U.idarea = A.id");
+                               inner join area as A on U.idarea = A.id and U.is_deleted=0");
         }else{
             $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
             from unidades as U inner join empresa as E on U.idempresa = e.id
-                               inner join area as A on U.idarea = A.id where e.id  = $dato");
+                               inner join area as A on U.idarea = A.id where e.id  = $dato and U.is_deleted=0");
         }
        
         return $query->getResultArray();

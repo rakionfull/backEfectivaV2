@@ -6,6 +6,25 @@ use CodeIgniter\Model;
 
 class MPosicion extends Model
 {
+    protected $table            = 'posicion_puesto';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
     public function validaPosicion($data){
         
             $query = $this->db->query("SELECT * FROM posicion_puesto where posicion_puesto='{$data['posicion']}'
@@ -25,12 +44,12 @@ class MPosicion extends Model
             $query = $this->db->query("SELECT PP.id as id_pos,PP.posicion_puesto,PP.idempresa,PP.idunidad,PP.idarea,
             E.empresa,A.area,U.unidad,PP.estado FROM posicion_puesto as PP inner join empresa as E
             on PP.idempresa=E.id inner join area as A on PP.idarea=A.id 
-            inner join unidades as U on PP.idunidad=U.id");
+            inner join unidades as U on PP.idunidad=U.id where PP.is_deleted=0");
         }else{
             $query = $this->db->query("SELECT PP.id as id_pos,PP.posicion_puesto,PP.idempresa,PP.idunidad,PP.idarea,
             E.empresa,A.area,U.unidad,PP.estado FROM posicion_puesto as PP inner join empresa as E
             on PP.idempresa=E.id inner join area as A on PP.idarea=A.id 
-            inner join unidades as U on PP.idunidad=U.id where E.id={$dato}");
+            inner join unidades as U on PP.idunidad=U.id where E.id={$dato} and PP.is_deleted=0");
         }
        
         return $query->getResultArray();

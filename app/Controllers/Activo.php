@@ -139,23 +139,49 @@ class Activo extends BaseController
     }
     public function deleteEmpresa()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new Mempresa();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
-
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
         
-            $model = new Mempresa();
-            $result = $model->deleteEmpresa($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
+            
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'Empresa está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'Empresa está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -252,23 +278,53 @@ class Activo extends BaseController
     }
     public function deleteArea()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new Marea();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new Marea();
-            $result = $model->deleteArea($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'Área está asignado, no es posible eliminarlo',
+                [  
+                    'error' => true,
+                    'msg' => 'Área está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -431,23 +487,51 @@ class Activo extends BaseController
     }
     public function deleteValorActivo()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new Mvaloractivo();
+        $found = $model->find($input['id']);
         try{
-            $input = $this->getRequestInput($this->request);
-
-        
-            $model = new Mvaloractivo();
-            $result = $model->deleteValorActivo($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Valor Activo eliminado Correctamente'
-                ]
-            );
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Valor Activo eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'El Valor activo está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'El Valor activo está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -552,27 +636,56 @@ class Activo extends BaseController
     public function deleteTipoActivo()
     {
    
+        $input = $this->getRequestInput($this->request);
+        $model = new Mtipoactivo();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new Mtipoactivo();
-            $result = $model->deleteTipoActivo($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'El tipo de activo está asignado, no es posible eliminarlo',
+                [  
+                    'error' => true,
+                    'msg' => 'El tipo de activo está asignado, no es posible eliminarlo',
                 ]
             );
         }
-      
-        
     }
     //clasificaicon de informacion
     public function getClasInformacion(){
@@ -651,27 +764,57 @@ class Activo extends BaseController
     }
     public function deleteClasInfo()
     {
-   
-        try{
-            $input = $this->getRequestInput($this->request);
 
-        
-            $model = new MclasInformacion();
-            $result = $model->deleteClasInfo($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
+        $input = $this->getRequestInput($this->request);
+        $model = new MclasInformacion();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
+        try{
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'La clasificación de infromación está asignado, no es posible eliminarlo',
+                [  
+                    'error' => true,
+                    'msg' => 'La clasificación de infromación está asignado, no es posible eliminarlo',
                 ]
             );
         }
-      
         
     }
     //aspecto de seguridad
@@ -769,23 +912,53 @@ class Activo extends BaseController
     }
     public function deleteAspectoSeg()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new MaspectoSeg();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
-
-        
-            $model = new MaspectoSeg();
-            $result = $model->deleteAspectoSeg($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Apecto de Seguridad eliminado Correctamente'
-                ]
-            );
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Apecto de Seguridad eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+            
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'El Apecto de Seguridad está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'El Apecto de Seguridad está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -865,10 +1038,7 @@ class Activo extends BaseController
     }
     public function updateUnidades()
     {
-           
         $input = $this->getRequestInput($this->request);
-
-      
         $model = new Munidades();
         $result = $model->updateUnidades($input);
     
@@ -883,23 +1053,54 @@ class Activo extends BaseController
     
     public function deleteUnidad()
     {
-   
-        try{
-            $input = $this->getRequestInput($this->request);
+        $input = $this->getRequestInput($this->request);
+        $model = new Munidades();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
 
-        
-            $model = new Munidades();
-            $result = $model->deleteUnidad($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
+        try{
+            if($found){
+                if($model->delete('id')){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Unidad eliminada'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'Unidad está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'Unidad está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -998,23 +1199,54 @@ class Activo extends BaseController
     }
     public function deleteMacroproceso()
     {
-   
-        try{
-            $input = $this->getRequestInput($this->request);
+        $input = $this->getRequestInput($this->request);
+        $model = new Mmacroprocesos();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
 
-        
-            $model = new Mmacroprocesos();
-            $result = $model->deleteMacroproceso($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
+        try{
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existe el macroproceso'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'Macroproceso está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'Macroproceso está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -1113,23 +1345,53 @@ class Activo extends BaseController
     }
     public function deleteProceso()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new Mproceso();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existe registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new Mproceso();
-            $result = $model->deleteProceso($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'Proceso está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'Proceso está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -1250,23 +1512,53 @@ class Activo extends BaseController
     }
     public function deletePosicion()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new MPosicion();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
-
-        
-            $model = new MPosicion();
-            $result = $model->deletePosicion($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Posicion/Puesto eliminado Correctamente'
-                ]
-            );
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Posicion/Puesto eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+            
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => 'Posicion/Puesto está asignado, no es posible eliminarlo',
+                    'error' => true,
+                    'msg' => 'Posicion/Puesto está asignado, no es posible eliminarlo',
                 ]
             );
         }
@@ -1350,27 +1642,56 @@ class Activo extends BaseController
     public function deleteValActivo()
     {
    
+        $input = $this->getRequestInput($this->request);
+        $model = new MValoracionActivo();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new MValoracionActivo();
-            $result = $model->deleteValActivo($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'No es posible eliminarlo, ya que esta siendo usado',
+                [  
+                    'error' => true,
+                    'msg' => 'No es posible eliminarlo, ya que esta siendo usado',
                 ]
             );
         }
-      
-        
     }
     //categoria de activo
     public function getCatActivo(){
@@ -1430,10 +1751,8 @@ class Activo extends BaseController
     }
     public function updateCatActivo()
     {
-           
+        
         $input = $this->getRequestInput($this->request);
-
-      
         $model = new MCatActivo();
         $result = $model->updateCatActivo($input);
     
@@ -1447,28 +1766,56 @@ class Activo extends BaseController
     }
     public function deleteCatActivo()
     {
-   
+        $input = $this->getRequestInput($this->request);
+        $model = new MCatActivo();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new MCatActivo();
-            $result = $model->deleteCatActivo($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'No es posible eliminarlo, está siendo usado por otra relación',
+                [  
+                    'error' => true,
+                    'msg' => 'No es posible eliminarlo, está siendo usado por otra relación',
                 ]
             );
         }
-      
-        
     }
 
     //Ubicacion de activo
@@ -1559,26 +1906,56 @@ class Activo extends BaseController
     public function deleteUbiActivo()
     {
    
+        $input = $this->getRequestInput($this->request);
+        $model = new MUbicActivo();
+        $found = $model->find($input['id']);
+        $this->db->transBegin();
         try{
-            $input = $this->getRequestInput($this->request);
+            if($found){
+                if($model->delete($input['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
 
-        
-            $model = new MUbicActivo();
-            $result = $model->deleteUbiActivo($input['id']);
-        
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'No es posible eliminarlo, está siendo usado por otra relación',
+                [  
+                    'error' => true,
+                    'msg' => 'No es posible eliminarlo, está siendo usado por otra relación',
                 ]
             );
         }
-      
         
     }
      //continente
@@ -1726,24 +2103,55 @@ class Activo extends BaseController
     }
     
     public function deleteEstado(){
-        
-        try {
-            
-            $input = $this->getRequestInput($this->request);       
-            $model = new Mestado();    
-            
-            $result = $model->deleteEstado($input);   
-            
-            return $this->getResponse([
-                'msg' => 'Estado Eliminado correctamente',
-                'error' => 0
-            ]);
-        
+        $input = $this->getRequestInput($this->request);
+        $model = new Mestado();
+        $found = $model->find($input[0]['id']);
+        $this->db->transBegin();
+        try{
+            if($found){
+                if($model->delete($input[0]['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (Exception $ex) {
-            
-            return $this->getResponse([
-                'error' => $ex->getMessage()
-            ], ResponseInterface::HTTP_OK);
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
+            return $this->getResponse(
+                [  
+                    'error' => true,
+                    'msg' => 'Estado está asignado, no es posible eliminarlo',
+                ]
+            );
         }
     }
     
@@ -1826,25 +2234,57 @@ class Activo extends BaseController
     }
     
     public function deletePrioridad(){
-    
-        try {
-            
-            $input = $this->getRequestInput($this->request);       
-            $model = new Mprioridad();    
-            
-            $result = $model->deletePrioridad($input);   
-            
-            return $this->getResponse([
-                'msg' => 'Prioridad Eliminado correctamente',
-                'error' => 0
-            ]);
-        
+        $input = $this->getRequestInput($this->request);
+        $model = new Mprioridad();
+        $found = $model->find($input[0]['id']);
+        $this->db->transBegin();
+        try{
+            if($found){
+                if($model->delete($input[0]['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (Exception $ex) {
-            
-            return $this->getResponse([
-                'error' => $ex->getMessage()
-            ], ResponseInterface::HTTP_OK);
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
+            return $this->getResponse(
+                [  
+                    'error' => true,
+                    'msg' => 'Prioridad está asignado, no es posible eliminarlo',
+                ]
+            );
         }
+
     }
     
     public function getAlerta_seguimiento(){
@@ -1927,26 +2367,57 @@ class Activo extends BaseController
     }
     
     public function deleteAlerta_seguimiento()
-        {
-       
-            try {
-            
-                $input = $this->getRequestInput($this->request);       
-                $model = new Malerta_seguimiento();    
-                
-                $result = $model->deleteAlerta_seguimiento($input);   
-                
-                return $this->getResponse([
-                    'msg' => 'Estado Eliminado correctamente',
-                    'error' => 0
-                ]);
-            
-            } catch (Exception $ex) {
-                
-                return $this->getResponse([
-                    'error' => $ex->getMessage()
-                ], ResponseInterface::HTTP_OK);
+    {
+        $input = $this->getRequestInput($this->request);
+        $model = new Malerta_seguimiento();
+        $found = $model->find($input[0]['id']);
+        $this->db->transBegin();
+        try{
+            if($found){
+                if($model->delete($input[0]['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
             }
+            $this->db->transCommit();
+
+        } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
+            return $this->getResponse(
+                [  
+                    'error' => true,
+                    'msg' => 'Alerta de seguimiento está asignado, no es posible eliminarlo',
+                ]
+            );
+        }
     }  
     
     

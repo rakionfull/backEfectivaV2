@@ -184,6 +184,7 @@ class NivelRiesgoController extends BaseController
             $model->update($id,$input);
             return $this->getResponse(
                 [
+                    'error' => true,
                     'msg' =>  'No se pudo eliminar'
                 ]
             );
