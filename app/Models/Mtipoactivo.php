@@ -28,44 +28,57 @@ class Mtipoactivo extends Model
 
     public function validarTipoActivo($data){
       
-        $query = $this->db->query("SELECT * FROM tipo_activo where tipo='{$data}'");
+        // $query = $this->db->query("SELECT * FROM tipo_activo 
+        // where tipo='{$data}'");
+        $query = $this->db->query("EXEC validaTipoActivo @tipo='{$data[0]['tipo']}'");
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;
     } 
     public function getTipoActivoByActivo(){
 
-        $query = $this->db->query("SELECT * FROM tipo_activo where estado='1' and is_deleted=0");
+        // $query = $this->db->query("SELECT * FROM tipo_activo 
+        // where estado='1' and is_deleted=0");
+        $query = $this->db->query("EXEC getTipoActivoByActivo");
         return $query->getResultArray();
     }
     public function getTipoActivo(){
 
-        $query = $this->db->query("SELECT * FROM tipo_activo");
+        $query = $this->db->query("EXEC listartipoactivo");
         return $query->getResultArray();
     }
     public function saveTipoActivo($data){       
 
-        $query=$this->db->query("INSERT INTO tipo_activo
-        (tipo,estado) VALUES
-        ('{$data['tipo']}',{$data['estado']})") ;
+        // $query=$this->db->query("INSERT INTO tipo_activo
+        // (tipo,estado) VALUES
+        // ('{$data['tipo']}',{$data['estado']})") ;
+        $query = $this->db->query("EXEC agregar_tipoactivo
+        @tipo = '{$data[0]['tipo']}',
+        @estado= '{$data[0]['estado']}',
+        @idUserAdd= '{$data['user']}'");
         return $query;
     }
     public function updateTipoActivo($data){  
         
-        $query=$this->db->query("UPDATE tipo_activo SET 
-        tipo = '{$data['tipo']}',
-        estado = '{$data['estado']}'
-        where id = {$data['id']} ") ;    
+        // $query=$this->db->query("UPDATE tipo_activo SET 
+        // tipo = '{$data['tipo']}',
+        // estado = '{$data['estado']}'
+        // where id = {$data['id']} ") ;   
+        $query = $this->db->query("EXEC editar_tipoactivo
+        @tipo = '{$data[0]['tipo']}',
+        @idtipo = '{$data[0]['id']}',
+        @estado= '{$data[0]['estado']}',
+        @idUserAdd= '{$data['user']}'");
         return $query;
     }
-    public function deleteTipoActivo($data){
+    // public function deleteTipoActivo($data){
       
         
-        $query=$this->db->query("DELETE tipo_activo 
-        where id = {$data} ") ;
+    //     $query=$this->db->query("DELETE tipo_activo 
+    //     where id = {$data} ") ;
            
-        return $query;
-    }
+    //     return $query;
+    // }
 
 
 }

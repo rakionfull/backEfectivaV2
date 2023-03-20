@@ -90,11 +90,11 @@ class Marea extends Model
             $query = $this->db->query("EXEC listarAreaByActivo @empresa ={$data}");
             return $query->getResultArray();
         }
-        public function deleteArea($data){
+        // public function deleteArea($data){
 
-            $query = $this->db->query("DELETE from area where id = {$data} ");
-            return $query;
-        }
+        //     $query = $this->db->query("DELETE from area where id = {$data} ");
+        //     return $query;
+        // }
         public function getAreasEmpresa($id){
           //  $query = $this->db->query("SELECT * FROM area where idempresa='{$id}'");
             $query = $this->db->query("EXEC listarAreaByActivo @empresa ={$data}");

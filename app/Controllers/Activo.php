@@ -339,13 +339,19 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input['id']);
+                    $result = $model->delete($input[0]['id']);
                     if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
                         return $this->getResponse(
                             [
-                                'error' => true,
-                                'msg' => 'se elimino'
-                            ],
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
                         );
                     }
                    
@@ -353,8 +359,8 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' => 'Conflicto no se elimino'
-                        ],
+                            'msg' =>  'No se pudo eliminar'
+                        ]
                     );
                 }
                 
@@ -550,12 +556,22 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
 
       
+          
             $model = new Mvaloractivo();
-            $result = $model->saveValorActivo($input);
-        
+            $valida = $model->validaValorActivo($input);
+    
+            if(!$valida){
+                $result = $model->saveValActivo($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Valor de Activo ya registrada';
+                $error = 0;
+            }
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  $msg,
+                    'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -607,21 +623,24 @@ class Activo extends BaseController
         $found = $model->find($input['id']);
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Valor Activo eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -629,6 +648,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Valor Activo eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -870,11 +911,11 @@ class Activo extends BaseController
 
       
             $model = new MclasInformacion();
-            $result = $model->saveClasInformacion($input);
+            $model->saveClasInformacion($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -902,7 +943,7 @@ class Activo extends BaseController
     
         return $this->getResponse(
             [
-                'msg' =>  $result
+                'msg' =>  true
             ]
         );
         } catch (Exception $ex) {
@@ -1041,7 +1082,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -1066,7 +1107,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -1221,17 +1262,17 @@ class Activo extends BaseController
         try{
             $input = $this->getRequestInput($this->request);
             $model = new Munidades();
-            $result = $model->updateUnidades($input);
+            $model->updateUnidades($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
+                    //'error' => $ex->getMessage(),
                     'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
@@ -1244,26 +1285,29 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new Munidades();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
 
         try{
             if($found){
-                if($model->delete('id')){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Unidad eliminada'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -1271,6 +1315,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete('id')){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Unidad eliminada'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -1389,7 +1455,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -1407,26 +1473,29 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new Mmacroprocesos();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
 
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -1434,6 +1503,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -1532,7 +1623,7 @@ class Activo extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
+                    //'error' => $ex->getMessage(),
                     'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
@@ -1550,7 +1641,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -1569,25 +1660,28 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new Mproceso();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -1595,6 +1689,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -1705,11 +1821,20 @@ class Activo extends BaseController
 
         
             $model = new MPosicion();
-            $result = $model->savePosicion($input);
+            $valida = $model->validaPosicion($input);
         
+            if(!$valida){
+                $result = $model->savePosicion($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Posicion ya registrada';
+                $error = 0;
+            }
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  $msg,
+                    'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -1734,7 +1859,7 @@ class Activo extends BaseController
             
                 return $this->getResponse(
                     [
-                        'msg' =>  $result
+                        'msg' =>  true
                     ]
                 );
             } catch (Exception $ex) {
@@ -1756,21 +1881,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Posicion/Puesto eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -1778,6 +1906,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Posicion/Puesto eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -1850,13 +2000,23 @@ class Activo extends BaseController
 
             
                 $model = new MValoracionActivo();
-                $result = $model->saveValActivo($input);
-            
+                $valida = $model->validarValActivo($input);
+        
+                if(!$valida){
+                    $result = $model->saveValActivo($input);
+                    $msg = 'Registrado Correctamente';
+                    $error = 1;
+                }else{
+                    $msg = 'Posicion ya registrada';
+                    $error = 0;
+                }
                 return $this->getResponse(
                     [
-                        'msg' =>  $result
+                        'msg' =>  $msg,
+                        'error' =>  $error
                     ]
                 );
+              
             } catch (Exception $ex) {
                 return $this->getResponse(
                     [
@@ -1879,7 +2039,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -1902,21 +2062,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -1924,6 +2087,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -2042,21 +2227,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -2064,6 +2252,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -2175,7 +2385,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' => true
                 ]
             );
         } catch (Exception $ex) {
@@ -2198,21 +2408,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -2220,6 +2433,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -2399,21 +2634,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input[0]['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input[0]['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input[0]['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -2421,6 +2659,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input[0]['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -2534,21 +2794,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input[0]['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input[0]['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input[0]['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -2556,6 +2819,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input[0]['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -2671,21 +2956,24 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input[0]['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input[0]['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input[0]['id'],$data);
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -2693,6 +2981,28 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input[0]['id'])){
+                //     $this->db->transRollback();
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -2840,25 +3150,80 @@ public function updatePlanAccion(){
 //revisar
 public function deletePlanAccion(){
     
-    try {
-        
-        $input = $this->getRequestInput($this->request);       
-        $model = new MriesgoPlanAccion();    
-        
-        $result = $model->deletePlanAccion($input);
-    
-    
-        
-        return $this->getResponse([
-            'msg' => 'Estado Eliminado correctamente',
-            'error' => 0
-        ]);
-    
+    $input = $this->getRequestInput($this->request);
+    $model = new MriesgoPlanAccion();
+    $found = $model->find($input[0]['id']);
+    $this->db->transBegin();
+    try{
+        if($found){
+            try {
+                $result = $model->delete($input[0]['id']);
+                if($result){
+                    $this->db->transRollback();
+                    $data['date_deleted'] = date("Y-m-d H:i:s");
+                    $data['id_user_deleted'] = $input['user'];
+                    $data['is_deleted'] = 1;
+                   
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }
+               
+            } catch (Exception $ex) {
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No se pudo eliminar'
+                    ]
+                );
+            }
+            // if($model->delete($input[0]['id'])){
+            //     $this->db->transRollback();
+            //     $data['is_deleted'] = 1;
+            //     $model->update($input[0]['id'],$data);
+            //     return $this->getResponse(
+            //         [
+            //             'error' => false,
+            //             'msg' =>  'Eliminado Correctamente'
+            //         ]
+            //     );
+            // }else{
+            //     $data['is_deleted'] = 0;
+            //     $data['date_deleted'] = null;
+            //     $data['id_user_deleted'] = null;
+            //     $model->update($input[0]['id'],$data);
+            //     return $this->getResponse(
+            //         [
+            //             'error' => true,
+            //             'msg' =>  'No se pudo eliminar'
+            //         ]
+            //     );
+            // }
+        }else{
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'No existen registros'
+                ]
+            );
+        }
+        $this->db->transCommit();
+
     } catch (Exception $ex) {
-        
-        return $this->getResponse([
-            'error' => $ex->getMessage()
-        ], ResponseInterface::HTTP_OK);
+        $data['is_deleted'] = 0;
+        $data['date_deleted'] = null;
+        $data['id_user_deleted'] = null;
+        $model->update($input['id'],$data);
+        return $this->getResponse(
+            [  
+                'error' => true,
+                'msg' => 'No es posible eliminarlo',
+            ]
+        );
     }
 }
 
