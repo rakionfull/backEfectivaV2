@@ -28,7 +28,7 @@ class Mempresa extends Model
 
     public function validaEmpresa($data){
         
-        $query = $this->db->query("SELECT * FROM empresa where  empresa='{$data['empresa']}'");
+        $query = $this->db->query("EXEC validaEmpresa @empresa='{$data['empresa']}'");
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;
@@ -36,42 +36,49 @@ class Mempresa extends Model
     //retorna todos los perfiles
     public function getEmpresas(){
 
-        $query = $this->db->query("SELECT * FROM empresa");
+        $query = $this->db->query("EXEC listarEmpresa");
         return $query->getResultArray();
     }
     public function getEmpresasByActivo(){
 
-        $query = $this->db->query("SELECT * FROM empresa where estado='1'");
+        $query = $this->db->query("EXEC listarEmpresaByAcivo");
         return $query->getResultArray();
     }
     public function saveEmpresa($data){
     
-        $query=$this->db->query("INSERT INTO empresa
-        (empresa,estado) VALUES
-        ('{$data[0]['empresa']}',{$data[0]['estado']})") ;
-       $empresa = $this->db->query("SELECT  @@IDENTITY as maxid FROM empresa");
+        // $query=$this->db->query("INSERT INTO empresa
+        // (empresa,estado) VALUES
+        // ('{$data[0]['empresa']}',{$data[0]['estado']})") ;
+          $query=$this->db->query("EXEC agregar_empresa @empresa='{$data[0]['empresa']}',
+          @estado={$data[0]['estado']} ,@idUserAdd={$data['user']}") ;
+      // $empresa = $this->db->query("SELECT  @@IDENTITY as maxid FROM empresa");
         
-        $result = $this->db->query("EXEC add_escenario_active @idEmpresa={$empresa->getRow()->maxid} ,@escenario='1',@idUser={$data['user']}");
-        return $result;
+      //  $result = $this->db->query("EXEC add_escenario_active @idEmpresa={$empresa->getRow()->maxid} ,@escenario='1',@idUser={$data['user']}");
+        return $query;
     }
     public function updateEmpresa($data){
       
         
-        $query=$this->db->query("UPDATE empresa SET 
-        empresa = '{$data['empresa']}',
-        estado = '{$data['estado']}'
-        where id = {$data['id']} ") ;
-           
+        // $query=$this->db->query("UPDATE editar_empresa 
+        // SET 
+        // empresa = '{$data['empresa']}',
+        // estado = '{$data['estado']}'
+        // where id = {$data['id']} ") ;
+        $query=$this->db->query("EXEC editar_empresa 
+             @empresa = '{$data[0]['empresa']}',
+             @estado = '{$data[0]['estado']}',
+             @idempresa= {$data[0]['id']},
+             @idUserAdd= {$data['user']} ") ;
         return $query;
     }
-    public function deleteEmpresa($data){
+    // public function deleteEmpresa($data){
         
             
-        $query=$this->db->query("DELETE empresa 
-        where id = {$data} ") ;
+    //     $query=$this->db->query("DELETE empresa 
+    //     where id = {$data} ") ;
         
-        return $query;
-    }
+    //     return $query;
+    // }
   
   
 }

@@ -404,36 +404,87 @@ class RegistroControlesController extends BaseController
     public function deleteControles()
     {
    
-        try {
-            $input = $this->getRequestInput($this->request);
+        // try {
+        //     $input = $this->getRequestInput($this->request);
 
       
-            $model = new MRegistroControles();
+        //     $model = new MRegistroControles();
         
            
-           $result = $model->deleteControles($input);
-            if($result){
-                $msg = 'Elimnado Correctamente';
-                $error = 1;
-            }else{
-                $msg = 'Error al Eliminar';
-                $error = 0;
-            }
+        //    $result = $model->deleteControles($input);
+        //     if($result){
+        //         $msg = 'Elimnado Correctamente';
+        //         $error = 1;
+        //     }else{
+        //         $msg = 'Error al Eliminar';
+        //         $error = 0;
+        //     }
                 
         
+        //     return $this->getResponse(
+        //         [
+        //             'msg' => $msg,
+        //             'error' =>  $error
+        //         ]
+        //     );
+        // } catch (Exception $ex) {
+        //     return $this->getResponse(
+        //         [
+        //             'msg' => $ex->getMessage(),
+        //             'error' =>  0
+        //         ],
+        //         ResponseInterface::HTTP_OK
+        //     );
+        // }
+        $input = $this->getRequestInput($this->request);
+        $model = new MRegistroControles();
+        $model->find($input[0]['id']);
+        $this->db->transBegin();
+        try {
+            if($model){
+                if($model->delete($input[0]['id'])){
+                    $this->db->transRollback();
+                    $input['is_deleted'] = 1;
+                    $data['id_user_deleted'] = $input[0]['user'];
+                    $model->update($input[0]['id'],$input);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Nivel de riesgo eliminado'
+                        ]
+                    );
+                }else{
+                    $input['is_deleted'] = 0;
+                    $input['date_deleted'] = null;
+                    $input['id_user_deleted'] = null;
+                    $model->update($id,$input);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existe'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+           
+        } catch (\Throwable $th) {
+            $input['is_deleted'] = 0;
+            $input['date_deleted'] = null;
+            $input['id_user_deleted'] = null;
+            $model->update($input[0]['id'],$input);
             return $this->getResponse(
                 [
-                    'msg' => $msg,
-                    'error' =>  $error
+                    'error' => true,
+                    'msg' =>  'No se pudo eliminar'
                 ]
-            );
-        } catch (Exception $ex) {
-            return $this->getResponse(
-                [
-                    'msg' => $ex->getMessage(),
-                    'error' =>  0
-                ],
-                ResponseInterface::HTTP_OK
             );
         }
     

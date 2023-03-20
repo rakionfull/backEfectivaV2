@@ -6,7 +6,26 @@ use CodeIgniter\Model;
 
 class MAplicacionImpacto extends Model
 {
-    
+    protected $table = 'aplicacion_impacto';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
+
     public function validaAplicacionImpacto($data){
         
         $query = $this->db->query("EXEC valida_AplicacionImpacto @escenario='".$data['escenario']."' ,

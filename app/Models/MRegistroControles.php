@@ -6,7 +6,25 @@ use CodeIgniter\Model;
 
 class MRegistroControles extends Model
 {
-
+    protected $table            = 'registro_controles';
+    protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = false;
+    // Dates
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'date_add';
+    protected $updatedField  = 'date_modify';
+    protected $deletedField  = 'date_deleted';
+    protected $allowedFields    = [
+        'id',
+        'date_add',
+        'date_modify',
+        'date_deleted',
+        'id_user_added',
+        'id_user_modify',
+        'id_user_deleted',
+        'is_deleted'
+    ];
     public function getCCMenu(){
         
         $query = $this->db->query("select * from caracteristica_control where tipo = 'menu' and is_deleted=0 and estado= 1");
