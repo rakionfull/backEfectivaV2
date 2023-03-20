@@ -180,22 +180,72 @@ class EvaluacionControlController extends BaseController
     public function deleteEvaluacionControl()
     {
    
-        try{
-            $input = $this->getRequestInput($this->request);
+        // try{
+        //     $input = $this->getRequestInput($this->request);
 
         
-            $model = new MEvaluacionControl();
-            $result = $model->deleteEvaluacionControl($input);
+        //     $model = new MEvaluacionControl();
+        //     $result = $model->deleteEvaluacionControl($input);
         
-            return $this->getResponse(
-                [
-                    'msg' =>  'Eliminado Correctamente'
-                ]
-            );
+        //     return $this->getResponse(
+        //         [
+        //             'msg' =>  'Eliminado Correctamente'
+        //         ]
+        //     );
+        // } catch (Exception $ex) {
+        //     return $this->getResponse(
+        //         [
+        //             'error' => 'Evaluacion Control está asignado, no es posible eliminarlo',
+        //         ]
+        //     );
+        // }
+        $input = $this->getRequestInput($this->request);
+        $model = new MEvaluacionControl();
+        $found = $model->find($input[0]['id']);
+        $this->db->transBegin();
+        try{
+            if($found){
+                if($model->delete($input[0]['id'])){
+                    $this->db->transRollback();
+                    $data['is_deleted'] = 1;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Eliminado Correctamente'
+                        ]
+                    );
+                }else{
+                    $data['is_deleted'] = 0;
+                    $data['date_deleted'] = null;
+                    $data['id_user_deleted'] = null;
+                    $model->update($input[0]['id'],$data);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+
         } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($input['id'],$data);
             return $this->getResponse(
-                [
-                    'error' => 'Evaluacion Control está asignado, no es posible eliminarlo',
+                [  
+                    'error' => true,
+                    'msg' => 'Evaluacion de Control está asignado, no es posible eliminarlo',
                 ]
             );
         }

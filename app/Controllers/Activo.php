@@ -84,36 +84,37 @@ class Activo extends BaseController
     }
     public function addEmpresa()
     {
-   try {
-        $input = $this->getRequestInput($this->request);
+        try {
+                $input = $this->getRequestInput($this->request);
 
-        
-        $model = new Mempresa();
-        $valida = $model -> validaEmpresa($input[0]);
-        if(!$valida){
-            $result = $model->saveEmpresa($input);
-            $msg = 'Registrado Correctamente';
-            $error = 1;
-        }else{
-            $msg = 'Empresa ya registrada';
-            $error = 0;
+                
+                $model = new Mempresa();
+                $valida = $model -> validaEmpresa($input[0]);
+                if(!$valida){
+                    $result = $model->saveEmpresa($input);
+                    $msg = 'Registrado Correctamente';
+                    $error = 1;
+                }else{
+                    $msg = 'Empresa ya registrada';
+                    $error = 0;
+                }
+                
+
+            return $this->getResponse(
+                [
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo Agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
         }
-        
-
-    return $this->getResponse(
-        [
-            'msg' =>  $msg,
-            'error' =>  $error
-        ]
-    );
-   } catch (Exception $ex) {
-    return $this->getResponse(
-        [
-            'error' => $ex->getMessage(),
-        ],
-        ResponseInterface::HTTP_OK
-    );
-}
         
       
       
@@ -122,18 +123,28 @@ class Activo extends BaseController
     public function updateEmpresa()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Mempresa();
-        $result = $model->updateEmpresa($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new Mempresa();
+            $model->updateEmpresa($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  true
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+       
       
         
     }
@@ -141,21 +152,28 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new Mempresa();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -163,6 +181,22 @@ class Activo extends BaseController
                         ]
                     );
                 }
+                // if($model->delete($input[0]['id'])){
+                //     $this->db->transRollback();
+                //     $data['date_deleted'] = date("Y-m-d H:i:s");
+                //     $data['id_user_deleted'] = $input['user'];
+                //     $data['is_deleted'] = 1;
+                   
+                //     $model->update($input[0]['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                   
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -232,47 +266,67 @@ class Activo extends BaseController
     public function addArea()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Marea();
-    
-        $valida = $model -> validaArea($input);
-        if(!$valida){
-            $result = $model->saveArea($input);
-            $msg = 'Registrado Correctamente';
-            $error = 1;
-        }else{
-            $msg = 'Arera ya registrada';
-            $error = 0;
-        }
+            $model = new Marea();
         
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $msg,
-                'error' =>  $error
-            ]
-        );
+            $valida = $model -> validaArea($input[0]);
+            if(!$valida){
+                $result = $model->saveArea($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Arera ya registrada';
+                $error = 0;
+            }
+            
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+       
       
         
     }
     public function updateArea()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Marea();
-        $result = $model->updateArea($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new Marea();
+            $model->updateArea($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  true
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+        
       
         
     }
@@ -284,28 +338,50 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
-                }else{
-                    $data['is_deleted'] = 0;
-                    $data['date_deleted'] = null;
-                    $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                try {
+                    $result = $model->delete($input['id']);
+                    if($result){
+                        return $this->getResponse(
+                            [
+                                'error' => true,
+                                'msg' => 'se elimino'
+                            ],
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
-                        ]
+                            'msg' => 'Conflicto no se elimino'
+                        ],
                     );
                 }
+                
+                // if($model->delete($input['id'])){
+                //     $this->db->transRollback();
+                //     $data['date_deleted'] = date("Y-m-d H:i:s");
+                //     $data['id_user_deleted'] = $input['user'];
+                //     $data['is_deleted'] = 1;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => false,
+                //             'msg' =>  'Eliminado Correctamente'
+                //         ]
+                //     );
+                // }else{
+                //     $data['is_deleted'] = 0;
+                //     $data['date_deleted'] = null;
+                //     $data['id_user_deleted'] = null;
+                //     $model->update($input['id'],$data);
+                //     return $this->getResponse(
+                //         [
+                //             'error' => true,
+                //             'msg' =>  'No se pudo eliminar'
+                //         ]
+                //     );
+                // }
             }else{
                 return $this->getResponse(
                     [
@@ -354,8 +430,8 @@ class Activo extends BaseController
     public function addAreaEmpresa()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
         $model = new Marea();
@@ -366,14 +442,24 @@ class Activo extends BaseController
                 'msg' =>  $result
             ]
         );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+       
       
         
     }
     public function updateAreaEmpresa()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
         $model = new Marea();
@@ -384,12 +470,20 @@ class Activo extends BaseController
                 'msg' =>  $result
             ]
         );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+       
       
         
     }
    
-      //------------------------------------------------------------------------------
-
       
       public function getValorActivo(){
 
@@ -452,36 +546,57 @@ class Activo extends BaseController
     public function addValorActivo()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Mvaloractivo();
-        $result = $model->saveValorActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new Mvaloractivo();
+            $result = $model->saveValorActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+        
       
         
     }
     public function updateValorActivo()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Mvaloractivo();
-        $result = $model->updateValorActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new Mvaloractivo();
+            $result = $model->updateValorActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+      
       
         
     }
@@ -581,18 +696,28 @@ class Activo extends BaseController
     public function addTipoActivo()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Mtipoactivo();
-        $result = $model->saveTipoActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new Mtipoactivo();
+            $result = $model->saveTipoActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+       
       
         
     }
@@ -617,18 +742,29 @@ class Activo extends BaseController
     public function updateTipoActivo()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Mtipoactivo();
-        $result = $model->updateTipoActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new Mtipoactivo();
+            $result = $model->updateTipoActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+            
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+        
       
         
     }
@@ -729,25 +865,35 @@ class Activo extends BaseController
     public function addClasInformacion()
     {
    
-        
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new MclasInformacion();
-        $result = $model->saveClasInformacion($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new MclasInformacion();
+            $result = $model->saveClasInformacion($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+       
       
         
     }
     public function updateClasInformacion()
     {
    
-        
+        try{
         $input = $this->getRequestInput($this->request);
 
       
@@ -759,7 +905,15 @@ class Activo extends BaseController
                 'msg' =>  $result
             ]
         );
-      
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
         
     }
     public function deleteClasInfo()
@@ -878,36 +1032,52 @@ class Activo extends BaseController
     }
     public function addAspectoSeg()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MaspectoSeg();
-        $result = $model->saveAspectoSeg($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new MaspectoSeg();
+            $result = $model->saveAspectoSeg($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
         
     }
     public function updateAspectoSeg()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{   
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MaspectoSeg();
-        $result = $model->updateAspectoSeg($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new MaspectoSeg();
+            $result = $model->updateAspectoSeg($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
         
     }
     public function deleteAspectoSeg()
@@ -1010,44 +1180,63 @@ class Activo extends BaseController
     }
     public function addUnidades()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
       
-        $model = new Munidades();
+            $model = new Munidades();
+            
         
-    
-        $valida = $model -> validaUnidad($input);
-        if(!$valida){
-            $result = $model->saveUnidades($input);
-            $msg = 'Registrado Correctamente';
-            $error = 1;
-        }else{
-            $msg = 'Unidad ya registrada';
-            $error = 0;
+            $valida = $model -> validaUnidad($input);
+            if(!$valida){
+                $result = $model->saveUnidades($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Unidad ya registrada';
+                $error = 0;
+            }
+            
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
         }
         
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $msg,
-                'error' =>  $error
-            ]
-        );
         
     }
     public function updateUnidades()
     {
-        $input = $this->getRequestInput($this->request);
-        $model = new Munidades();
-        $result = $model->updateUnidades($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        try{
+            $input = $this->getRequestInput($this->request);
+            $model = new Munidades();
+            $result = $model->updateUnidades($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
         
     }
     
@@ -1153,48 +1342,65 @@ class Activo extends BaseController
     
     public function addMacroproceso()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{ 
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new Mmacroprocesos();
-      
-    
-        $valida = $model -> validaMacroproceso($input);
-        if(!$valida){
-            $result = $model->saveMacroproceso($input);
-            $msg = 'Registrado Correctamente';
-            $error = 1;
-        }else{
-            $msg = 'Macroproceso ya registrada';
-            $error = 0;
-        }
         
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $msg,
-                'error' =>  $error
-            ]
-        );
+            $model = new Mmacroprocesos();
+        
+        
+            $valida = $model -> validaMacroproceso($input);
+            if(!$valida){
+                $result = $model->saveMacroproceso($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Macroproceso ya registrada';
+                $error = 0;
+            }
+            
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
       
         
     }
     public function updateMacroproceso()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new Mmacroprocesos();
-        $result = $model->updateMacroproceso($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new Mmacroprocesos();
+            $result = $model->updateMacroproceso($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
         
     }
     public function deleteMacroproceso()
@@ -1300,46 +1506,62 @@ class Activo extends BaseController
     //proceos
     public function addProceso()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new Mproceso();
-        $valida = $model->validaProceso($input);
-    
-        if(!$valida){
-            $result = $model->saveProceso($input);
-            $msg = 'Registrado Correctamente';
-            $error = 1;
-        }else{
-            $msg = 'Proceso ya registrada';
-            $error = 0;
-        }
         
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $msg,
-                'error' =>  $error
-            ]
-        );
-      
+            $model = new Mproceso();
+            $valida = $model->validaProceso($input);
         
+            if(!$valida){
+                $result = $model->saveProceso($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Proceso ya registrada';
+                $error = 0;
+            }
+            
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }        
     }
     public function updateProceso()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{   
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new Mproceso();
-        $result = $model->updateProceso($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+        
+            $model = new Mproceso();
+            $result = $model->updateProceso($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
       
         
     }
@@ -1478,36 +1700,52 @@ class Activo extends BaseController
     }
     public function addPosicion()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MPosicion();
-        $result = $model->savePosicion($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new MPosicion();
+            $result = $model->savePosicion($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
         
     }
     public function updatePosicion()
     {
-           
-        $input = $this->getRequestInput($this->request);
+            try{ 
+                $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MPosicion();
-        $result = $model->updatePosicion($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+            
+                $model = new MPosicion();
+                $result = $model->updatePosicion($input);
+            
+                return $this->getResponse(
+                    [
+                        'msg' =>  $result
+                    ]
+                );
+            } catch (Exception $ex) {
+                return $this->getResponse(
+                    [
+                        // 'error' => $ex->getMessage(),
+                        'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }  
         
     }
     public function deletePosicion()
@@ -1607,36 +1845,52 @@ class Activo extends BaseController
     }
     public function addValActivo()
     {
-           
-        $input = $this->getRequestInput($this->request);
+           try{
+                $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MValoracionActivo();
-        $result = $model->saveValActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+            
+                $model = new MValoracionActivo();
+                $result = $model->saveValActivo($input);
+            
+                return $this->getResponse(
+                    [
+                        'msg' =>  $result
+                    ]
+                );
+            } catch (Exception $ex) {
+                return $this->getResponse(
+                    [
+                        // 'error' => $ex->getMessage(),
+                        'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }  
         
     }
     public function updateValActivo()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MValoracionActivo();
-        $result = $model->updateValActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new MValoracionActivo();
+            $result = $model->updateValActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
         
     }
     public function deleteValActivo()
@@ -1734,34 +1988,50 @@ class Activo extends BaseController
     }
     public function addCatActivo()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MCatActivo();
-        $result = $model->saveCatActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new MCatActivo();
+            $result = $model->saveCatActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
         
     }
     public function updateCatActivo()
     {
+        try{
+            $input = $this->getRequestInput($this->request);
+            $model = new MCatActivo();
+            $result = $model->updateCatActivo($input);
         
-        $input = $this->getRequestInput($this->request);
-        $model = new MCatActivo();
-        $result = $model->updateCatActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
         
     }
     public function deleteCatActivo()
@@ -1859,48 +2129,64 @@ class Activo extends BaseController
     }
     public function addUbiActivo()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MUbicActivo();
-      
-    
-        $valida = $model -> validarUbiActivo($input);
-        if(!$valida){
-            $result = $model->saveUbiActivo($input);
-            $msg = 'Registrado Correctamente';
-            $error = 1;
-        }else{
-            $msg = 'Ubicacion de activo registrado ya registrada';
-            $error = 0;
-        }
         
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $msg,
-                'error' =>  $error
-            ]
-        );
-      
+            $model = new MUbicActivo();
+        
+        
+            $valida = $model -> validarUbiActivo($input);
+            if(!$valida){
+                $result = $model->saveUbiActivo($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Ubicacion de activo registrado ya registrada';
+                $error = 0;
+            }
+            
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
         
     }
     public function updateUbiActivo()
     {
-           
-        $input = $this->getRequestInput($this->request);
+        try{
+            $input = $this->getRequestInput($this->request);
 
-      
-        $model = new MUbicActivo();
-        $result = $model->updateUbiActivo($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
-      
+        
+            $model = new MUbicActivo();
+            $result = $model->updateUbiActivo($input);
+        
+            return $this->getResponse(
+                [
+                    'msg' =>  $result
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }  
         
     }
     public function deleteUbiActivo()
@@ -2072,7 +2358,8 @@ class Activo extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    'error' => $ex->getMessage(),
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
         );
@@ -2095,9 +2382,12 @@ class Activo extends BaseController
         
         } catch (Exception $ex) {
             
-            return $this->getResponse([
-                'error' => $ex->getMessage()
-            ], ResponseInterface::HTTP_OK);
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+            ResponseInterface::HTTP_OK);
         }
         
     }
@@ -2202,7 +2492,8 @@ class Activo extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    'error' => $ex->getMessage(),
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
         );
@@ -2225,9 +2516,12 @@ class Activo extends BaseController
         
         } catch (Exception $ex) {
             
-            return $this->getResponse([
-                'error' => $ex->getMessage()
-            ], ResponseInterface::HTTP_OK);
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ]
+            , ResponseInterface::HTTP_OK);
         }
       
         
@@ -2335,7 +2629,8 @@ class Activo extends BaseController
             } catch (Exception $ex) {
                 return $this->getResponse(
                     [
-                        'error' => $ex->getMessage(),
+                        // 'error' => $ex->getMessage(),
+                        'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                     ],
                     ResponseInterface::HTTP_OK
             );
@@ -2358,9 +2653,11 @@ class Activo extends BaseController
         
         } catch (Exception $ex) {
             
-            return $this->getResponse([
-                'error' => $ex->getMessage()
-            ], ResponseInterface::HTTP_OK);
+            return $this->getResponse(
+                [
+                    // 'error' => $ex->getMessage(),
+                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ], ResponseInterface::HTTP_OK);
         }
           
             
@@ -2501,8 +2798,12 @@ public function addPlanAccion(){
         );
     } catch (Exception $ex) {
         return $this->getResponse(
+            // [
+            //     'error' => $ex->getMessage()." line ".$ex->getLine()." ".$ex->getFile()
+            // ],
             [
-                'error' => $ex->getMessage()." line ".$ex->getLine()." ".$ex->getFile()
+                // 'error' => $ex->getMessage(),
+                'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
             ],
             ResponseInterface::HTTP_OK
         );
@@ -2526,14 +2827,17 @@ public function updatePlanAccion(){
     
     } catch (Exception $ex) {
         
-        return $this->getResponse([
-            'error' => $ex->getMessage()
-        ], ResponseInterface::HTTP_OK);
+        return $this->getResponse(
+            [
+                // 'error' => $ex->getMessage(),
+                'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+            ]
+        , ResponseInterface::HTTP_OK);
     }
     
 }
 
-
+//revisar
 public function deletePlanAccion(){
     
     try {
@@ -2642,7 +2946,8 @@ public function addActividadPlan(){
     } catch (Exception $ex) {
         return $this->getResponse(
             [
-                'error' => $ex->getMessage(),
+                // 'error' => $ex->getMessage(),
+                'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
             ],
             ResponseInterface::HTTP_OK
         );
@@ -2665,13 +2970,14 @@ public function updateActividadPlan(){
     
     } catch (Exception $ex) {
         
-        return $this->getResponse([
-            'error' => $ex->getMessage()
+        return $this->getResponse( [
+            // 'error' => $ex->getMessage(),
+            'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
         ], ResponseInterface::HTTP_OK);
     }
     
 }
-
+//revisar
 public function deleteActividadPlan(){
     
     try {

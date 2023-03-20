@@ -109,7 +109,7 @@ class TipoAmenazaController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => false,
-                            'msg' =>  'Tipo de amenaza eleminado'
+                            'msg' =>  'Tipo de amenaza eliminado'
                         ]
                     );
                 }else{

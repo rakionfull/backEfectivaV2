@@ -123,7 +123,8 @@ class DescripcionVulnerabilidadController extends BaseController
             $model->update($id,$input);
             return $this->getResponse(
                 [
-                    'msg' =>  'Ocurrio un error '.$th->getMessage()
+                    // 'msg' =>  'Ocurrio un error '.$th->getMessage()
+                    'msg' =>'No se pudo eliminar'
                 ]
             );
         
