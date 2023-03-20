@@ -32,11 +32,11 @@ class Database extends Config
      */
     public $default = [
         'DSN'      => '',
-        'hostname' => 'localhost',
-        'username' => 'root',
-        'password' => '',
+        'hostname' => 'DESKTOP-K7LLO77\SQLEXPRESS',
+        'username' => 'sa',
+        'password' => 'sqlserver',
         'database' => 'bd_efectiva',
-        'DBDriver' => 'MySQLi',
+        'DBDriver' => 'SQLSRV',
         'DBPrefix' => '',
         'pConnect' => false,
         'DBDebug'  => (ENVIRONMENT !== 'production'),
@@ -47,8 +47,28 @@ class Database extends Config
         'compress' => false,
         'strictOn' => false,
         'failover' => [],
-        'port'     => 3306,
+        'port'     => 1433,
     ];
+
+    // public $default = [
+    //     'DSN'      => '',
+    //     'hostname' => 'localhost',
+    //     'username' => 'root',
+    //     'password' => '',
+    //     'database' => 'bd_efectiva',
+    //     'DBDriver' => 'MySQLi',
+    //     'DBPrefix' => '',
+    //     'pConnect' => false,
+    //     'DBDebug'  => (ENVIRONMENT !== 'production'),
+    //     'charset'  => 'utf8',
+    //     'DBCollat' => 'utf8_general_ci',
+    //     'swapPre'  => '',
+    //     'encrypt'  => false,
+    //     'compress' => false,
+    //     'strictOn' => false,
+    //     'failover' => [],
+    //     'port'     => 3306,
+    // ];
 
     /**
      * This database connection is used when

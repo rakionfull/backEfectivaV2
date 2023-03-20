@@ -79,9 +79,9 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
     |
     */
     public bool $notification = false;
-    public string $from = 'your@example.com';
+    public string $from = 'ansir.manuel@gmail.com';
     public string $fromName = 'CronJob';
-    public string $to = 'your@example.com';
+    public string $to = 'antony_grone12@live.com';
     public string $toName = 'User';
 
     /*
