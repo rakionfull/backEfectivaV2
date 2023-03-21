@@ -45,8 +45,9 @@ class Muser extends Model
 
     }
     public function lastid(){
+        // $maxID = $this->db->query('SELECT id_us as maxid FROM tb_users order by id_us desc limit 1');
         $maxID = $this->db->query('SELECT SCOPE_IDENTITY() as maxid FROM tb_users');
-    
+
         return $maxID->getRow()->maxid;
     }
     public function savePass($data){

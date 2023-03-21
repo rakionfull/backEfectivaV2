@@ -319,6 +319,7 @@ class ImpactoRiesgoController extends BaseController
             if($model){
                 if($model->delete($id)){
                     $this->db->transRollback();
+                    $input['estado'] = 2;
                     $input['is_deleted'] = 1;
                     $model->update($id,$input);
                     $modelProbabilidad= new ProbabilidadRiesgo();
@@ -335,6 +336,7 @@ class ImpactoRiesgoController extends BaseController
                         ]
                     );
                 }else{
+                    $input['estado'] = 1;
                     $input['is_deleted'] = 0;
                     $input['date_deleted'] = null;
                     $input['id_user_deleted'] = null;
@@ -357,6 +359,7 @@ class ImpactoRiesgoController extends BaseController
             $this->db->transCommit();
 
         } catch (\Throwable $th) {
+            $input['estado'] = 1;
             $input['is_deleted'] = 0;
             $input['date_deleted'] = null;
             $input['id_user_deleted'] = null;
