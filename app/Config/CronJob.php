@@ -168,12 +168,12 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                         $email->setSubject('Prueba Job');
                                         $email->setMessage(
                                            view('mail/plan_accion',[
-                                                'data'=>[
-                                                    'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                                
+                                                    'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
                                                     'plan' => $value['plan_accion'],
                                                     'estado' => 'Ha Iniciado',
                                                     'alerta' => $value['alerta']
-                                                ]
+                                                
                                             ])
                                         );
                                         $email->send();
@@ -212,12 +212,12 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                     $email->setSubject('Prueba Job');
                                     $email->setMessage(
                                         view('mail/plan_accion',[
-                                            'data'=>[
-                                                'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                            
+                                                'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
                                                 'plan' => $value['plan_accion'],
                                                 'estado' => 'Ha Iniciado',
                                                 'alerta' => $value['alerta']
-                                            ]
+                                            
                                         ])
                                     );
                                     $email->send();
@@ -267,12 +267,12 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                         $email->setSubject('Prueba Job');
                                         $email->setMessage(
                                             view('mail/plan_accion',[
-                                                'data'=>[
-                                                    'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                                
+                                                    'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
                                                     'plan' => $value['plan_accion'],
                                                     'estado' => 'Ha Iniciado',
-                                                    'alerta' => $value['alerta']
-                                                ]
+                                                 'alerta' => $value['alerta']
+                                                
                                             ])
                                         );
                                         $email->send();
@@ -311,12 +311,12 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                       $email->setSubject('Prueba Job');
                                       $email->setMessage(
                                           view('mail/plan_accion',[
-                                              'data'=>[
-                                                  'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                              
+                                                  'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
                                                   'plan' => $value['plan_accion'],
                                                   'estado' => 'Ha Iniciado',
                                                   'alerta' => $value['alerta']
-                                              ]
+                                              
                                           ])
                                       );
                                       $email->send();
