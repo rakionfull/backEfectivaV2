@@ -79,9 +79,9 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
     |
     */
     public bool $notification = false;
-    public string $from = 'ansir.manuel@gmail.com';
+    public string $from = 'email@example.com';
     public string $fromName = 'CronJob';
-    public string $to = 'antony_grone12@live.com';
+    public string $to = 'email@example.com';
     public string $toName = 'User';
 
     /*
@@ -161,6 +161,22 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                         // el nombvre del plan $value['plan_accion]
                                         // el estado: ah inciado
                                         //aleta $value['alerta] tipo de alerta
+
+                                        $email = \Config\Services::email();
+                                        $email->setTo($value['email_us']);
+                                        $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
+                                        $email->setSubject('Prueba Job');
+                                        $email->setMessage(
+                                           view('mail/plan_accion',[
+                                                'data'=>[
+                                                    'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                                    'plan' => $value['plan_accion'],
+                                                    'estado' => 'Ha Iniciado',
+                                                    'alerta' => $value['alerta']
+                                                ]
+                                            ])
+                                        );
+                                        $email->send();
                                     }
                             }
                         }
@@ -189,6 +205,22 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                      // el nombvre del plan $row['plan_accion]
                                       // el estado: ah inciado
                                       //aleta $row['alerta] tipo de alerta
+
+                                    $email = \Config\Services::email();
+                                    $email->setTo($value['email_us']);
+                                    $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
+                                    $email->setSubject('Prueba Job');
+                                    $email->setMessage(
+                                        view('mail/plan_accion',[
+                                            'data'=>[
+                                                'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                                'plan' => $value['plan_accion'],
+                                                'estado' => 'Ha Iniciado',
+                                                'alerta' => $value['alerta']
+                                            ]
+                                        ])
+                                    );
+                                    $email->send();
                                  }
                          }
                      
@@ -228,6 +260,23 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                         // el nombvre del plan $value['plan_accion]
                                         // el estado: ah inciado
                                         //aleta $value['alerta] tipo de alerta
+
+                                        $email = \Config\Services::email();
+                                        $email->setTo($value['email_us']);
+                                        $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
+                                        $email->setSubject('Prueba Job');
+                                        $email->setMessage(
+                                            view('mail/plan_accion',[
+                                                'data'=>[
+                                                    'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                                    'plan' => $value['plan_accion'],
+                                                    'estado' => 'Ha Iniciado',
+                                                    'alerta' => $value['alerta']
+                                                ]
+                                            ])
+                                        );
+                                        $email->send();
+                                        
                                     }
                             }
                         }
@@ -256,6 +305,21 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                      // el nombvre del plan $row['plan_accion]
                                       // el estado: ah inciado
                                       //aleta $row['alerta] tipo de alerta
+                                      $email = \Config\Services::email();
+                                      $email->setTo($value['email_us']);
+                                      $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
+                                      $email->setSubject('Prueba Job');
+                                      $email->setMessage(
+                                          view('mail/plan_accion',[
+                                              'data'=>[
+                                                  'fullname' => $value['nombre_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+                                                  'plan' => $value['plan_accion'],
+                                                  'estado' => 'Ha Iniciado',
+                                                  'alerta' => $value['alerta']
+                                              ]
+                                          ])
+                                      );
+                                      $email->send();
                                  }
                          }
                      

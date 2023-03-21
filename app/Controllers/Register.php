@@ -50,6 +50,11 @@ class Register extends BaseController
                 'email_us' => $this->request->getVar('email'),
                 // 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT)
                 'usuario_us' => $this->request->getVar('usuario'),
+                'perfil_us' => $this->request->getVar('perfil_us'),
+                'id_empresa' => $this->request->getVar('idempresa'),
+                'id_puesto' => $this->request->getVar('idposicion'),
+                'id_area' => $this->request->getVar('idarea'),
+                'id_unidad' => $this->request->getVar('idunidad'),
                 'creacion_us' => date('Y-m-d H:i:s'),
                 'estado_us' => '1',
                 'change_pass' => '0',
