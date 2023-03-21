@@ -31,7 +31,7 @@ class MCatActivo extends Model
             // where categoria='{$data['categoria']}' 
             //  and idtipo='{$data['idtipo']}'");
             $query = $this->db->query("EXEC validaCatActivo 
-            @cateogria = '{$data[0]['categoria']}',
+            @categoria = '{$data[0]['categoria']}',
             @tipo= '{$data[0]['idtipo']}'");
             $query->getRow();
             if( $query->getRow()) return true;

@@ -1,0 +1,38 @@
+[
+    {
+        "name": "closure_c1bc6973978ee61d546af8693fdda6d5",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-19 18:31:56",
+        "end_at": "2023-03-19 18:31:56",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta con datos de la actividadCorreo registrado y enviadoEs hora de la alerta con datos de la actividadCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_c1bc6973978ee61d546af8693fdda6d5",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-18 18:31:13",
+        "end_at": "2023-03-18 18:31:13",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta inicial de actividadCorreo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_c1bc6973978ee61d546af8693fdda6d5",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-17 18:29:51",
+        "end_at": "2023-03-17 18:29:51",
+        "duration": "00:00:00",
+        "output": "",
+        "error": "null",
+        "test_time": null
+    }
+]

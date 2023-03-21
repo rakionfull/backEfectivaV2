@@ -211,7 +211,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [
                     'error' => true,
@@ -334,7 +334,7 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new Marea();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
@@ -402,7 +402,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -558,10 +558,10 @@ class Activo extends BaseController
       
           
             $model = new Mvaloractivo();
-            $valida = $model->validaValorActivo($input);
+            $valida = $model->validarValActivo($input);
     
             if(!$valida){
-                $result = $model->saveValActivo($input);
+                $result = $model->saveValorActivo($input);
                 $msg = 'Registrado Correctamente';
                 $error = 1;
             }else{
@@ -600,7 +600,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -620,7 +620,7 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new Mvaloractivo();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         try{
             if($found){
                 try {
@@ -742,11 +742,26 @@ class Activo extends BaseController
 
       
             $model = new Mtipoactivo();
-            $result = $model->saveTipoActivo($input);
+            // $result = $model->saveTipoActivo($input);
         
+            // return $this->getResponse(
+            //     [
+            //         'msg' =>  $result
+            //     ]
+            // );
+            $valida = $model -> validarTipoActivo($input);
+            if(!$valida){
+                $result = $model->saveTipoActivo($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Tipo de Activo ya registrada';
+                $error = 0;
+            }
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  $msg,
+                    'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -792,7 +807,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
             
@@ -815,14 +830,14 @@ class Activo extends BaseController
    
         $input = $this->getRequestInput($this->request);
         $model = new Mtipoactivo();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
+                if($model->delete($input[0]['id'])){
                     $this->db->transRollback();
                     $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
+                    $model->update($input[0]['id'],$data);
                     return $this->getResponse(
                         [
                             'error' => false,
@@ -833,7 +848,7 @@ class Activo extends BaseController
                     $data['is_deleted'] = 0;
                     $data['date_deleted'] = null;
                     $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                    $model->update($input[0]['id'],$data);
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -855,7 +870,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -910,12 +925,35 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
 
       
-            $model = new MclasInformacion();
-            $model->saveClasInformacion($input);
+            // $model = new MclasInformacion();
+            // $model->saveClasInformacion($input);
         
+            // return $this->getResponse(
+            //     [
+            //         'msg' =>  true
+            //     ]
+            // );
+            $model = new MclasInformacion();
+            // $result = $model->saveTipoActivo($input);
+        
+            // return $this->getResponse(
+            //     [
+            //         'msg' =>  $result
+            //     ]
+            // );
+            $valida = $model -> validarClasInfo($input);
+            if(!$valida){
+                $result = $model->saveClasInformacion($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Clasificaicon de Información ya registrada';
+                $error = 0;
+            }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  $msg,
+                     'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -962,14 +1000,14 @@ class Activo extends BaseController
 
         $input = $this->getRequestInput($this->request);
         $model = new MclasInformacion();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
+                if($model->delete($input[0]['id'])){
                     $this->db->transRollback();
                     $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
+                    $model->update($input[0]['id'],$data);
                     return $this->getResponse(
                         [
                             'error' => false,
@@ -980,7 +1018,7 @@ class Activo extends BaseController
                     $data['is_deleted'] = 0;
                     $data['date_deleted'] = null;
                     $data['id_user_deleted'] = null;
-                    $model->update($input['id'],$data);
+                    $model->update($input[0]['id'],$data);
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -1002,7 +1040,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -1125,14 +1163,14 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new MaspectoSeg();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input['id'])){
+                if($model->delete($input[0]['id'])){
                     $this->db->transRollback();
                     $data['is_deleted'] = 1;
-                    $model->update($input['id'],$data);
+                    $model->update($input[0]['id'],$data);
                     return $this->getResponse(
                         [
                             'error' => false,
@@ -1165,7 +1203,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [
                     'error' => true,
@@ -1781,7 +1819,8 @@ class Activo extends BaseController
             $model = new MPosicion();
             $input = $this->getRequestInput($this->request);
                 $response = [
-                    'data' =>  $model->getPosicionByActivo($input['idempresa'])
+                    // 'data' =>  $model->getPosicionByActivo($input['idempresa'])
+                    'data' =>  $model->getPosicionByActivo($input)
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         
@@ -1877,7 +1916,7 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new MPosicion();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
@@ -1942,7 +1981,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [
                     'error' => true,
@@ -2007,7 +2046,7 @@ class Activo extends BaseController
                     $msg = 'Registrado Correctamente';
                     $error = 1;
                 }else{
-                    $msg = 'Posicion ya registrada';
+                    $msg = 'Valoracion ya registrada';
                     $error = 0;
                 }
                 return $this->getResponse(
@@ -2058,7 +2097,7 @@ class Activo extends BaseController
    
         $input = $this->getRequestInput($this->request);
         $model = new MValoracionActivo();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
@@ -2178,13 +2217,31 @@ class Activo extends BaseController
 
         
             $model = new MCatActivo();
-            $result = $model->saveCatActivo($input);
+            // $result = $model->saveCatActivo($input);
         
-            return $this->getResponse(
-                [
-                    'msg' =>  $result
-                ]
-            );
+            // return $this->getResponse(
+            //     [
+            //         'msg' =>  true
+            //     ]
+            // );
+          
+            $valida = $model -> validarCatActivo($input);
+            if(!$valida){
+                $result = $model->saveCatActivo($input);
+                $msg = 'Registrado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Categoria ya registrada';
+                $error = 0;
+            }
+            
+
+        return $this->getResponse(
+            [
+                'msg' =>  $msg,
+                'error' =>  $error
+            ]
+        );
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
@@ -2205,7 +2262,7 @@ class Activo extends BaseController
         
             return $this->getResponse(
                 [
-                    'msg' =>  $result
+                    'msg' =>  true
                 ]
             );
         } catch (Exception $ex) {
@@ -2223,7 +2280,7 @@ class Activo extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new MCatActivo();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
@@ -2288,7 +2345,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -2404,7 +2461,7 @@ class Activo extends BaseController
    
         $input = $this->getRequestInput($this->request);
         $model = new MUbicActivo();
-        $found = $model->find($input['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
             if($found){
@@ -2469,7 +2526,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,

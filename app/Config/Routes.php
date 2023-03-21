@@ -420,11 +420,11 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
 
    
        //  CRUD INVENTARIO CLASIFICACION ACTIVO
-      $routes->get('listInventarioClasificacionActivo','InventarioClasificacionActivoController::index');
+      $routes->get('listInventarioClasificacionActivo/(:num)','InventarioClasificacionActivoController::index/$1');
       $routes->get('getAllHistoricos','InventarioClasificacionActivoController::getAllHistoricos');
       $routes->get('getAllHistoricosByUser/(:num)','InventarioClasificacionActivoController::getAllHistoricosByUser/$1');
       $routes->get('getInventarioClasificacionActivo/(:num)','InventarioClasificacionActivoController::show/$1');
-      $routes->get('getInventarioClasificacionActivoUser/(:num)','InventarioClasificacionActivoController::getByUser/$1');
+      $routes->get('getInventarioClasificacionActivoUser/(:num)/(:num)','InventarioClasificacionActivoController::getByUser/$1/$2');
       $routes->post('addInventarioClasificacionActivo','InventarioClasificacionActivoController::store');
       $routes->post('updateInventarioClasificacionActivo/(:num)','InventarioClasificacionActivoController::update/$1');
       $routes->post('deleteInventarioClasificacionActivo/(:num)','InventarioClasificacionActivoController::destroy/$1');
@@ -434,7 +434,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
   
 
       // CRUD EVALUACION RIESGO
-      $routes->get('listEvaluacionRiesgos','EvaluacionRiesgoController::index');
+      $routes->get('listEvaluacionRiesgos/(:num)','EvaluacionRiesgoController::index/$1');
       $routes->get('getListHistorial','EvaluacionRiesgoController::getListHistorial');
       $routes->get('getEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::show/$1');
       $routes->get('countByValor','EvaluacionRiesgoController::countByValor');

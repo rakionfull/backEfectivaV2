@@ -122,8 +122,10 @@ class MPosicion extends Model
     public function getPosicionByActivo($data){
 
        // $query = $this->db->query("SELECT * FROM posicion_puesto where estado='1' and idempresa={$data}");
-      
-      $query = $this->db->query("EXEC listarPosicionEmpresa @dato={$data}");
+       
+       $query = $this->db->query("EXEC getPosicionByActivo
+        @empresa={$data['idempresa']}");
+      //$query = $this->db->query("EXEC listarPosicionEmpresa @dato={$data}");
        return $query->getResultArray();
     }
 

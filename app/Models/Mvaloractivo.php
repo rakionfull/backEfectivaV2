@@ -64,7 +64,7 @@ class Mvaloractivo extends Model
         // valor = '{$data['valor']}',
         // estado = '{$data['estado']}'
         // where id = {$data['id']} ") ;
-        $query = $this->db->query("EXEC agregar_valoractivo
+        $query = $this->db->query("EXEC editar_valoractivo
         @valor = '{$data[0]['valor']}',
         @idvalor = '{$data[0]['id']}',
         @estado= {$data[0]['estado']},

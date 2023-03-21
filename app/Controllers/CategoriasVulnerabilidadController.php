@@ -100,10 +100,10 @@ class CategoriasVulnerabilidadController extends BaseController
     public function destroy($id){
         $input = $this->getRequestInput($this->request);
         $model = new CategoriasVulnerabilidad();
-        $model->find($id);
+        $found = $model->find($id);
         $this->db->transBegin();
         try {
-            if($model){
+            if($found){
                 if($model->delete($id)){
                     $this->db->transRollback();
                     $input['is_deleted'] = 1;
@@ -144,6 +144,7 @@ class CategoriasVulnerabilidadController extends BaseController
             $model->update($id,$input);
             return $this->getResponse(
                 [
+                    'error' => true,
                     'msg' =>  'No se pudo eliminar'
                 ]
             );

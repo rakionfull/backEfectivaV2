@@ -122,6 +122,7 @@ class Muser extends Model
         apepat_us = '{$data['apepat_us']}',apemat_us= '{$data['apemat_us']}',perfil_us= '{$data['perfil_us']}',
         estado_us= '{$data['estado_us']}',
         email_us= '{$data['email_us']}' ,actualizacion_us='{$actualizacion_us}',idempresa='{$data['id_empresa']}'
+        ,idarea='{$data['id_area']}',idposicion='{$data['id_puesto']}',idunidad='{$data['id_unidad']}'
        
         where id_us = {$id} ") ;
            
@@ -136,13 +137,13 @@ class Muser extends Model
            
         return $query;
     }
-    public function deleteUser($id){
-        $this->db->query("DELETE FROM tb_historial_claves
-        where id_us = {$id} ") ;
-        $query=$this->db->query("DELETE FROM tb_users
-        where id_us = {$id} ") ;
-        return $query;
-    }
+    // public function deleteUser($id){
+    //     $this->db->query("DELETE FROM tb_historial_claves
+    //     where id_us = {$id} ") ;
+    //     $query=$this->db->query("DELETE FROM tb_users
+    //     where id_us = {$id} ") ;
+    //     return $query;
+    // }
     public function findUser($username){
 
         $Usuario = $this->db->query("SELECT  * FROM  tb_users where usuario_us= '{$username}' ");

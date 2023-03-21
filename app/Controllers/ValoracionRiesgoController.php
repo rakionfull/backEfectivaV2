@@ -95,33 +95,35 @@ class ValoracionRiesgoController extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new MValoracionRiesgo();
-        $model->find($input[0]['id']);
+        $found = $model->find($input[0]['id']);
         $this->db->transBegin();
         try{
-            if($model){
-                if($model->delete($input[0]['id'])){
-                    $this->db->transRollback();
-                    $data['is_deleted'] = 1;
-                    $data['id_user_deleted'] = $input[0]['user'];
-                    $model->update($input[0]['id'],$data);
+            if($found){
+                try {
+                    $result = $model->delete($input[0]['id']);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['user'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($input[0]['id'],$data);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
                     return $this->getResponse(
                         [
-                            'error' => false,
-                            'msg' =>  'Valoracion de riesgo eliminado'
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
                         ]
                     );
                 }
-            }else{
-                $input['is_deleted'] = 0;
-                $input['date_deleted'] = null;
-                $input['id_user_deleted'] = null;
-                $model->update($input[0]['id'],$input);
-                return $this->getResponse(
-                    [
-                        'error' => true,
-                        'msg' =>  'No se pudo eliminar'
-                    ]
-                );
             }
             $this->db->transCommit();
 
