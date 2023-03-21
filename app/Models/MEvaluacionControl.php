@@ -110,7 +110,7 @@ class MEvaluacionControl extends Model
     public function getDisenioCalificacion(){
         
         $id=$this->db->query("SELECT id from caracteristica_control 
-        where is_deleted=0   and caracteristica='Disenio'") ;
+        where is_deleted=0   and caracteristica='Diseño'") ;
         $disenio = $id->getRow()->id;
         
         $id_cali=$this->db->query("SELECT id from caracteristica_control 

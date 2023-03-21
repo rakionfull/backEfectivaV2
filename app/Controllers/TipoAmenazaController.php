@@ -99,9 +99,10 @@ class TipoAmenazaController extends BaseController
     public function destroy($id){
         $input = $this->getRequestInput($this->request);
         $model = new TipoAmenaza();
-        $model->find($id);
+        $found = $model->find($id);
+        $this->db->transBegin();
         try {
-            if($model){
+            if($found){
                 if($model->delete($id)){
                     $this->db->transRollback();
                     $input['is_deleted'] = 1;
@@ -125,6 +126,16 @@ class TipoAmenazaController extends BaseController
                         ]
                     );
                 }
+                
+               
+            
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
             }
             $this->db->transCommit();
 
@@ -135,6 +146,7 @@ class TipoAmenazaController extends BaseController
             $model->update($id,$input);
             return $this->getResponse(
                 [
+                    'error' => true,
                     'msg' =>  'No se puede eliminar'
                 ]
             );

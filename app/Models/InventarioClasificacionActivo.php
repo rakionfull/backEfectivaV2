@@ -47,8 +47,8 @@ class InventarioClasificacionActivo extends Model
         return $result;
     }
 
-    public function getAll(){
-        $sql = "EXEC sp_list_inventario_clasificacion_activo";
+    public function getAll($id){
+        $sql = "EXEC sp_list_inventario_clasificacion_activo @empresa={$id}";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
@@ -59,9 +59,9 @@ class InventarioClasificacionActivo extends Model
         return $result;
     }
 
-    public function getByUser($user_id){
-        $sql = "EXEC sp_list_inventario_clasificacion_activo_by_user ? ";
-        $result = $this->db->query($sql,[$user_id])->getResultArray();
+    public function getByUser($user_id,$empresa){
+        $sql = "EXEC sp_list_inventario_clasificacion_activo_by_user ?,? ";
+        $result = $this->db->query($sql,[$user_id,$empresa])->getResultArray();
         return $result;
     }
 

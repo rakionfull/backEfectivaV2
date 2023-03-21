@@ -33,7 +33,7 @@ class Home extends BaseController
     }
     public function dashboard(){
         $response = [
-            'msg' => 'Bienvenido a eefectiva V2',
+            'msg' => 'BIENVENIDOS AL SISTEMA DE GESTIÓN DE RIESGOS SI-C',
         ];
         return $this->respond($response, ResponseInterface::HTTP_OK);
 
@@ -405,23 +405,85 @@ class Home extends BaseController
         );
     }
     public function deleteUser($id){
-        $model = new Muser();
+        // $model = new Muser();
+
+        // $input = $this->getRequestInput($this->request);
+
+        // $user =  $model->getUserbyId($id);
+
+        // $result = $model->deleteUser($id);
+       
+        // log_acciones(
+        //     'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
+        //     ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
+
+        // return $this->getResponse(
+        //     [
+        //         'user' =>  $result
+        //     ]
+        // );
 
         $input = $this->getRequestInput($this->request);
-
+        $model = new Muser();
+        $found = $model->find($id);
         $user =  $model->getUserbyId($id);
+        $this->db->transBegin();
+        try{
+            if($found){
+                try {
+                    $result = $model->delete($id);
+                    if($result){
+                        $this->db->transRollback();
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $input['username'];
+                        $data['is_deleted'] = 1;
+                       
+                        $model->update($id,$data);
+                        log_acciones(
+                            'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
+                            ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
 
-        $result = $model->deleteUser($id);
-       
-        log_acciones(
-            'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
-            ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'msg' =>  'Eliminado Correctamente'
+                            ]
+                        );
+                    }
+                   
+                } catch (Exception $ex) {
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'El Usuario esta asignado y no se pudo eliminar'
+                        ]
+                    );
+                }
+              
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen registros'
+                    ]
+                );
+            }
+            $this->db->transCommit();
+            
+        } catch (Exception $ex) {
+            $data['is_deleted'] = 0;
+            $data['date_deleted'] = null;
+            $data['id_user_deleted'] = null;
+            $model->update($id,$data);
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' => 'El Usuario está asignado, no es posible eliminarlo',
+                ]
+            );
+        }
 
-        return $this->getResponse(
-            [
-                'user' =>  $result
-            ]
-        );
+
     }
     public function getPerfiles(){
 

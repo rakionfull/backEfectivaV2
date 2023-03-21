@@ -37,7 +37,7 @@ class MriesgoPlanAccion extends Model
     }
     public function getCorreoActividad(){
         
-        $query = $this->db->query("SELECT AP.id,PA.plan_accion,AP.descripcion ,TU.id_us,TU.email_us,A.valor,CONVERT(date,AP.fecha_inicio,12) as fecha_ini,
+        $query = $this->db->query("SELECT AP.id as id_act,PA.plan_accion,AP.descripcion ,TU.id_us,TU.email_us,A.valor,CONVERT(date,AP.fecha_inicio,12) as fecha_ini,
         CONVERT (date,AP.fecha_fin,12) as fecha_fin,TU.nombres_us,TU.apepat_us,TU.apemat_us ,A.alerta as usuario
         from actividades_plan as AP  inner join alert_seguimiento as A on AP.idalerta=A.id
         inner join tb_users as TU on AP.idusuario = TU.id_us  inner join plan_accion as PA on PA.id=AP.id_planes

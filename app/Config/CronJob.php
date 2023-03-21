@@ -235,7 +235,7 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
             
             foreach ($result2 as $key => $value) {
               
-                $idactividad = $value['id'];
+                $idactividad = $value['id_act'];
                 $idusuario = $value['id_us'];
                 $correo_plan = $model->getCorreoActividadesEnviados($idactividad);
                 if(!$correo_plan){

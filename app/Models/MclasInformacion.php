@@ -30,7 +30,7 @@ class MclasInformacion extends Model
             // $query = $this->db->query("SELECT * FROM clasificacion_informacion 
             // where clasificacion='{$data}'");
             $query = $this->db->query("EXEC validaClasInfo 
-            @clasificacion= '{$data}'");
+            @clasificacion= '{$data[0]['clasificacion']}'");
             $query->getRow();
             if( $query->getRow()) return true;
             else return false;

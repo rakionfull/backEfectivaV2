@@ -123,6 +123,7 @@ class Muser extends Model
         apepat_us = '{$data['apepat_us']}',apemat_us= '{$data['apemat_us']}',perfil_us= '{$data['perfil_us']}',
         estado_us= '{$data['estado_us']}',
         email_us= '{$data['email_us']}' ,actualizacion_us='{$actualizacion_us}',idempresa='{$data['id_empresa']}'
+        ,idarea='{$data['id_area']}',idposicion='{$data['id_puesto']}',idunidad='{$data['id_unidad']}'
        
         where id_us = {$id} ") ;
            
@@ -131,19 +132,21 @@ class Muser extends Model
     }
         //actualiza solo el estado 
     public function updateEstadoUser($data){
-        $query=$this->db->query("UPDATE tb_users SET 
-        estado_us= '{$data['estado_us']}'
-        where id_us = {$data['id_us']} ") ;
-           
+        // $query=$this->db->query("UPDATE tb_users SET 
+        // estado_us= '{$data['estado_us']}'
+        // where id_us = {$data['id_us']} ") ;
+           $query=$this->db->query("UPDATE tb_users SET 
+           bloqueo_us= '{$data['estado_us']}'
+           where id_us = {$data['id_us']} ") ;
         return $query;
     }
-    public function deleteUser($id){
-        $this->db->query("DELETE FROM tb_historial_claves
-        where id_us = {$id} ") ;
-        $query=$this->db->query("DELETE FROM tb_users
-        where id_us = {$id} ") ;
-        return $query;
-    }
+    // public function deleteUser($id){
+    //     $this->db->query("DELETE FROM tb_historial_claves
+    //     where id_us = {$id} ") ;
+    //     $query=$this->db->query("DELETE FROM tb_users
+    //     where id_us = {$id} ") ;
+    //     return $query;
+    // }
     public function findUser($username){
 
         $Usuario = $this->db->query("SELECT  * FROM  tb_users where usuario_us= '{$username}' ");
@@ -151,7 +154,7 @@ class Muser extends Model
         return $Usuario->getRow();
     }
     public function getIntento($username){
-        $Usuario = $this->db->query("SELECT  intentos_us,bloqueo_time FROM  tb_users where usuario_us= '{$username}' ");
+        $Usuario = $this->db->query("SELECT  intentos_us,bloqueo_time,bloqueo_us FROM  tb_users where usuario_us= '{$username}' ");
        
         return $Usuario->getRow();
     }
@@ -162,8 +165,9 @@ class Muser extends Model
         return $Usuario;
     }
     public function setTimeIntento($username){
-        $time =  time() + 60*2;
-        $Usuario = $this->db->query("UPDATE  tb_users SET bloqueo_time= $time  where usuario_us= '{$username}' ");
+        // $time =  time() + 60*2;
+       // $Usuario = $this->db->query("UPDATE  tb_users SET bloqueo_time= $time  where usuario_us= '{$username}' ");
+        $Usuario = $this->db->query("UPDATE  tb_users SET bloqueo_us=1  where usuario_us= '{$username}' ");
        
         return $Usuario;
     }
@@ -188,7 +192,11 @@ class Muser extends Model
         $query = $this->db->query("SELECT * FROM tb_users where estado_us='1'");
         return $query->getResultArray();
     }
+    public function getUserByEmpresa($data){
 
+        $query = $this->db->query("SELECT * FROM tb_users where estado_us='1' and idempresa={$data}");
+        return $query->getResultArray();
+    }
     public function getUserNombreByActivo(){
 
         $query = $this->db->query("SELECT * FROM tb_users where estado_us='1'");

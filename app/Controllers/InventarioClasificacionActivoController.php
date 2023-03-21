@@ -78,11 +78,11 @@ class InventarioClasificacionActivoController extends BaseController
                 );
         }
     }
-    public function index(){
+    public function index($id){
         try {
             $model = new InventarioClasificacionActivo();
             $response = [
-                'data' =>  $model->getAll(),
+                'data' =>  $model->getAll($id),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {
@@ -111,11 +111,11 @@ class InventarioClasificacionActivoController extends BaseController
         }
     }
 
-    public function getByUser($user_id){
+    public function getByUser($user_id,$empresa){
         try {
             $model = new InventarioClasificacionActivo();
             $response = [
-                'data' =>  $model->getByUser($user_id),
+                'data' =>  $model->getByUser($user_id,$empresa),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {

@@ -6,10 +6,10 @@ use CodeIgniter\Model;
 
 class EvaluacionRiesgo extends Model
 {
-    protected $table            = 'evaluacion_riesgo';
+    protected $table  = 'evaluacion_riesgo';
 
-    public function getAll(){
-        $sql = "EXEC sp_list_evaluacion_riesgo";
+    public function getAll($id){
+        $sql = "EXEC sp_list_evaluacion_riesgo @empresa = {$id}" ;
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
