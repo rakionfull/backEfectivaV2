@@ -43,11 +43,12 @@ class Login extends BaseController
         $modelsUser = new Muser();
 
         $intento =  $modelsUser -> getIntento($input['username']);
+        
 
         $time_actual = time();
        
-        if($time_actual > $intento -> bloqueo_time){
-
+        // if($time_actual > $intento -> bloqueo_time){
+        if($intento -> bloqueo_us != 1){
             if (!$this->validateRequest($input, $rules, $errors)) {
                
     
@@ -62,12 +63,15 @@ class Login extends BaseController
     
                 if($intento->intentos_us  >= $configuracion[0]['intentos']){
                     //si llega al maximo de intentos mandar error y actualizar tb_user con el tiempo para desabilitar
+                    // $modelsUser -> setTimeIntento($input['username']);
                     $modelsUser -> setTimeIntento($input['username']);
                     // $error = new  \stdClass;
                     // $error->password = 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
                     // 2 min';
                     $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
                     2 min'];
+                    $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará. Por favor contactar con su adminsitrador
+                    del sistema'];
                 }else{
                     $error = $this->validator->getErrors();
                 }
@@ -85,7 +89,7 @@ class Login extends BaseController
             $modelsUser -> setIntento($input['username'],0);
         
             // $error->password = 'El usuario esta dabilitado por 2 min';
-            $error = ['password' => 'El usuario esta dabilitado por 2 min'];
+            $error = ['password' => 'El usuario esta Bloqueado, Contáctar con su administrador de sistema'];
             return $this->getResponse(
                 $error, ResponseInterface::HTTP_OK
                 // ResponseInterface::HTTP_BAD_REQUEST

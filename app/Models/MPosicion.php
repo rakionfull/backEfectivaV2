@@ -113,6 +113,12 @@ class MPosicion extends Model
         $query = $this->db->query("EXEC getPosicionByArea @idarea={$area_id}");
         return $query->getResultArray();
     }
+    public function getPosicionByUnidad($data){
+     
+        $query = $this->db->query("EXEC getPosicionByUnidad @empresa={$data['idempresa']},
+        @area={$data['idarea']}, @unidad={$data['idunidad']}");
+        return $query->getResultArray();
+    }
     public function getComboPosicion(){
 
         //$query = $this->db->query("SELECT * FROM posicion_puesto where estado='1'");

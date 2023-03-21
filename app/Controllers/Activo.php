@@ -1798,9 +1798,29 @@ class Activo extends BaseController
     }
     public function getPosicionByArea($area_id){
         try {
+            
             $model = new MPosicion();
             $response = [
                 'data' =>  $model->getPosicionByArea($area_id)
+            ];
+            return $this->respond($response, ResponseInterface::HTTP_OK);
+        
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                    [
+                        'error' => $ex->getMessage(),
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+        }
+    }
+    public function getPosicionByUnidad(){
+        try {
+            $input = $this->getRequestInput($this->request);
+            $model = new MPosicion();
+
+            $response = [
+                'data' =>  $model->getPosicionByUnidad($input)
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         
@@ -3532,7 +3552,8 @@ public function getAlerta(){
     }
 
        
-}public function getUserByActivo(){
+}
+public function getUserByActivo(){
 
     try {
         $model = new Muser();
@@ -3552,7 +3573,27 @@ public function getAlerta(){
 
        
 }
+public function getUserByEmpresa(){
 
+    try {
+        $input = $this->getRequestInput($this->request);      
+        $model = new Muser();
+            $response = [
+                'data' =>  $model->getUserByEmpresa($input['idempresa'])
+            ];
+            return $this->respond($response, ResponseInterface::HTTP_OK);
+    
+    } catch (Exception $ex) {
+        return $this->getResponse(
+                [
+                    'error' => $ex->getMessage(),
+                ],
+                ResponseInterface::HTTP_OK
+            );
+    }
+
+       
+}
 public function getEstadoByActivo(){
 
     try {

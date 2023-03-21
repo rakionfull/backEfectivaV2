@@ -165,6 +165,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->get('getPosicionByActivo', 'Activo::getPosicionByActivo',['filter' => 'authFilter']);
     $routes->get('getPosicion/(:num)', 'Activo::getPosicion/$1',['filter' => 'authFilter']);
     $routes->get('getPosicionByArea/(:num)', 'Activo::getPosicionByArea/$1',['filter' => 'authFilter']);
+    $routes->get('getPosicionByUnidad', 'Activo::getPosicionByUnidad',['filter' => 'authFilter']);
     $routes->post('addPosicion', 'Activo::addPosicion',['filter' => 'authFilter']);
     $routes->post('updatePosicion', 'Activo::updatePosicion',['filter' => 'authFilter']);
     $routes->delete('deletePosicion', 'Activo::deletePosicion',['filter' => 'authFilter']);
@@ -475,6 +476,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
 
       // LLENADO DE COMBOS MODAL ACTIVIDADES
       $routes->post('getUserByActivo', 'Activo::getUserByActivo',['filter' => 'authFilter']);
+      $routes->post('getUserByEmpresa', 'Activo::getUserByEmpresa',['filter' => 'authFilter']);
       $routes->post('getEstadoByActivo', 'Activo::getEstadoByActivo',['filter' => 'authFilter']);
       $routes->post('getPrioridadByActivo', 'Activo::getPrioridadByActivo',['filter' => 'authFilter']);
       $routes->post('getAlertaByActivo', 'Activo::getAlertaByActivo',['filter' => 'authFilter']);
