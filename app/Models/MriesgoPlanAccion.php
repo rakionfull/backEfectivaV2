@@ -121,21 +121,22 @@ class MriesgoPlanAccion extends Model
     //     return $query;
     // }
     public function updatePlanAccion($data){
+
         $query=$this->db->query("EXEC modificar_plan_accion 
-        @id={$data[0]['id']},
+        @id='{$data[0]['id']}',
         @plan='{$data[0]['plan_accion']}',
         @descripcion='{$data[0]['descripcion']}',
         @fecha_ini='{$data[0]['fecha_inicio']}',
         @fecha_fin='{$data[0]['fecha_fin']}',
-        @empresa={$data[0]['idempresa']},
-        @area={$data[0]['idarea']},
-        @unidad={$data[0]['idunidad']},
-        @posicion={$data[0]['idposicion']},
-        @usuario={$data[0]['idusuario']},
-        @prioridad={$data[0]['idprioridad']},
-        @estado={$data[0]['idestado']},
-        @alerta={$data[0]['idalerta']},
-        @idUserAdd= {$data['user']},
+        @empresa='{$data[0]['idempresa']}',
+        @area='{$data[0]['idarea']}',
+        @unidad='{$data[0]['idunidad']}',
+        @posicion='{$data[0]['idposicion']}',
+        @usuario='{$data[0]['idusuario']}',
+        @prioridad='{$data[0]['idprioridad']}',
+        @estado='{$data[0]['idestado']}',
+        @alerta='{$data[0]['idalerta']}',
+        @idUserAdd= '{$data['user']}',
         @idriesgo='{$data[0]['id_riesgo']}',
         @idcontrol='{$data[0]['id_control']}' ");
         

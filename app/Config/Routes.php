@@ -45,7 +45,7 @@ $routes->get('/newcaptcha', 'Login::newCaptcha');
 $routes->post('/validaCaptcha', 'Login::validaCaptcha');
 // http://localhost:8080/register
 $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
-
+$routes->post('/register2', 'Register::register');
 // $routes->cli('Task','Task::mensaje');
 
   $routes->get('Task','Task::mensaje');

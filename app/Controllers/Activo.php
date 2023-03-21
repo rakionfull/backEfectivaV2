@@ -3205,10 +3205,10 @@ public function updatePlanAccion(){
         $input = $this->getRequestInput($this->request);
     
         $model = new MriesgoPlanAccion();
-        $result = $model->updatePlanAccion($input);
+        $model->updatePlanAccion($input);
     
         return $this->getResponse([
-            'msg' => 'Estado actualizado correctamente',
+            'msg' => 'Actualizado correctamente',
             'error' => 1
         ]);
     
@@ -3217,7 +3217,7 @@ public function updatePlanAccion(){
         return $this->getResponse(
             [
                 // 'error' => $ex->getMessage(),
-                'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                'error' =>'Hola No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
             ]
         , ResponseInterface::HTTP_OK);
     }
