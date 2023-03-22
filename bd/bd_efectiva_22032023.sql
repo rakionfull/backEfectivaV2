@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-03-2023 a las 09:12:28
+-- Tiempo de generación: 22-03-2023 a las 15:41:29
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 8.0.25
 
@@ -25,11 +25,6 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `add_escenario_active` (IN `idEmpresa` INT, IN `escenario` INT, IN `idUser` INT)   BEGIN
-	INSERT INTO escenario_active (idEmpresa,escenario,id_user_added,date_add) 
-	VALUES(idEmpresa,escenario,idUser,current_date());
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_actividades_plan` (IN `idempresa` INT, IN `idarea` INT, IN `idunidad` INT, IN `idposicion` INT, IN `idusuario` INT, IN `descripcion` VARCHAR(150), IN `fecha_inicio` DATETIME, IN `fecha_fin` DATETIME, IN `idalerta` INT, IN `progreso` INT, IN `idUserAdd` INT, IN `idplan` INT)   BEGIN
 	insert into actividades_plan (
         idempresa, idarea, idunidad, idposicion, idusuario, descripcion, 
@@ -70,15 +65,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_aspecto` (IN `aspecto` VARC
 id_user_added,date_add) VALUES(aspecto,estado,idUserAdd,now());
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Automatizacion` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO automatizacion(
-	   caracteristica,
-	   descripcion,peso,estado,id_user_added,date_add)
-    VALUES (
-	   caracteristica,
-	   descripcion,peso ,estado,idUserAdd,current_date());
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_caractControl` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `estado` INT, IN `peso` VARCHAR(50), IN `valor` VARCHAR(50), IN `condicion` VARCHAR(50), IN `tipo` VARCHAR(50), IN `idOpcion` INT, IN `calificacion` INT, IN `check_tabla` INT, IN `nom_tabla` VARCHAR(100), IN `seleccionable` INT, IN `idUserAdd` INT)   BEGIN
 	INSERT INTO caracteristica_control(
 	   caracteristica,
@@ -88,26 +74,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_caractControl` (IN `caracte
 	   nom_tabla,seleccionable,idUserAdd,current_date());
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_CaracteristicaOpera` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(200), IN `idUserAdd` INT)   BEGIN
-	INSERT INTO caract_operatividad(caracteristica,descripcion,id_user_added,date_add)
-    VALUES (caracteristica,descripcion,idUserAdd,current_date());
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_catactivo` (IN `categoria` VARCHAR(150), IN `tipo` INT, IN `estado` INT, IN `idUserAdd` INT)   BEGIN
 	INSERT INTO categoria_activo
 (categoria,estado,idtipo,id_user_added,date_add)
 VALUES
 (categoria,estado,tipo,idUserAdd,now());
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_ClasificacionDise` (IN `clasificacion` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `condicion` VARCHAR(10), IN `valor` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO clasificacion_dise(clasificacion,descripcion,condicion,valor,id_user_added,date_add)
-    VALUES (clasificacion,descripcion,condicion,valor,idUserAdd,current_date());
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_ClasificacionOpera` (IN `clasificacion` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `condicion` VARCHAR(10), IN `valor` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO clasi_operatividad(clasificacion,descripcion,condicion,valor,id_user_added,date_add)
-    VALUES (clasificacion,descripcion,condicion,valor,idUserAdd,current_date());
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_clasinfo` (IN `clasificacion` VARCHAR(150), IN `descripcion` VARCHAR(150), IN `estado` INT, IN `idUserAdd` INT)   BEGIN
@@ -122,11 +93,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_cobertura` (IN `cobertura` 
     VALUES (cobertura,descripcion,idUserAdd,current_date());
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Definicion` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO definicion(caracteristica,descripcion,peso,estado,id_user_added,date_add)
-    VALUES (caracteristica,descripcion,peso,estado,idUserAdd,current_date());
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_detalle_control` (IN `idControl` INT, IN `idCC` INT, IN `nom_tabla` INT, IN `valor` VARCHAR(50))   BEGIN
 	INSERT INTO detalle_controles(idControles, idCC, nom_tabla,valor)
 	VALUES (idControl,idCC,nom_tabla,valor);
@@ -135,11 +101,6 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_detalle_Evaluacion_Control` (IN `IEC` INT, IN `IDCC` INT)   BEGIN
 	INSERT INTO detalle_evaluacion_control(IEC,ID_CC)
     VALUES (IEC,IDCC);
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Diseño` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `estado` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO diseño(caracteristica,descripcion,estado,id_user_added,date_add)
-    VALUES (caracteristica,descripcion,estado,idUserAdd,current_date());
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_empresa` (IN `empresa` VARCHAR(150), IN `estado` INT, IN `idUserAdd` INT)   BEGIN
@@ -160,16 +121,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_macroproceso` (IN `area` IN
 	INSERT INTO macroproceso(macroproceso,
 idunidad,idempresa,idarea,estado,
 id_user_added,date_add) VALUES(macroproceso,unidad,empresa,area,estado,idUserAdd,now());
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Objetivo` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO objetivo(caracteristica,descripcion,peso,estado,id_user_added,date_add)
-    VALUES (caracteristica,descripcion,peso,estado,idUserAdd,current_date());
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Operatividad` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `estado` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO operatividad(caracteristica,descripcion,estado,id_user_added,date_add)
-	VALUES (caracteristica,descripcion,estado,idUserAdd,current_date());
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_plan_accion` (IN `id_riesgo` VARCHAR(150), IN `id_control` VARCHAR(150), IN `plan_accion` VARCHAR(150), IN `descripcion` VARCHAR(150), IN `fecha_inicio` DATE, IN `fecha_fin` DATE, IN `id_user_added` INT, IN `idempresa` INT, IN `idarea` INT, IN `idunidad` INT, IN `idposicion` INT, IN `idusuario` INT, IN `idprioridad` INT, IN `idestado` INT, IN `idalerta` INT)   BEGIN
@@ -197,11 +148,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_proceso` (IN `area` INT, IN
 idunidad,idempresa,idarea,estado,
 id_user_added,date_add) VALUES(proceso,macroproceso,unidad,
                                empresa,area,estado,idUserAdd,now());
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Prueba` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT)   BEGIN
-	INSERT INTO prueba(caracteristica,descripcion,peso,estado,id_user_added,date_add)
-    VALUES (caracteristica,descripcion,peso,estado,idUserAdd,current_date());
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `agregar_Registro_Controles` (IN `IDR` VARCHAR(100), IN `riesgo` VARCHAR(100), IN `IDC` VARCHAR(100), IN `control` VARCHAR(100), IN `cobertura` INT, IN `evaluacion` VARCHAR(100), IN `estado` INT, IN `idUserAdd` INT)   BEGIN
@@ -433,14 +379,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_AplicacionProbabilidad` (I
 	where id= idAplicacionProbabilidad;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Automatizacion` (IN `idUserAdd` INT, IN `idAutomatizacion` INT)   BEGIN
-	UPDATE prueba  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idAutomatizacion;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_caractControl` (IN `idUserAdd` INT, IN `idCaractControl` INT)   BEGIN
 	UPDATE caracteristica_control  SET
 	id_user_deleted=idUserAdd,
@@ -449,52 +387,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_caractControl` (IN `idUser
 	where id=idCaractControl;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_CaracteristicaOpera` (IN `idUserAdd` INT, IN `idClasificacionOpera` INT)   BEGIN
-	UPDATE caract_operatividad  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idClasificacionOpera;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_ClasificacionDise` (IN `idUserAdd` INT, IN `idClasificacionDise` INT)   BEGIN
-	UPDATE clasificacion_dise  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idClasificacionDise;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_ClasificacionOpera` (IN `idUserAdd` INT, IN `idClasificacionOpera` INT)   BEGIN
-	UPDATE clasi_operatividad  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idClasificacionOpera;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_cobertura` (IN `idUserAdd` INT, IN `idCobertura` INT)   BEGIN
 	UPDATE cobertura  SET
 	id_user_deleted=idUserAdd,
 	date_deleted=current_date(),
 	is_deleted=1
 	where id=idCobertura;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Definicion` (IN `idUserAdd` INT, IN `idDefinicion` INT)   BEGIN
-	UPDATE definicion  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idDefinicion;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Diseño` (IN `idUserAdd` INT, IN `idDisenio` INT)   BEGIN
-	UPDATE diseño  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idDisenio;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_estado` (IN `idUserAdd` INT, IN `idEstado` INT)   BEGIN
@@ -513,22 +411,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Evaluacion_Control` (IN `i
 	where id= idEvaluacionControl;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Objetivo` (IN `idUserAdd` INT, IN `idObjetivo` INT)   BEGIN
-	UPDATE objetivo  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idObjetivo;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Operatividad` (IN `idUserAdd` INT, IN `idOperatividad` INT)   BEGIN
-	UPDATE operatividad  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idOperatividad;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_plan_accion` (IN `id` INT, IN `id_user_deleted` INT)   BEGIN
 	UPDATE plan_accion
     SET id_user_deleted = id_user_deleted,
@@ -543,14 +425,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_prioridad` (IN `idUserAdd`
 	date_deleted=current_date(),
 	is_deleted=1
 	where id=idPrioridad;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Prueba` (IN `idUserAdd` INT, IN `idPrueba` INT)   BEGIN
-	UPDATE prueba  SET
-	id_user_deleted=idUserAdd,
-	date_deleted=current_date(),
-	is_deleted=1
-	where id=idPrueba;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `eliminar_Registro_Controles` (IN `idUserAdd` INT, IN `idControl` INT)   BEGIN
@@ -869,36 +743,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_AplicacionProbabilidad` (IN 
 	where is_deleted=0 and escenario=escenario;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_Automatizacion` ()   BEGIN
-	SELECT * FROM automatizacion where is_deleted=0;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_caractControl` ()   BEGIN
 	SELECT * FROM caracteristica_control where is_deleted=0;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_CaracteristicaOpera` ()   BEGIN
-	SELECT * FROM caract_operatividad where is_deleted=0;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_ClasificacionDise` ()   BEGIN
-	SELECT * FROM clasificacion_dise where is_deleted=0;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_ClasificacionOpera` ()   BEGIN
-	SELECT * FROM clasi_operatividad where is_deleted=0;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_Definicion` ()   BEGIN
-	SELECT * FROM definicion where is_deleted=0;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_detalle_plan` (IN `id` INT)   BEGIN
 	select count(*) as actividades from actividades_plan where id_planes= id;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_Diseño` ()   BEGIN
-	SELECT * FROM diseño where is_deleted=0;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_estado` ()   BEGIN
@@ -916,14 +766,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_ImpactoRiesgoByActivo` ()   
 	SELECT *
 	FROM impacto_riesgo
     where is_deleted=0 and estado=1 and tipo_regla='2 Valores'  order by valor1 ASC;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_Objetivo` ()   BEGIN
-	SELECT * FROM objetivo where is_deleted=0;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_Operatividad` ()   BEGIN
-	SELECT * FROM operatividad where is_deleted=0;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_plan_accion` ()   BEGIN
@@ -944,10 +786,6 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_ProbabilidadRiesgoByActivo` ()   BEGIN
 	SELECT *
 	FROM probabilidad_riesgo where is_deleted=0 and estado=1 and tipo_regla='2 Valores'  order by valor1 DESC;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_Prueba` ()   BEGIN
-	SELECT * FROM prueba where is_deleted=0;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `listar_riesgos` ()   BEGIN
@@ -1008,16 +846,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_AplicacionProbabilidad` (
 	date_modify=current_date() where id=idAplicacionProbabilidad;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Automatizacion` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT, IN `idAutomatizacion` INT)   BEGIN
-	UPDATE automatizacion  SET
-	caracteristica=caracteristica,
-	descripcion= descripcion,
-	peso=peso,
-	estado= estado,
-	id_user_updated=idUserAdd,
-	date_modify=current_date() where id=idAutomatizacion;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_caractControl` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `estado` INT, IN `peso` VARCHAR(50), IN `valor` VARCHAR(50), IN `condicion` VARCHAR(50), IN `check_tabla` INT, IN `nom_tabla` VARCHAR(100), IN `calificacion` INT, IN `seleccionable` INT, IN `idUserAdd` INT, IN `idCaractControl` INT)   BEGIN
 	UPDATE caracteristica_control  SET
 	   caracteristica=caracteristica,
@@ -1034,34 +862,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_caractControl` (IN `carac
 	   date_modify=current_date() where id=idCaractControl;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_CaracteristicaOpera` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `idUserAdd` INT, IN `idClasificacionOpera` INT)   BEGIN
-	UPDATE caract_operatividad  SET
-	caracteristica=caracteristica,
-	descripcion= descripcion,
-	id_user_updated=idUserAdd,
-	date_modify=current_date() where id=idClasificacionOpera;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_ClasificacionDise` (IN `clasificacion` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `condicion` VARCHAR(50), IN `valor` INT, IN `idUserAdd` INT, IN `idClasificacionDise` INT)   BEGIN
-	UPDATE clasificacion_dise  SET
-	clasificacion=clasificacion,
-	descripcion= descripcion,
-	condicion=condicion,
-	valor= valor,
-	id_user_updated=idUserAdd,
-	date_modify=CURRENT_DATE() where id=idClasificacionDise;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_ClasificacionOpera` (IN `clasificacion` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `condicion` VARCHAR(50), IN `valor` INT, IN `idUserAdd` INT, IN `idClasificacionOpera` INT)   BEGIN
-	UPDATE clasi_operatividad  SET
-	clasificacion=clasificacion,
-	descripcion= descripcion,
-	condicion=condicion,
-	valor= valor,
-	id_user_updated=idUserAdd,
-	date_modify=CURRENT_DATE() where id=idClasificacionOpera;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_cobertura` (IN `cobertura` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `idUserAdd` INT, IN `idCobertura` INT)   BEGIN
 	UPDATE cobertura  SET
 	cobertura=cobertura,
@@ -1070,36 +870,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_cobertura` (IN `cobertura
 	date_modify=current_date() where id=idCobertura;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Definicion` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT, IN `idDefinicion` INT)   BEGIN
-	UPDATE definicion  SET
-	caracteristica=caracteristica,
-	descripcion= descripcion,
-	peso=peso,
-	estado= estado,
-	id_user_updated=idUserAdd,
-	date_modify=current_date() where id=idDefinicion;
-END$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_detalle_control` (IN `valor` VARCHAR(50), IN `idControl` INT, IN `idCC` INT)   BEGIN
 	UPDATE  detalle_controles SET
 	valor=valor WHERE idControles=idControl and idCC=idCC;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Diseño` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `estado` INT, IN `idUserAdd` INT, IN `idDisenio` INT)   BEGIN
-	UPDATE diseño  SET
-	   caracteristica=caracteristica,
-	   descripcion= descripcion,
-	   estado= estado,
-	   id_user_updated=idUserAdd,
-	   date_modify=current_date() where id=idDisenio;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_escenario_active` (IN `idEmpresa` INT, IN `user_id` INT, IN `scene` INT)   BEGIN
-	UPDATE escenario_active
-    set escenario=scene,
-	id_user_updated=user_id,
-	date_modify=current_date()
-	where idEmpresa=idEmpresa;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_estado` (IN `estado` VARCHAR(150), IN `descripcion` VARCHAR(150), IN `idUserAdd` INT, IN `idEstado` INT)   BEGIN
@@ -1115,25 +888,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Evaluacion_Control` (IN `
 	calificacion= calificacion,
 	id_user_updated=idUserAdd,
 	date_modify=current_date() where id=@idEvaluacionControl;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Objetivo` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT, IN `idObjetivo` INT)   BEGIN
-	UPDATE objetivo  SET
-	   caracteristica=caracteristica,
-	   descripcion= descripcion,
-	   peso=peso,
-	   estado= estado,
-	   id_user_updated=idUserAdd,
-	   date_modify=current_date() where id=idObjetivo;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Operatividad` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `estado` INT, IN `idUserAdd` INT, IN `idOperatividad` INT)   BEGIN
-	UPDATE operatividad  SET
-	   caracteristica=caracteristica,
-	   descripcion= descripcion,
-	   estado= estado,
-	   id_user_updated=idUserAdd,
-	   date_modify=CURRENT_DATE() where id=idOperatividad;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_plan_accion` (IN `id` INT, IN `plan` VARCHAR(150), IN `descripcion` VARCHAR(150), IN `fecha_ini` DATETIME, IN `fecha_fin` DATETIME, IN `empresa` INT, IN `area` INT, IN `unidad` INT, IN `posicion` INT, IN `usuario` INT, IN `prioridad` INT, IN `estado` INT, IN `alerta` INT, IN `idUserAdd` INT, IN `idriesgo` VARCHAR(150), IN `idcontrol` VARCHAR(150))   BEGIN
@@ -1163,16 +917,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_prioridad` (IN `prioridad
 	decripcion= descripcion,
 	id_user_updated=idUserAdd,
 	date_modify=current_date() where id=idPrioridad;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Prueba` (IN `caracteristica` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `peso` FLOAT, IN `estado` INT, IN `idUserAdd` INT, IN `idPrueba` INT)   BEGIN
-	UPDATE prueba  SET
-	caracteristica=caracteristica,
-	descripcion= descripcion,
-	peso=peso,
-	estado= estado,
-	id_user_updated=idUserAdd,
-	date_modify=current_date() where id=idPrueba;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `modificar_Registro_Controles` (IN `IDR` VARCHAR(100), IN `riesgo` VARCHAR(100), IN `IDC` VARCHAR(100), IN `control` VARCHAR(100), IN `cobertura` INT, IN `evaluacion` VARCHAR(100), IN `estado` INT, IN `idUserAdd` INT, IN `idControl` INT)   BEGIN
@@ -2280,35 +2024,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_AplicacionProbabilidad` (IN 
 	posicion=posicion and escenario=escenario and is_deleted=0;
 end$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Automatizacion` (IN `caracteristica` VARCHAR(50), IN `peso` FLOAT)   begin
-	SELECT *
-	FROM automatizacion where caracteristica=caracteristica and peso=peso and is_deleted=0;
-end$$
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_caractControl` (IN `caracteristica` VARCHAR(50), IN `idOpcion` INT)   begin
 	SELECT *
 	FROM caracteristica_control where caracteristica=caracteristica and is_deleted=0 and idOpcion = idOpcion;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_CaracteristicaOpera` (IN `caracteristica` VARCHAR(50))   begin
-	SELECT *
-	FROM caract_operatividad where caracteristica=caracteristica and is_deleted=0;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_ClasificacionDise` (IN `clasificacion` VARCHAR(50), IN `condicion` VARCHAR(10), IN `valor` INT)   begin
-	SELECT *
-	FROM clasificacion_dise
-    where clasificacion=clasificacion and condicion=condicion and is_deleted=0;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_ClasificacionOpera` (IN `clasificacion` VARCHAR(50), IN `condicion` VARCHAR(10), IN `valor` INT)   begin
-	SELECT *
-	FROM clasi_operatividad
-    where clasificacion=clasificacion and condicion=condicion and is_deleted=0;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Diseño` (IN `caracteristica` VARCHAR(50))   begin
-	 SELECT * FROM diseño where caracteristica=caracteristica and is_deleted=0;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Evaluacion_Control` (IN `disenio` INT, IN `operatividad` INT, IN `calificacion` VARCHAR(50))   begin
@@ -2316,18 +2034,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Evaluacion_Control` (IN `dis
 	FROM evaluacion_control
     where idDisenio=disenio and 
 	idOperatividad=operatividad and calificacion=calificacion and is_deleted=0;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Objetivo` (IN `caracteristica` VARCHAR(50), IN `peso` FLOAT)   begin
-	  SELECT * FROM objetivo where caracteristica=caracteristica and peso=peso and is_deleted=0;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Operatividad` (IN `caracteristica` VARCHAR(50))   begin
-	SELECT * FROM operatividad where caracteristica=caracteristica and is_deleted=0;
-end$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_Prueba` (IN `caracteristica` VARCHAR(50), IN `peso` FLOAT)   begin
-	  SELECT * FROM prueba where caracteristica=caracteristica and peso=peso and is_deleted=0 ;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `valida_ValoracionRiesgo` (IN `probabilidad` INT, IN `impacto` INT)   begin
