@@ -4,6 +4,18 @@
         "type": "closure",
         "action": "{}",
         "environment": "[]",
+        "start_at": "2023-03-21 18:25:49",
+        "end_at": "2023-03-21 18:25:49",
+        "duration": "00:00:00",
+        "output": null,
+        "error": "{}",
+        "test_time": null
+    },
+    {
+        "name": "closure_4bd040737f1acb7cd8195df9348bf20b",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
         "start_at": "2023-03-21 17:33:37",
         "end_at": "2023-03-21 17:33:37",
         "duration": "00:00:00",

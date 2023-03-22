@@ -1,0 +1,38 @@
+[
+    {
+        "name": "closure_8528ad1136d665776bb3f6f0b41f8c06",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-22 18:45:11",
+        "end_at": "2023-03-22 18:45:13",
+        "duration": "00:00:01",
+        "output": "Es hora de la alerta con envios anteriores del plan de accionCorreo registrado y enviadoEs hora de la alerta con envios anteriores del plan de accionCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_8528ad1136d665776bb3f6f0b41f8c06",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-21 18:31:00",
+        "end_at": "2023-03-21 18:31:00",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta inciial de Plan de Accion1Correo registrado y enviadoEs hora de la alerta inciial de Plan de Accion1Correo registrado y enviadoEs hora de la alerta con envios anteriores del plan de accionCorreo registrado y enviadoEs hora de la alerta inciial de Plan de Accion1Correo registrado y enviadoEs hora de la alerta inciial de Plan de Accion1Correo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_8528ad1136d665776bb3f6f0b41f8c06",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-20 18:29:04",
+        "end_at": "2023-03-20 18:29:04",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta inciial de Plan de Accion1Correo registrado y enviadoEs hora de la alerta inciial de Plan de Accion1Correo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    }
+]

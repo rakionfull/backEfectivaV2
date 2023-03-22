@@ -46,7 +46,8 @@ class Muser extends Model
     }
     public function lastid(){
         // $maxID = $this->db->query('SELECT id_us as maxid FROM tb_users order by id_us desc limit 1');
-        $maxID = $this->db->query('SELECT SCOPE_IDENTITY() as maxid FROM tb_users');
+        //$maxID = $this->db->query('SELECT SCOPE_IDENTITY() as maxid FROM tb_users');
+        $maxID = $this->db->query('SELECT @@identity as maxid FROM tb_users');
 
         return $maxID->getRow()->maxid;
     }
@@ -64,16 +65,16 @@ class Muser extends Model
     }
     public function getUser($username){
 
-        $Usuario = $this->db->query("SELECT TOP 1 * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
-        on TU.id_us=TH.id_us WHERE TU.usuario_us= '{$username}'  ORDER BY TH.id_cl DESC");
+        $Usuario = $this->db->query("SELECT * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
+        on TU.id_us=TH.id_us WHERE TU.usuario_us= '{$username}'  ORDER BY TH.id_cl DESC LIMIT 1");
        
         return $Usuario->getRow();
     }
    
     public function getPass($idPost){
 
-        $query = $this->db->query("SELECT TOP 10 * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
-        on TU.id_us=TH.id_us WHERE TU.id_us= {$idPost} ORDER BY TH.id_cl DESC");
+        $query = $this->db->query("SELECT * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
+        on TU.id_us=TH.id_us WHERE TU.id_us= {$idPost} ORDER BY TH.id_cl DESC LIMIT 10");
        
         return $query->getResultArray();
     }
@@ -92,9 +93,13 @@ class Muser extends Model
     }
     public function getUserByDatos($username){
 
-        $Usuario = $this->db->query("EXEC getUserByDatos @user = {$username}");
+        $sql = "CALL getUserByDatos(?)";
+
+		$result = $this->db->query($sql, [$username]);
+
+        //$Usuario = $this->db->query("CALL getUserByDatos user = {$username}");
        
-        return $Usuario->getRow();
+        return $result->getRow();
     }
    
     public function changePass($data){

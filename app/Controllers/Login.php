@@ -23,7 +23,10 @@ class Login extends BaseController
  
     public function index()
     {
-       
+        //        return $this->getResponse(
+        //     ['hola'], ResponseInterface::HTTP_OK
+        //     // ResponseInterface::HTTP_BAD_REQUEST
+        // );
         $rules = [
             'username' => 'required|min_length[3]|max_length[50]',
             'password' => 'required|min_length[6]|max_length[255]|validateUser[username, password]'
@@ -38,63 +41,72 @@ class Login extends BaseController
             ]
         ];
 
-        $input = $this->getRequestInput($this->request);
+                
+                    $input = $this->getRequestInput($this->request);
+                
+                    $modelsUser = new Muser();
+                
+                    $intento =  $modelsUser -> getIntento($input['username']);
+                    
+                
+                    $time_actual = time();
+                
+                   
 
-        $modelsUser = new Muser();
-
-        $intento =  $modelsUser -> getIntento($input['username']);
+                    // if($time_actual > $intento -> bloqueo_time){
+                    if($intento -> bloqueo_us != 1){
+                         if (!$this->validateRequest($input, $rules, $errors)) {
+                        
+                
+                            $intento =  $modelsUser -> getIntento($input['username']);
+                            $dato = $intento->intentos_us;
+                            if($intento->intentos_us == 4) $dato = 0;
+                            $modelsUser -> setIntento($input['username'],$dato);
+                    
+                            $modelConfigPass = new MconfigPass();
+                
+                            $configuracion = $modelConfigPass -> getConfigPass();
+                
+                            if($intento->intentos_us  >= $configuracion[0]['intentos']){
+                                //si llega al maximo de intentos mandar error y actualizar tb_user con el tiempo para desabilitar
+                                // $modelsUser -> setTimeIntento($input['username']);
+                                $modelsUser -> setTimeIntento($input['username']);
+                                // $error = new  \stdClass;
+                                // $error->password = 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
+                                // 2 min';
+                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
+                                2 min'];
+                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará. Por favor contactar con su adminsitrador
+                                del sistema'];
+                            }else{
+                                $error = $this->validator->getErrors();
+                            }
+                        
+                
+                                return $this->getResponse(
+                                    $error, ResponseInterface::HTTP_OK
+                                    // ResponseInterface::HTTP_BAD_REQUEST
+                                );
+                             
+                        }
+                        
+                       return $this->getJWTForUser($input["username"],$input["ip"],$input["terminal"]);
+                    }else{
+                        // $error = new  \stdClass;
+                        $modelsUser -> setIntento($input['username'],0);
+                    
+                        // $error->password = 'El usuario esta dabilitado por 2 min';
+                        $error = ['password' => 'El usuario esta Bloqueado, Contáctar con su administrador de sistema'];
+                        return $this->getResponse(
+                            $error, ResponseInterface::HTTP_OK
+                            // ResponseInterface::HTTP_BAD_REQUEST
+                        );
+                    }
+                
+                        
         
 
-        $time_actual = time();
-       
-        // if($time_actual > $intento -> bloqueo_time){
-        if($intento -> bloqueo_us != 1){
-            if (!$this->validateRequest($input, $rules, $errors)) {
-               
-    
-                $intento =  $modelsUser -> getIntento($input['username']);
-                $dato = $intento->intentos_us;
-                if($intento->intentos_us == 4) $dato = 0;
-                $modelsUser -> setIntento($input['username'],$dato);
         
-                $modelConfigPass = new MconfigPass();
-    
-                $configuracion = $modelConfigPass -> getConfigPass();
-    
-                if($intento->intentos_us  >= $configuracion[0]['intentos']){
-                    //si llega al maximo de intentos mandar error y actualizar tb_user con el tiempo para desabilitar
-                    // $modelsUser -> setTimeIntento($input['username']);
-                    $modelsUser -> setTimeIntento($input['username']);
-                    // $error = new  \stdClass;
-                    // $error->password = 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
-                    // 2 min';
-                    $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
-                    2 min'];
-                    $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará. Por favor contactar con su adminsitrador
-                    del sistema'];
-                }else{
-                    $error = $this->validator->getErrors();
-                }
-               
-    
-                return $this->getResponse(
-                        $error, ResponseInterface::HTTP_OK
-                        // ResponseInterface::HTTP_BAD_REQUEST
-                    );
-            }
-          
-            return $this->getJWTForUser($input["username"],$input["ip"],$input["terminal"]);
-        }else{
-            // $error = new  \stdClass;
-            $modelsUser -> setIntento($input['username'],0);
-        
-            // $error->password = 'El usuario esta dabilitado por 2 min';
-            $error = ['password' => 'El usuario esta Bloqueado, Contáctar con su administrador de sistema'];
-            return $this->getResponse(
-                $error, ResponseInterface::HTTP_OK
-                // ResponseInterface::HTTP_BAD_REQUEST
-            );
-        }
         
         
     
@@ -103,42 +115,7 @@ class Login extends BaseController
     }
  
     
-    public function validaCaptcha(){
-     
-      
-            // funcion para validar el captcha 
-            $Mcaptcha = new Mcaptcha();   
-            $expiration = time() - 3*60; //limite de 3 minutos
-            $ip = $this->request->getIPAddress(); //ip del usuario
-            $captcha = $this->request->getVar('captcha'); //captcha introducido por el user
-            //eliminanos los captcha con mas de 2 mintos de vida
-            $Mcaptcha->deleteOldCaptcha($expiration);
-
-            //comprobamos si es correcta la imagen introducida
-            $last = $Mcaptcha->check($ip,$expiration,$captcha);
-
-            // validacion del capcha
-            if(count($last) == 1)
-            {
-                $response = [
-                    'msg' => 1  
-                ];
-                return $this->respond($response, ResponseInterface::HTTP_OK);
-                
-            }else{
-                return $this->respond(
-                    [
-                    'msg' => 0, 
-                    'error' => 'Captcha Expirado',
-                    ],
-                    ResponseInterface::HTTP_OK
-                );
-            }
-        
-       
-       
-       
-    }
+   
     public function change_pass(){
         // $rules = [
         //     'passw' => 'required|min_length[8]|validatePass[passw]',
@@ -184,7 +161,7 @@ class Login extends BaseController
                 $existe_pass = veriPass($input['passw'],$input['id_us']);
                 if(!$existe_pass){
                     $datos = array(
-                        'pass_cl' => hashPass($input['passw']),
+                        'pass_cl' =>password_hash($input['passw'], PASSWORD_DEFAULT),
                         'id_us' =>$input['id_us'],
                     );
                     $userModel->savePass($datos);
@@ -333,13 +310,13 @@ class Login extends BaseController
                     // ResponseInterface::HTTP_BAD_REQUEST
                 );
             }
-           
+          
            
         } catch (Exception $ex) {
             return $this->getResponse(
                     [
-                        //'error'  => 'No se pudo iniciar sesión, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
-                        'error' => $ex->getMessage(),
+                        'error'  => 'No se pudo iniciar sesión, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                        'error2' => $ex->getMessage(),
                     ],
                     $responseCode
                 );

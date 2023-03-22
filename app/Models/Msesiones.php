@@ -20,8 +20,8 @@ class Msesiones extends Model
     }
     public function getByIdSesion($id,$iat){
 
-        $query = $this->db->query("SELECT TOP 1 * from tb_sesiones
-         where id_us=$id and expi > $iat and loged='1' " );
+        $query = $this->db->query("SELECT  * from tb_sesiones
+         where id_us=$id and expi > $iat and loged='1' ORDER BY id_se LIMIT 1" );
         return $query->getResultArray();
     }
     public function updateLoged($data){

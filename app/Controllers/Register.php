@@ -65,7 +65,9 @@ class Register extends BaseController
         
             $datos = array(
                 'creacion_cl' => date('Y-m-d H:i:s'),
-                'pass_cl' => hashPass($this->request->getVar('password')),
+                
+                'pass_cl' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                // 'pass_cl' => hashPass($this->request->getVar('password')),
                 'expiracion_cl' => time() + (24*3600*45),
                 'id_us' =>$Muser->lastid(),
             );

@@ -231,102 +231,102 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
     
 
 
-            $result2= $model->getCorreoActividad() ;
+            // $result2= $model->getCorreoActividad() ;
             
-            foreach ($result2 as $key => $value) {
+            // foreach ($result2 as $key => $value) {
               
-                $idactividad = $value['id_act'];
-                $idusuario = $value['id_us'];
-                $correo_plan = $model->getCorreoActividadesEnviados($idactividad);
-                if(!$correo_plan){
-                    //Como no hay registros entonces hacemos la primera alerta desde la fecha inicio
-                    $fecha_alerta = $value['fecha_ini']; 
+            //     $idactividad = $value['id_act'];
+            //     $idusuario = $value['id_us'];
+            //     $correo_plan = $model->getCorreoActividadesEnviados($idactividad);
+            //     if(!$correo_plan){
+            //         //Como no hay registros entonces hacemos la primera alerta desde la fecha inicio
+            //         $fecha_alerta = $value['fecha_ini']; 
                  
-                    $fecha_fin = $value['fecha_fin'];
-                    $fecha_actual = date("Y-m-d");
+            //         $fecha_fin = $value['fecha_fin'];
+            //         $fecha_actual = date("Y-m-d");
                     
-                        if($fecha_alerta <= $fecha_fin){
+            //             if($fecha_alerta <= $fecha_fin){
                         
-                            if($fecha_actual == $fecha_alerta ){
+            //                 if($fecha_actual == $fecha_alerta ){
         
-                                echo ("Es hora de la alerta inicial de actividad");
-                                    //realizo el registro de la primera alerta 
-                                    $insert = $model -> insertCorreoActividad($idactividad,$fecha_actual,$idusuario);
+            //                     echo ("Es hora de la alerta inicial de actividad");
+            //                         //realizo el registro de la primera alerta 
+            //                         $insert = $model -> insertCorreoActividad($idactividad,$fecha_actual,$idusuario);
                                  
-                                    if($insert){
-                                        echo ("Correo registrado y enviado");
-                                        // enviar al correo  $value['email_us']
-                                        // nombre sy apellidos $value['nombre_us']  $value['apepat_us']  $value['apemat_us']
-                                        // el nombvre del plan $value['plan_accion]
-                                        // el estado: ah inciado
-                                        //aleta $value['alerta] tipo de alerta
+            //                         if($insert){
+            //                             echo ("Correo registrado y enviado");
+            //                             // enviar al correo  $value['email_us']
+            //                             // nombre sy apellidos $value['nombre_us']  $value['apepat_us']  $value['apemat_us']
+            //                             // el nombvre del plan $value['plan_accion]
+            //                             // el estado: ah inciado
+            //                             //aleta $value['alerta] tipo de alerta
 
-                                        $email = \Config\Services::email();
-                                        $email->setTo($value['email_us']);
-                                        $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
-                                        $email->setSubject('Prueba Job');
-                                        $email->setMessage(
-                                            view('mail/plan_accion',[
+            //                             $email = \Config\Services::email();
+            //                             $email->setTo($value['email_us']);
+            //                             $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
+            //                             $email->setSubject('Prueba Job');
+            //                             $email->setMessage(
+            //                                 view('mail/plan_accion',[
                                                 
-                                                    'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
-                                                    'plan' => $value['plan_accion'],
-                                                    'estado' => 'Ha Iniciado',
-                                                 'alerta' => $value['alerta']
+            //                                         'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+            //                                         'plan' => $value['plan_accion'],
+            //                                         'estado' => 'Ha Iniciado',
+            //                                      'alerta' => $value['alerta']
                                                 
-                                            ])
-                                        );
-                                        $email->send();
+            //                                 ])
+            //                             );
+            //                             $email->send();
                                         
-                                    }
-                            }
-                        }
+            //                         }
+            //                 }
+            //             }
                
                 
                    
                     
                 
-                }else{
+            //     }else{
                     
-                     //Si encuentro registros en la tabla envio sumo los dias del ultimo envio segun el valor de la alerta
-                     $fecha_alerta = (date("Y-m-d",strtotime($correo_plan->fecha_envio."+ ".$value['valor']." days"))); 
-                     $fecha_fin = $value['fecha_fin'];
-                     $fecha_actual = date("Y-m-d");
-                     // echo $fecha_actual;
-                     if($fecha_alerta <= $fecha_fin){
+            //          //Si encuentro registros en la tabla envio sumo los dias del ultimo envio segun el valor de la alerta
+            //          $fecha_alerta = (date("Y-m-d",strtotime($correo_plan->fecha_envio."+ ".$value['valor']." days"))); 
+            //          $fecha_fin = $value['fecha_fin'];
+            //          $fecha_actual = date("Y-m-d");
+            //          // echo $fecha_actual;
+            //          if($fecha_alerta <= $fecha_fin){
                     
-                         if($fecha_actual == $fecha_alerta ){
+            //              if($fecha_actual == $fecha_alerta ){
      
-                             echo ("Es hora de la alerta con datos de la actividad");
-                                 $insert = $model -> insertCorreoActividad($idplan,$fecha_actual,$idusuario);
-                                 if($insert){
-                                     echo ("Correo registrado y enviado");
-                                     // enviar al correo  $row['email_us']
-                                          // nombre sy apellidos $row['nombre_us']  $row['apepat_us']  $row['apemat_us']
-                                     // el nombvre del plan $row['plan_accion]
-                                      // el estado: ah inciado
-                                      //aleta $row['alerta] tipo de alerta
-                                      $email = \Config\Services::email();
-                                      $email->setTo($value['email_us']);
-                                      $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
-                                      $email->setSubject('Prueba Job');
-                                      $email->setMessage(
-                                          view('mail/plan_accion',[
+            //                  echo ("Es hora de la alerta con datos de la actividad");
+            //                      $insert = $model -> insertCorreoActividad($idplan,$fecha_actual,$idusuario);
+            //                      if($insert){
+            //                          echo ("Correo registrado y enviado");
+            //                          // enviar al correo  $row['email_us']
+            //                               // nombre sy apellidos $row['nombre_us']  $row['apepat_us']  $row['apemat_us']
+            //                          // el nombvre del plan $row['plan_accion]
+            //                           // el estado: ah inciado
+            //                           //aleta $row['alerta] tipo de alerta
+            //                           $email = \Config\Services::email();
+            //                           $email->setTo($value['email_us']);
+            //                           $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
+            //                           $email->setSubject('Prueba Job');
+            //                           $email->setMessage(
+            //                               view('mail/plan_accion',[
                                               
-                                                  'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
-                                                  'plan' => $value['plan_accion'],
-                                                  'estado' => 'Ha Iniciado',
-                                                  'alerta' => $value['alerta']
+            //                                       'fullname' => $value['nombres_us'].' '.$value['apepat_us'].' '.$value['apemat_us'],
+            //                                       'plan' => $value['plan_accion'],
+            //                                       'estado' => 'Ha Iniciado',
+            //                                       'alerta' => $value['alerta']
                                               
-                                          ])
-                                      );
-                                      $email->send();
-                                 }
-                         }
+            //                               ])
+            //                           );
+            //                           $email->send();
+            //                      }
+            //              }
                      
-                   }
-                }
+            //        }
+            //     }
               
-            }
+            // }
    
      
        
