@@ -69,7 +69,25 @@ class Database extends Config
         'failover' => [],
         'port'     => 3306,
     ];
-
+    // public $default = [
+    //     'DSN'      => '',
+    //     'hostname' => '216.246.46.194',
+    //     'username' => 'oebjedyp_valtx',
+    //     'password' => 'v=2*WCz5M4Va',
+    //     'database' => 'oebjedyp_bd_efe_riesgossi',
+    //     'DBDriver' => 'MySQLi',
+    //     'DBPrefix' => '',
+    //     'pConnect' => false,
+    //     'DBDebug'  => (ENVIRONMENT !== 'production'),
+    //     'charset'  => 'utf8',
+    //     'DBCollat' => 'utf8_general_ci',
+    //     'swapPre'  => '',
+    //     'encrypt'  => false,
+    //     'compress' => false,
+    //     'strictOn' => false,
+    //     'failover' => [],
+    //     'port'     => 3306,
+    // ];
     /**
      * This database connection is used when
      * running PHPUnit database tests.

@@ -3171,14 +3171,22 @@ public function addPlanAccion(){
 
         $model = new MriesgoPlanAccion();
     
-        $result = $model->savePlanAccion($input);
+        $valida =  $model->validaPlanAccion($input[0]);
+        if(!$valida){
+            $result = $model->savePlanAccion($input);
 
-        $msg = 'Plan Registrado Correctamente';
-        $error = 1;
+            $msg = 'Plan Registrado Correctamente';
+            $error = 1;
+        }else{
+            $result = 0;
+            $msg = 'Plan ya registrado';
+            $error = 1;
+        }
+       
 
         return $this->getResponse(
             [
-                 'id' => $result,   
+                'id' => $result,   
                 'msg' =>  $msg,
                 'error' =>  $error
             ]

@@ -59,8 +59,10 @@ class MRegistroControles extends Model
     }
     public function LastIdControles(){
         
-        $query = $this->db->query("SELECT IDENT_CURRENT ('registro_controles') AS last_id;  ");
-        return $query->getRow()->last_id;
+        $query = $this->db->query("SELECT @@identity as last_id from registro_controles");
+        if($query->getRow())  return $query->getRow()->last_id;
+        else  return 0;
+        // return $query->getRow();
     }
     public function obtenerPeso($id){
         
@@ -129,61 +131,110 @@ class MRegistroControles extends Model
 
     public function saveControles($data){
 
-        $query=$this->db->query("EXEC agregar_Registro_Controles
-        @IDR='{$data[0]['IDR']}',
-        @riesgo='{$data[0]['riesgo']}',
-        @IDC='{$data[0]['IDC']}',
-        @control='{$data[0]['control']}',
-        @cobertura='{$data[0]['cobertura']}',
-        @evaluacion='{$data[0]['evaluacion']}',
-        @estado='{$data[0]['estado']}',
-        @idUserAdd= {$data['user']}") ;
+        // $query=$this->db->query("EXEC agregar_Registro_Controles
+        // @IDR='{$data[0]['IDR']}',
+        // @riesgo='{$data[0]['riesgo']}',
+        // @IDC='{$data[0]['IDC']}',
+        // @control='{$data[0]['control']}',
+        // @cobertura='{$data[0]['cobertura']}',
+        // @evaluacion='{$data[0]['evaluacion']}',
+        // @estado='{$data[0]['estado']}',
+        // @idUserAdd= {$data['user']}") ;
        
-        
-        $last_id = $this->db->query("EXEC last_id_Registro_Proceso");
+        $sql = "CALL agregar_Registro_Controles(?,?,?,?,?,?,?,?)";
+
+	    $this->db->query($sql, [
+            $data[0]['IDR'],
+            $data[0]['riesgo'],
+            $data[0]['IDC'],
+            $data[0]['control'],
+            $data[0]['cobertura'],
+            $data[0]['evaluacion'],
+            $data[0]['estado'],
+            $data['user']
+        ]);
+        $sql2 = "CALL last_id_Registro_Proceso()";
+        $last_id = $this->db->query($sql2, []);
+
+        // $last_id = $this->db->query("EXEC last_id_Registro_Proceso");
     
         return  $last_id->getRow()->maxid;
     }
     public function saveDtealle_Control($data){
 
-        $query=$this->db->query("EXEC agregar_detalle_control
-        @idControl='{$data['idControl']}',
-        @idCC='{$data['idCC']}',
-        @nom_tabla='{$data['nom_tabla']}',
-        @valor='{$data['valor']}'") ;
-       
+        $sql = "CALL agregar_detalle_control(?,?,?,?,?)";
 
+	    $query = $this->db->query($sql, [
+            $data['idControl'],
+            $data['idCC'],
+            $data['IDC'],
+            $data['nom_tabla'],
+            $data['valor']
+        ]);
+
+        // $query=$this->db->query("EXEC agregar_detalle_control
+        // @idControl='{$data['idControl']}',
+        // @idCC='{$data['idCC']}',
+        // @nom_tabla='{$data['nom_tabla']}',
+        // @valor='{$data['valor']}'") ;
+       
         return  $query;
     }
     
     public function updateControles($data){
 
-        $query=$this->db->query("EXEC modificar_Registro_Controles
-        @IDR='{$data[0]['IDR']}',
-        @riesgo='{$data[0]['riesgo']}',
-        @IDC='{$data[0]['IDC']}',
-        @control='{$data[0]['control']}',
-        @cobertura='{$data[0]['cobertura']}',
-        @evaluacion='{$data[0]['evaluacion']}',
-        @estado='{$data[0]['estado']}',
-        @idUserAdd= {$data['user']},
-        @idControl= {$data[0]['id']}") ;
-       
+        // $query=$this->db->query("EXEC modificar_Registro_Controles
+        // @IDR='{$data[0]['IDR']}',
+        // @riesgo='{$data[0]['riesgo']}',
+        // @IDC='{$data[0]['IDC']}',
+        // @control='{$data[0]['control']}',
+        // @cobertura='{$data[0]['cobertura']}',
+        // @evaluacion='{$data[0]['evaluacion']}',
+        // @estado='{$data[0]['estado']}',
+        // @idUserAdd= {$data['user']},
+        // @idControl= {$data[0]['id']}") ;
+        $sql = "CALL modificar_Registro_Controles(?,?,?,?,?,?,?,?,?)";
+
+	    $this->db->query($sql, [
+            $data[0]['IDR'],
+            $data[0]['riesgo'],
+            $data[0]['IDC'],
+            $data[0]['control'],
+            $data[0]['cobertura'],
+            $data[0]['evaluacion'],
+            $data[0]['estado'],
+            $data['user'],
+            $data[0]['id']
+        ]);
     
         return  $query;
     }
     public function updateDtealle_Control($data){
 
-        $query=$this->db->query("EXEC modificar_detalle_control
-        @valor='{$data['valor']}', @idControl= {$data['idControl']},@idCC={$data['idCC'] }") ;
+        // $query=$this->db->query("EXEC modificar_detalle_control
+        // @valor='{$data['valor']}', @idControl= {$data['idControl']}
+        // ,@idCC={$data['idCC'] }") ;
        
+        $sql = "CALL modificar_detalle_control(?,?,?)";
+
+	    $query = $this->db->query($sql, [
+            $data['valor'],
+            $data['idControl'],
+            $data['idCC']
+        ]);
 
         return  $query;
     }
     public function deleteControles($data){
 
-        $query=$this->db->query("EXEC eliminar_Registro_Controles @idUserAdd= {$data['user']},@idControl={$data['id'] }") ;
-       
+        $query=$this->db->query("EXEC eliminar_Registro_Controles 
+        @idUserAdd= {$data['user']},@idControl={$data['id'] }") ;
+        $sql = "CALL eliminar_Registro_Controles(?,?)";
+
+            $query = $this->db->query($sql, [
+                $data['user'],
+                $data['id']
+            ]);
 
         return  $query;
     }
@@ -216,7 +267,10 @@ class MRegistroControles extends Model
         return $query->getResultArray();
     }
     public function getControlesRiesgos(){
-        $query = $this->db->query(" EXEC listar_riesgos");
+        // $query = $this->db->query(" EXEC listar_riesgos");
+        $sql = "CALL listar_riesgos()";
+
+	    $query = $this->db->query($sql, []);
         return $query->getResultArray();
     }
 

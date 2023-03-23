@@ -27,35 +27,67 @@ class MCobertura extends Model
     ];
     public function validaCobertura($data){
         
-        $query = $this->db->query("EXEC valida_cobertura @cobertura='".$data."'");
+        // $query = $this->db->query("EXEC valida_cobertura @cobertura='".$data."'");
+        $sql = "CALL valida_cobertura(?)";
+
+	    $query = $this->db->query($sql, [
+            $data
+        ]);
+        
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;
     }
     public function getCobertura(){
         
-        $query = $this->db->query("EXEC listar_cobertura");
+        // $query = $this->db->query("EXEC listar_cobertura");
+        $sql = "CALL listar_cobertura()";
+
+	    $query = $this->db->query($sql, [
+        ]);
         return $query->getResultArray();
     }
 
 
     public function saveCobertura($data){       
 
-        $query=$this->db->query("EXEC agregar_cobertura @cobertura='{$data[0]['cobertura']}',
-        @descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']}") ;
+        // $query=$this->db->query("EXEC agregar_cobertura @cobertura='{$data[0]['cobertura']}',
+        // @descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']}") ;
+        $sql = "CALL agregar_cobertura(?,?,?)";
 
+	    $query = $this->db->query($sql, [
+            $data[0]['cobertura'],
+            $data[0]['descripcion'],
+            $data['user']
+        ]);
         return $query;
     }
     public function updateCobertura($data){  
         
-        $query= $this->db->query("EXEC modificar_cobertura @cobertura='{$data[0]['cobertura']}',
-        @descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']},@idCobertura={$data[0]['id']}") ;
+        // $query= $this->db->query("EXEC modificar_cobertura @cobertura='{$data[0]['cobertura']}',
+        // @descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']},@idCobertura={$data[0]['id']}") ;
+
+        $sql = "CALL modificar_cobertura(?,?,?,?)";
+
+	    $query = $this->db->query($sql, [
+            $data[0]['cobertura'],
+            $data[0]['descripcion'],
+            $data['user'],
+            $data[0]['id']
+        ]);
+
         return $query;
     }
     public function deleteCobertura($data){
             
-        $query=$this->db->query("EXEC eliminar_cobertura @idUserAdd={$data['user']}, @idCobertura={$data[0]['id']}") ;
-        
+        //$query=$this->db->query("EXEC eliminar_cobertura @idUserAdd={$data['user']}, @idCobertura={$data[0]['id']}") ;
+        $sql = "CALL eliminar_cobertura(?,?)";
+
+	    $query = $this->db->query($sql, [
+            $data['user'],
+            $data[0]['id']
+        ]);
+
         return $query;
     }
 }
