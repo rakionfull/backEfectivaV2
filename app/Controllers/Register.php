@@ -58,6 +58,7 @@ class Register extends BaseController
                 'creacion_us' => date('Y-m-d H:i:s'),
                 'estado_us' => '1',
                 'change_pass' => '0',
+                'bloqueo_us' => '0',
                 
             );
             $user = $Muser->saveUser($data);

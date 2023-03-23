@@ -49,13 +49,13 @@ class MriesgoPlanAccion extends Model
     }
     public function getCorreoPlanEnviados($id){
         
-        $query = $this->db->query("SELECT TOP 1 * FROM correo_plan where idplan= {$id} ORDER BY id DESC");
+        $query = $this->db->query("SELECT * FROM correo_plan where idplan= {$id} ORDER BY id DESC LIMIT 1");
 
         return $query->getRow();
     }
     public function getCorreoActividadesEnviados($id){
         
-        $query = $this->db->query("SELECT TOP 1 * FROM correo_actividad where idactividad= {$id} ORDER BY id DESC");
+        $query = $this->db->query("SELECT * FROM correo_actividad where idactividad= {$id} ORDER BY id DESC LIMIT 1");
 
         return $query->getRow();
     }
@@ -77,7 +77,12 @@ class MriesgoPlanAccion extends Model
     ////
     public function validaPlanAccion($data){
         
-        $query = $this->db->query("EXEC validaEstado @estado='".$data."'");
+        // $query = $this->db->query("EXEC validaPlanAccion	 @estado='".$data."'");
+
+        $sql = "CALL validaPlanAccion(?)";
+
+        $query = $this->db->query($sql, [ $data['plan_accion']  ]);
+
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;
@@ -86,31 +91,60 @@ class MriesgoPlanAccion extends Model
   
     public function getPlanAccion(){
 
-        $query = $this->db->query("exec listar_plan_accion");
+        // $query = $this->db->query("exec listar_plan_accion");
+      
+        $sql = "CALL listar_plan_accion()";
+
+        $query = $this->db->query($sql, [ ]);
         return $query->getResultArray();
     }
     
 
     public function savePlanAccion($data){
 
-        $query=$this->db->query("EXEC agregar_plan_accion
-        @id_riesgo ='{$data[0]['id_riesgo']}',
-        @id_control='{$data[0]['id_control']}',
-        @plan_accion='{$data[0]['plan_accion']}',        
-        @descripcion ='{$data[0]['descripcion']}',
-        @fecha_inicio ='{$data[0]['fecha_inicio']}',            
-        @fecha_fin='{$data[0]['fecha_fin']}',
-        @id_user_added='{$data['user']}',
-        @idempresa='{$data[0]['idempresa']}',
-        @idarea='{$data[0]['idarea']}',
-        @idunidad='{$data[0]['idunidad']}',
-        @idposicion='{$data[0]['idposicion']}',
-        @idusuario='{$data[0]['idusuario']}',
-        @idprioridad='{$data[0]['idprioridad']}',
-        @idestado='{$data[0]['idestado']}',
-        @idalerta='{$data[0]['idalerta']}'") ;
-        $last_id = $this->db->query("SELECT  @@IDENTITY as maxid FROM 
-        plan_accion");
+        // $query=$this->db->query("EXEC agregar_plan_accion
+        // @id_riesgo ='{$data[0]['id_riesgo']}',
+        // @id_control='{$data[0]['id_control']}',
+        // @plan_accion='{$data[0]['plan_accion']}',        
+        // @descripcion ='{$data[0]['descripcion']}',
+        // @fecha_inicio ='{$data[0]['fecha_inicio']}',            
+        // @fecha_fin='{$data[0]['fecha_fin']}',
+        // @id_user_added='{$data['user']}',
+        // @idempresa='{$data[0]['idempresa']}',
+        // @idarea='{$data[0]['idarea']}',
+        // @idunidad='{$data[0]['idunidad']}',
+        // @idposicion='{$data[0]['idposicion']}',
+        // @idusuario='{$data[0]['idusuario']}',
+        // @idprioridad='{$data[0]['idprioridad']}',
+        // @idestado='{$data[0]['idestado']}',
+        // @idalerta='{$data[0]['idalerta']}'") ;
+
+        $sql = "CALL agregar_plan_accion(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+            $data[0]['id_riesgo'],
+            $data[0]['id_control'],
+            $data[0]['plan_accion'],
+            $data[0]['descripcion'],
+            $data[0]['fecha_inicio'],
+            $data[0]['fecha_fin'],
+            $data['user'],
+            $data[0]['idempresa'],
+            $data[0]['idarea'],
+            $data[0]['idunidad'],
+            $data[0]['idposicion'],
+            $data[0]['idusuario'],
+            $data[0]['idprioridad'],
+            $data[0]['idestado'],
+            $data[0]['idalerta'],
+        
+        ]);
+
+               // $last_id = $this->db->query("EXEC last_id_Registro_Proceso");
+    
+       
+        $last_id = $this->db->query("SELECT  id as maxid FROM 
+        plan_accion order by id DESC LIMIT 1");
 
         return $last_id->getRow()->maxid;
     }
@@ -142,15 +176,46 @@ class MriesgoPlanAccion extends Model
         @idriesgo='{$data[0]['id_riesgo']}',
         @idcontrol='{$data[0]['id_control']}' ");
         
+        $sql = "CALL agregar_plan_accion(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+            $data[0]['id'],
+            $data[0]['plan_accion'],
+            $data[0]['descripcion'],
+            $data[0]['fecha_inicio'],
+            $data[0]['fecha_fin'],
+            $data[0]['idempresa'],
+            $data[0]['idarea'],
+            $data[0]['idunidad'],
+            $data[0]['idposicion'],
+            $data[0]['idusuario'],
+            $data[0]['idprioridad'],
+            $data[0]['idestado'],
+            $data[0]['idalerta'],
+            $data['user'],
+            $data[0]['id_riesgo'],
+            $data[0]['id_control'],
+           
+        ]);
+
         return $query;
     }
 
 
     public function deletePlanAccion($data){
 
-        $query = $this->db->query("EXEC eliminar_plan_accion 
-        @id={$data[0]['id']},
-        @id_user_deleted={$data['user']}");
+        // $query = $this->db->query("EXEC eliminar_plan_accion 
+        // @id={$data[0]['id']},
+        // @id_user_deleted={$data['user']}");
+        $sql = "CALL eliminar_plan_accion(?,?)";
+
+        $query = $this->db->query($sql, [
+            $data[0]['id'],
+           
+            $data['user'],
+           
+           
+        ]);
         return $query;
     }
 
@@ -164,17 +229,36 @@ class MriesgoPlanAccion extends Model
 
     public function getActividadPlan($id){
 
-        $query = $this->db->query("exec listar_actividades_plan @id={$id}");
+        // $query = $this->db->query("exec listar_actividades_plan @id={$id}");
+
+        $sql = "CALL listar_actividades_plan(?)";
+
+        $query = $this->db->query($sql, [
+            $id,         
+           
+        ]);
+        
         return $query->getResultArray();
     }
     public function getDetallePlan($id){
 
-        $query = $this->db->query("exec listar_detalle_plan @id={$id}");
+        // $query = $this->db->query("exec listar_detalle_plan @id={$id}");
+        $sql = "CALL listar_detalle_plan(?)";
+
+        $query = $this->db->query($sql, [
+            $id,         
+           
+        ]);
         return $query->getRow();
     }
     public function getPlan($id){
-        $query=$this->db->query("EXEC get_Plan_Control @id = {$id}");
-    
+        // $query=$this->db->query("EXEC get_Plan_Control @id = {$id}");
+        $sql = "CALL get_Plan_Control(?)";
+
+        $query = $this->db->query($sql, [
+            $id,         
+           
+        ]);
         return $query->getRow();
     }
  
@@ -194,40 +278,96 @@ public function getActividadesPorPlan($id_plan)
 
 
     public function saveActividadPlan($data){
-        $query=$this->db->query("EXEC agregar_actividades_plan 
-            @idempresa={$data['idempresa']},
-            @idarea={$data['idarea']},
-            @idunidad={$data['idunidad']},
-            @idposicion={$data['idposicion']},
-            @idusuario={$data['idusuario']},
-            @descripcion='{$data['descripcion']}',
-            @fecha_inicio='{$data['fecha_inicio']}',
-            @fecha_fin='{$data['fecha_fin']}',
-            @idalerta={$data['idalerta']},
-            @progreso={$data['progreso']},
-            @idUserAdd={$data['user']},
-            @idplan={$data['idplanaccion']}");
+        // $query=$this->db->query("EXEC agregar_actividades_plan 
+        //     @idempresa={$data['idempresa']},
+        //     @idarea={$data['idarea']},
+        //     @idunidad={$data['idunidad']},
+        //     @idposicion={$data['idposicion']},
+        //     @idusuario={$data['idusuario']},
+        //     @descripcion='{$data['descripcion']}',
+        //     @fecha_inicio='{$data['fecha_inicio']}',
+        //     @fecha_fin='{$data['fecha_fin']}',
+        //     @idalerta={$data['idalerta']},
+        //     @progreso={$data['progreso']},
+        //     @idUserAdd={$data['user']},
+        //     @idplan={$data['idplanaccion']}");
     
+
+            $sql = "CALL agregar_actividades_plan(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            $query = $this->db->query($sql, [
+                $data[0]['idempresa'],
+                $data[0]['idarea'],
+                $data[0]['idunidad'],
+                $data[0]['idposicion'],
+                $data[0]['idusuario'],
+                $data[0]['descripcion'],
+                $data[0]['fecha_inicio'],
+                $data[0]['fecha_fin'],
+                $data[0]['idalerta'],
+                $data[0]['progreso'],
+               
+                $data['user'],
+                $data[0]['idplanaccion'],
+               
+            ]);
+
         return $query;
     }
     
     public function updateActividadPlan($data){
-        $query=$this->db->query("EXEC modificar_actividades_plan @id={$data[0]['id']},
-            @idempresa={$data[0]['idempresa']},@idarea={$data[0]['idarea']},@idunidad={$data[0]['idunidad']},
-            @idposicion={$data[0]['idposicion']},@idusuario={$data[0]['idusuario']},
-            @descripcion='{$data[0]['descripcion']}',@fecha_inicio='{$data[0]['fecha_inicio']}',
-            @fecha_fin='{$data[0]['fecha_fin']}',@idalerta={$data[0]['idalerta']},@progreso={$data[0]['progreso']},
-            @idUserModify={$data['user']}");
+        // $query=$this->db->query("EXEC modificar_actividades_plan 
+        // @id={$data[0]['id']},
+        //     @idempresa={$data[0]['idempresa']},
+        //     @idarea={$data[0]['idarea']},
+        //     @idunidad={$data[0]['idunidad']},
+        //     @idposicion={$data[0]['idposicion']},
+        //     @idusuario={$data[0]['idusuario']},
+        //     @descripcion='{$data[0]['descripcion']}',
+        //     @fecha_inicio='{$data[0]['fecha_inicio']}',
+        //     @fecha_fin='{$data[0]['fecha_fin']}',
+        //     @idalerta={$data[0]['idalerta']},
+        //     @progreso={$data[0]['progreso']},
+        //     @idUserModify={$data['user']}");
         
+
+            $sql = "CALL modificar_actividades_plan(?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            $query = $this->db->query($sql, [
+                $data[0]['id'],
+                $data[0]['idempresa'],
+                $data[0]['idarea'],
+                $data[0]['idunidad'],
+                $data[0]['idposicion'],
+                $data[0]['idusuario'],
+                $data[0]['descripcion'],
+                $data[0]['fecha_inicio'],
+                $data[0]['fecha_fin'],
+                $data[0]['idalerta'],
+                $data[0]['progreso'],
+               
+                $data['user'],
+             
+            ]);
+
         return $query;
     }
 
     public function deleteActividadesPlan($data) {
        
     
-        $query = $this->db->query("EXEC eliminar_actividades_plan 
-        @id={$data[0]['id']},
-        @idUserDel={$data['user']}");
+        // $query = $this->db->query("EXEC eliminar_actividades_plan 
+        // @id={$data[0]['id']},
+        // @idUserDel={$data['user']}");
+
+        $sql = "CALL eliminar_actividades_plan(?,?)";
+
+            $query = $this->db->query($sql, [
+                $data[0]['id'],               
+                $data['user'],
+             
+            ]);
+
         return $query;
     }
     
