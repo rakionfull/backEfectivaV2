@@ -23,13 +23,13 @@ class DescripcionVulnerabilidad extends Model
         'is_deleted'
     ];
     public function getAll(){
-        $sql = "EXEC sp_list_desc_vulnerabilidad";
+        $sql = "call sp_list_desc_vulnerabilidad";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
     public function store($data){
-        $sql = "EXEC sp_add_desc_vulnerabilidad ?,?,?,?";
+        $sql = "call sp_add_desc_vulnerabilidad(?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['idcategoria'],
             $data['vulnerabilidad'],
@@ -43,7 +43,7 @@ class DescripcionVulnerabilidad extends Model
     }
 
     public function edit($id,$data){
-        $sql = "EXEC sp_edit_desc_vulnerabilidad ?,?,?,?,?";
+        $sql = "call sp_edit_desc_vulnerabilidad(?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['idcategoria'],
@@ -58,7 +58,7 @@ class DescripcionVulnerabilidad extends Model
     }
 
     public function destroy($id,$data){
-        $sql = "EXEC sp_delete_desc_vulnerabilidad ?,?,?";
+        $sql = "call sp_delete_desc_vulnerabilidad(?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['id_user_deleted'],

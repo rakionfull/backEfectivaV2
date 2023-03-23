@@ -9,25 +9,25 @@ class EvaluacionRiesgo extends Model
     protected $table  = 'evaluacion_riesgo';
 
     public function getAll($id){
-        $sql = "EXEC sp_list_evaluacion_riesgo @empresa = {$id}" ;
-        $result = $this->db->query($sql)->getResultArray();
+        $sql = "call sp_list_evaluacion_riesgo(?)" ;
+        $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
 
     public function getAllHistoricos(){
-        $sql = "EXEC sp_list_evaluacion_riesgo_historial";
+        $sql = "call sp_list_evaluacion_riesgo_historial";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
     public function getById($id){
-        $sql = "EXEC sp_get_evaluacion_riesgo_by_id ?";
+        $sql = "call sp_get_evaluacion_riesgo_by_id(?)";
         $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
     
     public function store($data){
-        $sql = "EXEC sp_add_evaluacion_riesgo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_evaluacion_riesgo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['id_tipo_riesgo'],
             $data['id_empresa'],
@@ -61,7 +61,7 @@ class EvaluacionRiesgo extends Model
     }
 
     public function edit($id,$data){
-        $sql = "EXEC sp_update_evaluacion_riesgo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_update_evaluacion_riesgo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['id_tipo_riesgo'],
@@ -94,27 +94,14 @@ class EvaluacionRiesgo extends Model
         }
         return false;
     }
-
-    public function destroy($id,$data){
-        $sql = "EXEC sp_delete_evaluacion_riesgo ?,?,?";
-        $result = $this->db->query($sql,[
-            $id,
-            $data['id_user_deleted'],
-            $data['date_deleted']
-        ]);
-        if($result){
-            return true;
-        }
-    }
-
     public function countByValor(){
-        $sql = "EXEC sp_count_evaluacion_by_valor";
+        $sql = "call sp_count_evaluacion_by_valor";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
     public function save_historial($data){
-        $sql = "EXEC sp_add_evaluacion_riesgo_historial ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_evaluacion_riesgo_historial(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['id_tipo_riesgo'],
             $data['id_empresa'],

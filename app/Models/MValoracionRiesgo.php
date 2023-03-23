@@ -29,50 +29,55 @@ class MValoracionRiesgo extends Model
 
     
     public function validaValoracionRiesgo($data){
-        
-        $query = $this->db->query("EXEC valida_ValoracionRiesgo 
-      @probabilidad='".$data['probabilidad']."' ,@impacto='".$data['impacto']."'");
+        $sql = "call valida_ValoracionRiesgo(?,?)";
+        $query = $this->db->query($sql,[
+            $data['probabilidad'],
+            $data['impacto']
+        ]);
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;
     }
     public function getValoracionRiesgo(){
         
-        $query = $this->db->query("EXEC listar_ValoracionRiesgo");
+        $query = $this->db->query("call listar_ValoracionRiesgo");
         return $query->getResultArray();
     }
 
 
     public function saveValoracionRiesgo($data){       
 
-        $query=$this->db->query("EXEC agregar_ValoracionRiesgo @valor='{$data[0]['valor']}',
-        @probabilidad='{$data[0]['probabilidad']}', @impacto='{$data[0]['impacto']}',@idUserAdd= {$data['user']}") ;
+        $sql = "call agregar_ValoracionRiesgo(?,?,?,?)";
+
+        $query=$this->db->query($sql,[
+            $data[0]['valor'],
+            $data[0]['probabilidad'],
+            $data[0]['impacto'],
+            $data['user']
+        ]);
 
         return $query;
     }
     public function updateValoracionRiesgo($data){  
-        
-        $query= $this->db->query("EXEC modificar_ValoracionRiesgo @valor='{$data[0]['valor']}',
-        @probabilidad='{$data[0]['probabilidad']}', @impacto='{$data[0]['impacto']}'
-        ,@idUserAdd= {$data['user']},@idValoracionRiesgo={$data[0]['id']}") ;
-        return $query;
-    }
-    public function deleteValoracionRiesgo($data){
-            
-        $query=$this->db->query("EXEC eliminar_ValoracionRiesgo @idUserAdd={$data['user']}, 
-        @idValoracionRiesgo={$data[0]['id']}") ;
-        
+        $sql = "call modificar_ValoracionRiesgo(?,?,?,?,?)";
+        $query= $this->db->query($sql,[
+            $data[0]['valor'],
+            $data[0]['probabilidad'],
+            $data[0]['impacto'],
+            $data['user'],
+            $data[0]['id']
+        ]);
         return $query;
     }
 
     public function getImpactoRiesgoByActivo(){
         
-        $query = $this->db->query("EXEC listar_ImpactoRiesgoByActivo");
+        $query = $this->db->query("call listar_ImpactoRiesgoByActivo");
         return $query->getResultArray();
     }
     public function getProbabilidadRiesgoByActivo(){
         
-        $query = $this->db->query("EXEC listar_ProbabilidadRiesgoByActivo");
+        $query = $this->db->query("call listar_ProbabilidadRiesgoByActivo");
         return $query->getResultArray();
     }
    
@@ -89,7 +94,7 @@ class MValoracionRiesgo extends Model
         return $query->getResultArray();
     }
     public function getByProbabilidadImpacto($data){
-        $query = $this->db->query("EXEC sp_get_valoracion_riesgo ?,?",[
+        $query = $this->db->query("call sp_get_valoracion_riesgo(?,?)",[
             $data['id_probabilidad'],
             $data['id_impacto']
         ]);

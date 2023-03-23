@@ -23,13 +23,13 @@ class DescripcionAmenaza extends Model
     ];
 
     public function getAll(){
-        $sql = "EXEC sp_list_desc_amenaza";
+        $sql = "call sp_list_desc_amenaza";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
     public function store($data){
-        $sql = "EXEC sp_add_desc_amenaza ?,?,?,?";
+        $sql = "call sp_add_desc_amenaza(?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['idtipo_amenaza'],
             $data['amenaza'],
@@ -43,7 +43,7 @@ class DescripcionAmenaza extends Model
     }
 
     public function edit($id,$data){
-        $sql = "EXEC sp_edit_desc_amenaza ?,?,?,?,?";
+        $sql = "call sp_edit_desc_amenaza(?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['idtipo_amenaza'],
@@ -55,17 +55,5 @@ class DescripcionAmenaza extends Model
             return true;
         }
         return false;
-    }
-
-    public function destroy($id,$data){
-        $sql = "EXEC sp_delete_desc_amenaza ?,?,?";
-        $result = $this->db->query($sql,[
-            $id,
-            $data['id_user_deleted'],
-            $data['date_deleted']
-        ]);
-        if($result){
-            return true;
-        }
     }
 }
