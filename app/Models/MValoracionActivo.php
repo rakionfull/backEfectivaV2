@@ -27,23 +27,15 @@ class MValoracionActivo extends Model
     ];
     public function validarValActivo($data){
         
-            // $query = $this->db->query("SELECT * FROM valoracion_activo 
-            // where idaspecto1='{$data['id_aspecto1']}'
-            // and idaspecto2={$data['id_aspecto2']} 
-            // and idaspecto3={$data['id_aspecto3']} 
-            // and idvalor={$data['id_valor_val']}
-            // and valoracion1='{$data['nom_val1']}' 
-            // and valoracion2='{$data['nom_val2']}' 
-            // and valoracion3='{$data['nom_val3']}'");
-             $query = $this->db->query("EXEC validaValoracionActivo
-                @aspecto1= {$data[0]['id_aspecto1']},
-                @aspecto2={$data[0]['id_aspecto2']},
-                @aspecto3={$data[0]['id_aspecto3']},
-                @valoracion1={$data[0]['nom_val1']},
-                @valoracion2={$data[0]['nom_val2']},
-                @valoracion3= {$data[0]['nom_val3']},
-                @idvalor= {$data[0]['id_valor_val']}");
-            $query->getRow();
+            $query = $this->db->query("SELECT * FROM valoracion_activo 
+            where idaspecto1='{$data['id_aspecto1']}'
+            and idaspecto2={$data['id_aspecto2']} 
+            and idaspecto3={$data['id_aspecto3']} 
+            and idvalor={$data['id_valor_val']}
+            and valoracion1='{$data['nom_val1']}' 
+            and valoracion2='{$data['nom_val2']}' 
+            and valoracion3='{$data['nom_val3']}'");
+           
             if( $query->getRow()) return true;
             else return false;
     }

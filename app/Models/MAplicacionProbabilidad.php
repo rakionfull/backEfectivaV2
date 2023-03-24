@@ -27,18 +27,10 @@ class MAplicacionProbabilidad extends Model
     ];
     public function validaAplicacionProbabilidad($data){
         
-        // $query = $this->db->query("EXEC valida_AplicacionProbabilidad @escenario='".$data['escenario']."' ,
-        // @disenio='".$data['disenio']."', @posicion='".$data['posicion']."'");
+        $query = $this->db->query("SELECT * FROM aplicacion_probailidad where idclasificacion= '{$data['disenio']}' and 
+        posicion= '{$data['posicion']}' and escenario='{$data['escenario']}' and is_deleted=0");
 
-        $sql = "CALL valida_AplicacionProbabilidad(?,?,?)";
 
-	    $query = $this->db->query($sql, [
-            $data['escenario'],
-            $data['disenio'],
-            $data['posicion']
-        ]);
-
-        $query->getRow();
         if( $query->getRow()) return true;
         else return false;
     }

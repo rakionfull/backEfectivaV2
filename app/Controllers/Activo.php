@@ -89,7 +89,8 @@ class Activo extends BaseController
 
                 
                 $model = new Mempresa();
-                $valida = $model -> validaEmpresa($input[0]);
+             
+                 $valida = $model -> validaEmpresa($input[0]);
                 if(!$valida){
                     $result = $model->saveEmpresa($input);
                     $msg = 'Registrado Correctamente';
@@ -102,8 +103,8 @@ class Activo extends BaseController
 
             return $this->getResponse(
                 [
-                    'msg' =>  $msg,
-                    'error' =>  $error
+                    'msg' => $msg,
+                'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -181,22 +182,7 @@ class Activo extends BaseController
                         ]
                     );
                 }
-                // if($model->delete($input[0]['id'])){
-                //     $this->db->transRollback();
-                //     $data['date_deleted'] = date("Y-m-d H:i:s");
-                //     $data['id_user_deleted'] = $input['user'];
-                //     $data['is_deleted'] = 1;
-                   
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                   
-                // }
+               
             }else{
                 return $this->getResponse(
                     [
@@ -925,23 +911,10 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
 
       
-            // $model = new MclasInformacion();
-            // $model->saveClasInformacion($input);
-        
-            // return $this->getResponse(
-            //     [
-            //         'msg' =>  true
-            //     ]
-            // );
+          
             $model = new MclasInformacion();
-            // $result = $model->saveTipoActivo($input);
         
-            // return $this->getResponse(
-            //     [
-            //         'msg' =>  $result
-            //     ]
-            // );
-            $valida = $model -> validarClasInfo($input);
+            $valida = $model -> validarClasInfo($input['clasificacion']);
             if(!$valida){
                 $result = $model->saveClasInformacion($input);
                 $msg = 'Registrado Correctamente';
@@ -1266,7 +1239,7 @@ class Activo extends BaseController
             $model = new Munidades();
             
         
-            $valida = $model -> validaUnidad($input);
+            $valida = $model -> validaUnidad($input[0]);
             if(!$valida){
                 $result = $model->saveUnidades($input);
                 $msg = 'Registrado Correctamente';
@@ -1453,7 +1426,7 @@ class Activo extends BaseController
             $model = new Mmacroprocesos();
         
         
-            $valida = $model -> validaMacroproceso($input);
+            $valida = $model -> validaMacroproceso($input[0]);
             if(!$valida){
                 $result = $model->saveMacroproceso($input);
                 $msg = 'Registrado Correctamente';
@@ -1640,7 +1613,7 @@ class Activo extends BaseController
 
         
             $model = new Mproceso();
-            $valida = $model->validaProceso($input);
+            $valida = $model->validaProceso($input[0]);
         
             if(!$valida){
                 $result = $model->saveProceso($input);
@@ -1880,7 +1853,7 @@ class Activo extends BaseController
 
         
             $model = new MPosicion();
-            $valida = $model->validaPosicion($input);
+            $valida = $model->validaPosicion($input[0]);
         
             if(!$valida){
                 $result = $model->savePosicion($input);
@@ -2059,7 +2032,7 @@ class Activo extends BaseController
 
             
                 $model = new MValoracionActivo();
-                $valida = $model->validarValActivo($input);
+                $valida = $model->validarValActivo($input[0]);
         
                 if(!$valida){
                     $result = $model->saveValActivo($input);
@@ -2237,15 +2210,9 @@ class Activo extends BaseController
 
         
             $model = new MCatActivo();
-            // $result = $model->saveCatActivo($input);
-        
-            // return $this->getResponse(
-            //     [
-            //         'msg' =>  true
-            //     ]
-            // );
           
-            $valida = $model -> validarCatActivo($input);
+          
+            $valida = $model -> validarCatActivo($input[0]);
             if(!$valida){
                 $result = $model->saveCatActivo($input);
                 $msg = 'Registrado Correctamente';

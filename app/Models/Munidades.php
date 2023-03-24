@@ -27,30 +27,30 @@ class Munidades extends Model
     ];
     public function validaUnidad($data){
         
-        // $query = $this->db->query("SELECT * FROM unidades where  
-        // idempresa='{$data['idempresa']}' 
-        // and idarea='{$data['idarea']}' and  
-        // unidad='{$data['unidad']}'");[]
-        $query = $this->db->query("EXEC validaUnidad
-        @area={$data[0]['idarea']} ,
-        @empresa={$data[0]['idempresa']} ,
-        @unidad= '{$data[0]['unidad']}'");
-        $query->getRow();
+        $query = $this->db->query("SELECT * FROM unidades where  
+        idempresa='{$data['idempresa']}' 
+        and idarea='{$data['idarea']}' and is_deleted=0 and  
+        unidad='{$data['unidad']}'");
+        
         if( $query->getRow()) return true;
         else return false;
     }
     //retorna todas las Unidades
     public function getUnidades($dato){
         if($dato == 0){
-            $query = $this->db->query("EXEC listarUnidades");
-            // $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
-            // from unidades as U inner join empresa as E on U.idempresa = e.id
-            //                    inner join area as A on U.idarea = A.id and U.is_deleted=0");
+            // $query = $this->db->query("EXEC listarUnidades");
+            $sql = "CALL listarUnidades()";
+
+                $query = $this->db->query($sql, [
+            ]);
+        
         }else{
-            // $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado,U.idempresa,U.idarea
-            // from unidades as U inner join empresa as E on U.idempresa = e.id
-            //                    inner join area as A on U.idarea = A.id where e.id  = $dato and U.is_deleted=0");
-            $query = $this->db->query("EXEC listarUnidadEmpresa @dato='{$dato}'");
+         
+                $sql = "CALL listarUnidadEmpresa(?)";
+
+                $query = $this->db->query($sql, [
+                $dato
+            ]);
         }
        
         return $query->getResultArray();
@@ -59,35 +59,46 @@ class Munidades extends Model
     public function saveUnidades($data){
        
 
-        // $query=$this->db->query("INSERT INTO unidades
-        // (unidad,idempresa,idarea,estado) VALUES
-        // ('{$data['unidad']}',
-        // '{$data['idempresa']}',
-        // '{$data['idarea']}',
-        // {$data['estado']})") ;
-        $query=$this->db->query("EXEC agregar_unidad 
-        @unidad = '{$data[0]['unidad']}',
-        @empresa= '{$data[0]['idempresa']}',
-        @area= '{$data[0]['idarea']}',
-        @estado= '{$data[0]['estado']}',
-        @idUserAdd= '{$data['user']}'");
+      
+        // $query=$this->db->query("EXEC agregar_unidad 
+        // @unidad = '{$data[0]['unidad']}',
+        // @empresa= '{$data[0]['idempresa']}',
+        // @area= '{$data[0]['idarea']}',
+        // @estado= '{$data[0]['estado']}',
+        // @idUserAdd= '{$data['user']}'");
+        $sql = "CALL agregar_unidad(?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+            $data[0]['idarea'],
+        
+         $data[0]['idempresa'],
+         $data[0]['unidad'],
+         $data[0]['estado'],
+         $data['user']
+        ]);
         return $query;
     }
     public function updateUnidades($data){
               
-        // $query=$this->db->query("UPDATE unidades SET 
-        // unidad = '{$data['unidad']}',
-        // idempresa = '{$data['idempresa']}',
-		// idarea = '{$data['idarea']}',
-        // estado = '{$data['estado']}'
-        // where id = {$data['id']} ") ;
-        $query=$this->db->query("EXEC editar_unidad 
-        @unidad = '{$data[0]['unidad']}',
-        @empresa= {$data[0]['idempresa']},
-        @area= {$data[0]['idarea']},
-        @estado= {$data[0]['estado']},
-        @idunidad= {$data[0]['id']},
-        @idUserAdd= {$data['user']}");
+       
+        // $query=$this->db->query("EXEC editar_unidad 
+        // @unidad = '{$data[0]['unidad']}',
+        // @empresa= {$data[0]['idempresa']},
+        // @area= {$data[0]['idarea']},
+        // @estado= {$data[0]['estado']},
+        // @idunidad= {$data[0]['id']},
+        // @idUserAdd= {$data['user']}");
+
+        $sql = "CALL editar_unidad(?,?,?,?,?,?)";
+
+       $query = $this->db->query($sql, [
+        $data[0]['idarea'],
+        $data[0]['idempresa'],
+        $data[0]['unidad'],
+        $data[0]['estado'],
+        $data[0]['id'],
+        $data['user']
+       ]);
         return $query;
     }
     /*
@@ -101,21 +112,27 @@ class Munidades extends Model
     */
     public function getUnidadByActivo($data){
 
-       // $query = $this->db->query("SELECT * FROM unidades where estado='1' and idempresa={$data['idempresa']} and idarea={$data['idarea']}");
-       $query = $this->db->query("EXEC listarUnidadByActivo 
-       @idempresa ={$data['idempresa']} ,@idarea={$data['idarea']}");
-       
+        //    $query = $this->db->query("EXEC listarUnidadByActivo 
+    //    @idempresa ={$data['idempresa']} ,@idarea={$data['idarea']}");
+       $sql = "CALL listarUnidadByActivo(?)";
+
+       $query = $this->db->query($sql, [
+        $data['idempresa'],
+        $data['idarea'],
+
+       ]);
+
        return $query->getResultArray();
     }
-    // public function deleteUnidad($data){
-    
-    //     $query = $this->db->query("DELETE from unidades where id = {$data} ");
-    //     return $query;
-    // }
+
     public function getComboUnidad(){
 
-       // $query = $this->db->query("SELECT * FROM unidades where estado='1'");
-       $query = $this->db->query("EXEC listarUnidadByEstado");
+      
+    //    $query = $this->db->query("EXEC listarUnidadByEstado");
+       $sql = "CALL listarUnidadByEstado()";
+
+       $query = $this->db->query($sql, [
+       ]);
        return $query->getResultArray();
     }
 }

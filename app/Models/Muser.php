@@ -45,8 +45,7 @@ class Muser extends Model
 
     }
     public function lastid(){
-        // $maxID = $this->db->query('SELECT id_us as maxid FROM tb_users order by id_us desc limit 1');
-        //$maxID = $this->db->query('SELECT SCOPE_IDENTITY() as maxid FROM tb_users');
+     
         $maxID = $this->db->query('SELECT @@identity as maxid FROM tb_users');
 
         return $maxID->getRow()->maxid;
@@ -80,8 +79,8 @@ class Muser extends Model
     }
     public function getUserbyId($id){
 
-        $Usuario = $this->db->query("SELECT TOP 1 * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
-        on TU.id_us=TH.id_us WHERE TU.id_us= '{$id}' and TU.estado_us='1' ORDER BY TH.id_cl DESC");
+        $Usuario = $this->db->query("SELECT * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
+        on TU.id_us=TH.id_us WHERE TU.id_us= '{$id}' and TU.estado_us='1' ORDER BY TH.id_cl DESC LIMIT 1");
        
         return $Usuario->getRow();
     }
@@ -112,8 +111,8 @@ class Muser extends Model
     //retorna todos los usuarios
     public function getUsers($data){
         $consulta = "";
-        if($data['estado'] == 'all') {$consulta = "SELECT TU.id_us as id, * FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us ";}
-        else { $consulta = "SELECT TU.id_us as id, * FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} "; }
+        if($data['estado'] == 'all') {$consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us ";}
+        else { $consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} "; }
 
         $Usuario = $this->db->query($consulta);
         return $Usuario->getResultArray();

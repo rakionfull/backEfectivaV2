@@ -28,18 +28,9 @@ class MAplicacionImpacto extends Model
 
     public function validaAplicacionImpacto($data){
         
-        // $query = $this->db->query("EXEC valida_AplicacionImpacto @escenario='".$data['escenario']."' ,
-        // @disenio='".$data['disenio']."', @posicion='".$data['posicion']."'");
-        // $sql = "CALL valida_AplicacionImpacto(?)";
-
-	    $query = $this->db->query($sql, [
-            $data['escenario'],
-            $data['disenio'],
-            $data['posicion'],
-            
-        ]);
-
-        $query->getRow();
+        $query = $this->db->query("SELECT * FROM aplicacion_impacto where idclasificacion= '{$data['disenio']}' and 
+        posicion= '{$data['posicion']}' and escenario='{$data['escenario']}' and is_deleted=0");
+        
         if( $query->getRow()) return true;
         else return false;
     }
