@@ -39,7 +39,7 @@ class Mestado extends Model
 
      
         $sql = "call listar_estado()";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
          
         ]);
         return $query->getResultArray();
@@ -48,7 +48,7 @@ class Mestado extends Model
     public function saveEstado($data){
 
         $sql = "call agregar_estado(?,?,?)";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
             $data[0]['estado'],
             $data[0]['descripcion'],
             $data['user']
@@ -60,7 +60,7 @@ class Mestado extends Model
     public function updateEstado($data){
       
         $sql = "call modificar_estado(?,?,?,?)";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
             $data[0]['estado'],
             $data[0]['descripcion'],
             $data['user'],

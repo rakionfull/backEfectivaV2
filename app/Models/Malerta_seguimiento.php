@@ -40,7 +40,7 @@ class Malerta_seguimiento extends Model
 
       
         $sql = "call listar_alert_seguimiento()";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
          
         ]);
         return $query->getResultArray();
@@ -50,7 +50,7 @@ class Malerta_seguimiento extends Model
 
      
         $sql = "call agregar_AlertSeguimiento(?,?,?,?)";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
             $data[0]['alerta'],
             $data[0]['descripcion'],
             $data[0]['valor'],

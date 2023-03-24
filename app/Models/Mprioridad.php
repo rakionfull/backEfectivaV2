@@ -36,9 +36,9 @@ class Mprioridad extends Model
 
     public function getPrioridad(){
 
-        $query = $this->db->query("EXEC listar_prioridad");
-        $sql = "call modificar_AlertSeguimiento()";
-        $result = $this->db->query($sql,[
+        // $query = $this->db->query("EXEC listar_prioridad");
+        $sql = "call listar_prioridad()";
+        $query = $this->db->query($sql,[
           
         ]);
         return $query->getResultArray();
@@ -48,7 +48,7 @@ class Mprioridad extends Model
 
      
         $sql = "call agregar_prioridad(?,?,?)";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
             $data[0]['prioridad'],
             $data[0]['decripcion'],
             $data['user']
@@ -59,7 +59,7 @@ class Mprioridad extends Model
     public function updatePrioridad($data){
        
         $sql = "call modificar_prioridad(?,?,?,?)";
-        $result = $this->db->query($sql,[
+        $query = $this->db->query($sql,[
             $data[0]['prioridad'],
             $data[0]['decripcion'],
             $data['user'],
