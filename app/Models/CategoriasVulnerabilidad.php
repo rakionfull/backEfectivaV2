@@ -23,13 +23,13 @@ class CategoriasVulnerabilidad extends Model
     ];
 
     public function getAll(){
-        $sql = "EXEC sp_list_categoria_vulnerabilidad";
+        $sql = "call sp_list_categoria_vulnerabilidad";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
     public function store($data){
-        $sql = "EXEC sp_add_categoria_vulnerabilidad ?,?,?,?";
+        $sql = "call sp_add_categoria_vulnerabilidad(?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['categoria'],
             $data['estado'],
@@ -43,7 +43,7 @@ class CategoriasVulnerabilidad extends Model
     }
 
     public function edit($id,$data){
-        $sql = "EXEC sp_edit_categoria_vulnerabilidad ?,?,?,?,?";
+        $sql = "call sp_edit_categoria_vulnerabilidad(?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['categoria'],
@@ -55,17 +55,5 @@ class CategoriasVulnerabilidad extends Model
             return true;
         }
         return false;
-    }
-
-    public function destroy($id,$data){
-        $sql = "EXEC sp_delete_categoria_vulnerabilidad ?,?,?";
-        $result = $this->db->query($sql,[
-            $id,
-            $data['id_user_deleted'],
-            $data['date_deleted']
-        ]);
-        if($result){
-            return true;
-        }
     }
 }

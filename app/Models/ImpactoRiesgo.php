@@ -42,13 +42,13 @@ class ImpactoRiesgo extends Model
 
 
     public function getAll($scene){
-        $sql = "EXEC sp_list_impacto ?";
+        $sql = "call sp_list_impacto(?)";
         $result = $this->db->query($sql,[$scene])->getResultArray();
         return $result;
     }
 
     public function store_1($data){
-        $sql = "EXEC sp_add_impacto_1 ?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_impacto_1(?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['descripcion'],
             $data['tipo_regla'],
@@ -68,7 +68,7 @@ class ImpactoRiesgo extends Model
 
     public function store_2($data){
 
-        $sql = "EXEC sp_add_impacto_2 ?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_impacto_2(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['descripcion'],
             $data['tipo_regla'],
@@ -90,7 +90,7 @@ class ImpactoRiesgo extends Model
 
     }
     public function edit_1($data){
-        $sql = "EXEC sp_edit_impacto_1 ?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_edit_impacto_1(?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['id'],
             $data['descripcion'],
@@ -108,7 +108,7 @@ class ImpactoRiesgo extends Model
         return false;
     }
     public function edit_2($data){
-        $sql = "EXEC sp_edit_impacto_2 ?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_edit_impacto_2(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['id'],
             $data['descripcion'],
@@ -128,26 +128,15 @@ class ImpactoRiesgo extends Model
         }
         return false;
     }
-    public function destroy($id,$data){
-        $sql = "EXEC sp_delete_impacto ?,?,?";
-        $result = $this->db->query($sql,[
-            $id,
-            $data['id_user_deleted'],
-            $data['date_deleted']
-        ]);
-        if($result){
-            return true;
-        }
-    }
 
     public function getActivesScene1(){
-        $sql = "EXEC sp_get_active_impacto_escenario_1";
+        $sql = "call sp_get_active_impacto_escenario_1";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
     public function validateCombinatoria($data){
-        $sql = "EXEC sp_validate_combinatoria_impacto ?,?,?,?";
+        $sql = "call sp_validate_combinatoria_impacto(?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['operador1'],
             $data['valor1'],
@@ -157,7 +146,7 @@ class ImpactoRiesgo extends Model
         return $result;
     }
     public function getByDescription($data){
-        $sql = "EXEC sp_get_impacto_by_description ?";
+        $sql = "call sp_get_impacto_by_description(?)";
         $result = $this->db->query($sql,[
             $data['descripcion']
         ])->getResultArray();

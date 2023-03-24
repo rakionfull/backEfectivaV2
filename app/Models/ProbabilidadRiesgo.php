@@ -41,13 +41,13 @@ class ProbabilidadRiesgo extends Model
 
 
     public function getAll($scene){
-        $sql = "EXEC sp_list_probabilidad ?";
+        $sql = "call sp_list_probabilidad(?)";
         $result = $this->db->query($sql,[$scene])->getResultArray();
         return $result;
     }
 
     public function store_1($data){
-        $sql = "EXEC sp_add_probabilidad_1 ?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_probabilidad_1(?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['formula'],
             $data['descripcion'],
@@ -66,7 +66,7 @@ class ProbabilidadRiesgo extends Model
     }
 
     public function store_2($data){
-        $sql = "EXEC sp_add_probabilidad_2 ?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_probabilidad_2(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['descripcion'],
             $data['tipo_regla'],
@@ -87,7 +87,7 @@ class ProbabilidadRiesgo extends Model
         return false;
     }
     public function edit_1($data){
-        $sql = "EXEC sp_edit_probabilidad_1 ?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_edit_probabilidad_1(?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['id'],
             $data['descripcion'],
@@ -105,7 +105,7 @@ class ProbabilidadRiesgo extends Model
         return false;
     }
     public function edit_2($data){
-        $sql = "EXEC sp_edit_probabilidad_2 ?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_edit_probabilidad_2(?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['id'],
             $data['descripcion'],
@@ -126,7 +126,7 @@ class ProbabilidadRiesgo extends Model
         return false;
     }
     public function destroy($id,$data){
-        $sql = "EXEC sp_delete_probabilidad ?,?,?";
+        $sql = "call sp_delete_probabilidad(?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['id_user_deleted'],
@@ -138,7 +138,7 @@ class ProbabilidadRiesgo extends Model
     }
 
     public function updateScene($data,$scene){
-        $sql = "EXEC sp_update_scene_probabilidad_user ?,?";
+        $sql = "call sp_update_scene_probabilidad_user(?,?)";
         $result = $this->db->query($sql,[
             $data['user_id'],
             $scene
@@ -150,12 +150,12 @@ class ProbabilidadRiesgo extends Model
     }
 
     public function getActivesScene1(){
-        $sql = "EXEC sp_get_active_escenario_1";
+        $sql = "call sp_get_active_escenario_1";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
     public function validateCombinatoria($data){
-        $sql = "EXEC sp_validate_combinatoria_probabilidad ?,?,?,?";
+        $sql = "call sp_validate_combinatoria_probabilidad(?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['operador1'],
             $data['valor1'],
@@ -166,7 +166,7 @@ class ProbabilidadRiesgo extends Model
     }
 
     public function getByDescription($data){
-        $sql = "EXEC sp_get_probabilidad_by_description ?";
+        $sql = "call sp_get_probabilidad_by_description(?)";
         $result = $this->db->query($sql,[
             $data['descripcion']
         ])->getResultArray();

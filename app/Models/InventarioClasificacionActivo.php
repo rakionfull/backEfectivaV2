@@ -37,36 +37,36 @@ class InventarioClasificacionActivo extends Model
     ];
 
     public function getAllHistoricos(){
-        $sql = "EXEC sp_list_inventario_clasificacion_activo_historial";
+        $sql = "call sp_list_inventario_clasificacion_activo_historial";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
     public function getAllHistoricosByUser($user_id){
-        $sql = "EXEC sp_list_inventario_clasificacion_activo_historial_by_user ?";
+        $sql = "call sp_list_inventario_clasificacion_activo_historial_by_user(?)";
         $result = $this->db->query($sql,[$user_id])->getResultArray();
         return $result;
     }
 
     public function getAll($id){
-        $sql = "EXEC sp_list_inventario_clasificacion_activo @empresa={$id}";
-        $result = $this->db->query($sql)->getResultArray();
+        $sql = "call sp_list_inventario_clasificacion_activo(?)";
+        $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
 
     public function getById($id){
-        $sql = "EXEC sp_get_inventario_clasificacion_activo ?";
+        $sql = "call sp_get_inventario_clasificacion_activo(?)";
         $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
 
     public function getByUser($user_id,$empresa){
-        $sql = "EXEC sp_list_inventario_clasificacion_activo_by_user ?,? ";
+        $sql = "call sp_list_inventario_clasificacion_activo_by_user(?,?)";
         $result = $this->db->query($sql,[$user_id,$empresa])->getResultArray();
         return $result;
     }
 
     public function store($data){
-        $sql = "EXEC sp_add_inventario_clasificacion_activo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_inventario_clasificacion_activo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['idempresa'],
             $data['idarea'],
@@ -90,7 +90,7 @@ class InventarioClasificacionActivo extends Model
             $data['date_add']
         ]);
         if($result){
-            $sql = "EXEC sp_get_last_id";
+            $sql = "call sp_get_last_id";
             $result = $this->db->query($sql)->getResult();
             // $this->store_historial($result[0]->id,$data);
             if($data['estado'] == '2'){
@@ -103,7 +103,7 @@ class InventarioClasificacionActivo extends Model
         return false;
     }
     public function store_historial($id_ica,$data){
-        $sql = "EXEC sp_add_inventario_clasificacion_activo_historial ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_add_inventario_clasificacion_activo_historial(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id_ica,
             $data['idempresa'],
@@ -134,7 +134,7 @@ class InventarioClasificacionActivo extends Model
     }
 
     public function edit($id,$data){
-        $sql = "EXEC sp_edit_inventario_clasificacion_activo ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+        $sql = "call sp_edit_inventario_clasificacion_activo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['idempresa'],
@@ -171,21 +171,9 @@ class InventarioClasificacionActivo extends Model
         return false;
     }
 
-    public function destroy($id,$data){
-        $sql = "EXEC sp_delete_inventario_clasificacion_activo ?,?,?";
-        $result = $this->db->query($sql,[
-            $id,
-            $data['id_user_deleted'],
-            $data['date_deleted']
-        ]);
-        if($result){
-            return true;
-        }
-    }
-
     public function sendMail($id,$mail){
         try {
-            $sql = "EXEC sp_get_info_to_email ?";
+            $sql = "call sp_get_info_to_email(?)";
             $result = $this->db->query($sql,[
                 $id
             ])->getResult();
@@ -214,7 +202,7 @@ class InventarioClasificacionActivo extends Model
 
     public function getValorByValoraciones($data){
         try {
-            $sql = "EXEC sp_get_valor_combinacion_valoracion ?,?,?";
+            $sql = "call sp_get_valor_combinacion_valoracion(?,?,?)";
             $result = $this->db->query($sql,[
                 $data['val_c'],
                 $data['val_i'],
@@ -228,7 +216,7 @@ class InventarioClasificacionActivo extends Model
     }
     public function listByValoraciones($data){
         try {
-            $sql = "EXEC sp_list_ica_by_valoracion ?,?,?";
+            $sql = "call sp_list_ica_by_valoracion(?,?,?)";
             $result = $this->db->query($sql,[
                 $data['nom_val1'],
                 $data['nom_val2'],
@@ -243,7 +231,7 @@ class InventarioClasificacionActivo extends Model
 
     public function update_valor_ica($id,$data){
         try {
-            $sql = "EXEC update_valor_ica ?,?";
+            $sql = "call update_valor_ica(?,?)";
             $result = $this->db->query($sql,[
                 $id,
                 $data['id_valor_val']
@@ -259,7 +247,7 @@ class InventarioClasificacionActivo extends Model
     }
     public function update_estado_ica($id,$data){
         try {
-            $sql = "EXEC update_status_ica ?,?,?,?";
+            $sql = "call update_status_ica(?,?,?,?)";
             $result = $this->db->query($sql,[
                 $id,
                 $data['estado'],
