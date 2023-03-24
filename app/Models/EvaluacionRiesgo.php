@@ -9,8 +9,8 @@ class EvaluacionRiesgo extends Model
     protected $table  = 'evaluacion_riesgo';
 
     public function getAll($id){
-        $sql = "call sp_list_evaluacion_riesgo(?)" ;
-        $result = $this->db->query($sql,[$id])->getResultArray();
+        $sql = "call sp_list_evaluacion_riesgo()" ;
+        $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
 
