@@ -41,7 +41,7 @@ class MPosicion extends Model
 
         if($dato == 0){
            
-            $query = $this->db->query("EXEC listarPosicion");
+           
             $sql = "CALL listarPosicion()";
 
             $query = $this->db->query($sql, [

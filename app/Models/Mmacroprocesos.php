@@ -39,14 +39,14 @@ class Mmacroprocesos extends Model
     public function getMacroproceso($dato){
 
         if($dato == 0){
-             $query = $this->db->query("EXEC listarMacroproceso");
-             $sql = "CALL listarMacroproceso(?)";
+            
+             $sql = "CALL listarMacroproceso()";
 
              $query = $this->db->query($sql, [
              
              ]);
     }else{
-            // $query = $this->db->query("EXEC listarMacroEmpresa @dato={$dato}");
+           
             $sql = "CALL listarMacroEmpresa(?)";
 
             $query = $this->db->query($sql, [

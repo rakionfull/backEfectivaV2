@@ -112,9 +112,8 @@ class Munidades extends Model
     */
     public function getUnidadByActivo($data){
 
-        //    $query = $this->db->query("EXEC listarUnidadByActivo 
-    //    @idempresa ={$data['idempresa']} ,@idarea={$data['idarea']}");
-       $sql = "CALL listarUnidadByActivo(?)";
+    
+       $sql = "CALL listarUnidadByActivo(?,?)";
 
        $query = $this->db->query($sql, [
         $data['idempresa'],
@@ -122,7 +121,8 @@ class Munidades extends Model
 
        ]);
 
-       return $query->getResultArray();
+     return $query->getResultArray();
+     
     }
 
     public function getComboUnidad(){

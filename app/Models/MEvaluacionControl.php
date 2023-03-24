@@ -158,18 +158,32 @@ class MEvaluacionControl extends Model
         
         $id=$this->db->query("SELECT id from caracteristica_control 
         where is_deleted=0   and caracteristica='Diseño'") ;
-        $disenio = $id->getRow()->id;
-        
-        $id_cali=$this->db->query("SELECT id from caracteristica_control 
-        where is_deleted=0 and clasificacion =1 and idOpcion={$disenio}") ;
-        $calificacion = $id_cali->getRow()->id;
+        if($id){
+            $disenio = $id->getRow()->id;
+            $id_cali=$this->db->query("SELECT id from caracteristica_control 
+            where is_deleted=0 and clasificacion =1 and idOpcion={$disenio}") ;
+           
+            if($id_cali->getRow()){
+                    $calificacion = $id_cali->getRow()->id;
 
-        $query=$this->db->query("SELECT * from caracteristica_control 
-        where is_deleted=0 and clasificacion =1 and tipo='opcion' and idOpcion={$calificacion}") ;
+                    $query=$this->db->query("SELECT * from caracteristica_control 
+                    where is_deleted=0 and clasificacion =1 and tipo='opcion' and idOpcion={$calificacion}") ;
+
+                    return $query->getResultArray();
+            }else{
+                return 0;
+            }
+            //return $id_cali->getRow();
+        
+        }else{
+            return 0;
+        }
+        
+       
        
 
 
-        return $query->getResultArray();
+      
     }
     public function getOperatividadCalificacion(){
         

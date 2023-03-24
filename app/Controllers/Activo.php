@@ -563,8 +563,8 @@ class Activo extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
-                    'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                     'error' => $ex->getMessage(),
+                    //'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
             );
@@ -914,7 +914,7 @@ class Activo extends BaseController
           
             $model = new MclasInformacion();
         
-            $valida = $model -> validarClasInfo($input['clasificacion']);
+            $valida = $model -> validarClasInfo($input[0]['clasificacion']);
             if(!$valida){
                 $result = $model->saveClasInformacion($input);
                 $msg = 'Registrado Correctamente';
@@ -932,7 +932,7 @@ class Activo extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
+                    //'error' => $ex->getMessage(),
                     'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
@@ -2052,7 +2052,7 @@ class Activo extends BaseController
             } catch (Exception $ex) {
                 return $this->getResponse(
                     [
-                        // 'error' => $ex->getMessage(),
+                        //'error' => $ex->getMessage(),
                         'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                     ],
                     ResponseInterface::HTTP_OK

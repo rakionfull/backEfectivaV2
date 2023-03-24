@@ -55,7 +55,7 @@ class MAplicacionImpacto extends Model
         // @posicion='{$data[0]['posicion']}', @escenario={$data[0]['escenario']},
         //  @descripcion='{$data[0]['descripcion']}', @idUserAdd= {$data['user']}") ;
         
-        $sql = "CALL modificar_AplicacionImpacto(?,?,?,?,?,?)";
+        $sql = "CALL agregar_AplicacionImpacto(?,?,?,?,?)";
 
 	    $query = $this->db->query($sql, [
             $data[0]['disenio'],
