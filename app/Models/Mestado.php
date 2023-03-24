@@ -28,40 +28,48 @@ class Mestado extends Model
 
     public function validaEstado($data){
         
-        $query = $this->db->query("EXEC validaEstado @estado='".$data."'");
-        $query->getRow();
+       
+        $query = $this->db->query("SELECT * FROM estado where estado='{$data}' and is_deleted=0");
+      
         if( $query->getRow()) return true;
         else return false;
     }
 
     public function getEstado(){
 
-        $query = $this->db->query("EXEC listar_estado");
+     
+        $sql = "call listar_estado()";
+        $result = $this->db->query($sql,[
+         
+        ]);
         return $query->getResultArray();
     }
 
     public function saveEstado($data){
 
-        $query=$this->db->query("EXEC agregar_estado
-        @estado='{$data[0]['estado']}',
-        @descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']}") ;
+        $sql = "call agregar_estado(?,?,?)";
+        $result = $this->db->query($sql,[
+            $data[0]['estado'],
+            $data[0]['descripcion'],
+            $data['user']
+        ]);
         return $query;
     }
 
     
     public function updateEstado($data){
-        $query=$this->db->query("EXEC modificar_estado @estado='{$data[0]['estado']}',
-        @descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']},@idEstado={$data[0]['id']} ");
-        
+      
+        $sql = "call modificar_estado(?,?,?,?)";
+        $result = $this->db->query($sql,[
+            $data[0]['estado'],
+            $data[0]['descripcion'],
+            $data['user'],
+            $data[0]['id'],
+        ]);
         return $query;
     }
 
 
-    public function deleteEstado($data){
-
-        $query = $this->db->query("EXEC eliminar_estado @idUserAdd={$data['id']}, @idEstado={$data[0]['id']}");
-        return $query;
-    }
     public function getEstadoByActivo(){
 
         $query = $this->db->query("SELECT * FROM estado where is_deleted=0");

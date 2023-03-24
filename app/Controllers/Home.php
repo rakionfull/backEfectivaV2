@@ -405,23 +405,7 @@ class Home extends BaseController
         );
     }
     public function deleteUser($id){
-        // $model = new Muser();
-
-        // $input = $this->getRequestInput($this->request);
-
-        // $user =  $model->getUserbyId($id);
-
-        // $result = $model->deleteUser($id);
-       
-        // log_acciones(
-        //     'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
-        //     ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
-
-        // return $this->getResponse(
-        //     [
-        //         'user' =>  $result
-        //     ]
-        // );
+      
 
         $input = $this->getRequestInput($this->request);
         $model = new Muser();
@@ -600,22 +584,67 @@ class Home extends BaseController
     public function deletePerfil()
     {
 
-      try {
-        $model = new Mperfil();
-        $input = $this->getRequestInput($this->request);
-        $result = $model->deletePerfil($input);
     
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+      $input = $this->getRequestInput($this->request);
+      $model = new Mperfil();
+      $modelUser = new Muser();
+      $found = $model->find($input['id']);
+      
+
+      $user =  $modelUser->getUserbyId($input['id']);
+      $this->db->transBegin();
+
+      try{
+          if($found){
+              try {
+                  $result = $model->delete($input['id']);
+                  if($result){
+                      $this->db->transRollback();
+                      $data['date_deleted'] = date("Y-m-d H:i:s");
+                      $data['id_user_deleted'] = $input['user'];
+                      $data['is_deleted'] = 1;
+                       log_acciones(
+                        'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
+                        ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
+                      $model->update($input['id'],$data);
+                      return $this->getResponse(
+                          [
+                              'error' => false,
+                              'msg' =>  'Eliminado Correctamente'
+                          ]
+                      );
+                  }
+                 
+              } catch (Exception $ex) {
+                  return $this->getResponse(
+                      [
+                          'error' => true,
+                          'msg' =>  'No se pudo eliminar'
+                      ]
+                  );
+              }
+             
+          }else{
+              return $this->getResponse(
+                  [
+                      'error' => true,
+                      'msg' =>  'No existen registros'
+                  ]
+              );
+          }
+          $this->db->transCommit();
+
       } catch (Exception $ex) {
-        return $this->getResponse(
-            [
-                'error' => 'El perfil está asignado a usuario, no es posible eliminarlo',
-            ]
-        );
+          $data['is_deleted'] = 0;
+          $data['date_deleted'] = null;
+          $data['id_user_deleted'] = null;
+          $model->update($input['id'],$data);
+          return $this->getResponse(
+              [
+                  'error' => true,
+                  'msg' => 'Unidad está asignado, no es posible eliminarlo',
+              ]
+          );
       }
         
       

@@ -29,49 +29,55 @@ class Malerta_seguimiento extends Model
 
     public function validaAlerta_seguimiento($data){
         
-        $query = $this->db->query("EXEC validaAlerta_seguimiento @alert='".$data."'");
-        $query->getRow();
+    
+        $query = $this->db->query("SELECT * FROM alert_seguimiento where alerta = '{$data}' and is_deleted='0'");
+       
         if( $query->getRow()) return true;
         else return false;
     }
 
     public function getAlerta_seguimiento(){
 
-        $query = $this->db->query("EXEC listar_alert_seguimiento");
+      
+        $sql = "call listar_alert_seguimiento()";
+        $result = $this->db->query($sql,[
+         
+        ]);
         return $query->getResultArray();
     }
 
     public function saveAlerta_seguimiento($data){
 
-        $query=$this->db->query("EXEC agregar_AlertSeguimiento
-        @alerta='{$data[0]['alerta']}',
-        @descripcion='{$data[0]['descripcion']}',
-        @valor='{$data[0]['valor']}',@idUserAdd= {$data['user']}") ;
+     
+        $sql = "call agregar_AlertSeguimiento(?,?,?,?)";
+        $result = $this->db->query($sql,[
+            $data[0]['alerta'],
+            $data[0]['descripcion'],
+            $data[0]['valor'],
+            $data['user']
+        ]);
         return $query;
     }
 
     public function updateAlerta_seguimiento($data){
-        $query=$this->db->query("EXEC modificar_AlertSeguimiento @alerta='{$data[0]['alerta']}',
-        @valor='{$data[0]['valor']}',@descripcion='{$data[0]['descripcion']}',@idUserAdd= {$data['user']},@idAlerta={$data[0]['id']} ") ;
-        
+        $sql = "call modificar_AlertSeguimiento(?,?,?,?,?)";
+        $result = $this->db->query($sql,[
+            $data[0]['alerta'],
+            $data[0]['descripcion'],
+            $data[0]['valor'],
+            $data['user'],
+            $data[0]['id'],
+        ]);
         return $query;
     }
 
-    public function deleteAlerta_seguimiento($data){
-
-        $query = $this->db->query("EXEC eliminar_alertSeguimiento @idUserAdd={$data['id']}, @idAlerta={$data[0]['id']} ");
-        return $query;
-    }
+   
     public function getAlertaByActivo(){
 
         $query = $this->db->query("SELECT * FROM alert_seguimiento where is_deleted='0'");
         return $query->getResultArray();
     }
 
-    public function getAlerta(){
 
-        $query = $this->db->query("SELECT * FROM alert_seguimiento where is_deleted='0'");
-        return $query->getResultArray();
-    }
 
 }

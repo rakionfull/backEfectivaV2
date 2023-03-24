@@ -2703,28 +2703,7 @@ class Activo extends BaseController
                         ]
                     );
                 }
-                // if($model->delete($input[0]['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+            
             }else{
                 return $this->getResponse(
                     [
@@ -2739,7 +2718,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -2863,28 +2842,7 @@ class Activo extends BaseController
                         ]
                     );
                 }
-                // if($model->delete($input[0]['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+          
             }else{
                 return $this->getResponse(
                     [
@@ -2899,7 +2857,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -3025,28 +2983,7 @@ class Activo extends BaseController
                         ]
                     );
                 }
-                // if($model->delete($input[0]['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input[0]['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+           
             }else{
                 return $this->getResponse(
                     [
@@ -3061,7 +2998,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
@@ -3513,7 +3450,7 @@ public function getAlerta(){
     try {
         $model = new Malerta_seguimiento();
             $response = [
-                'data' =>  $model->getAlerta()
+                'data' =>  $model->getAlertaByActivo()
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
     

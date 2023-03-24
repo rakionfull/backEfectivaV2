@@ -85,14 +85,7 @@ class Mperfil extends Model
            
         return $query;
     }
-    // public function deletePerfil($data){
-      
-        
-    //     $query=$this->db->query("DELETE FROM tb_perfiles 
-    //     where id_perfil = {$data['id']} ") ;
-           
-    //     return $query;
-    // }
+   
     //detalle perfiles}
     public function getDetPerfil($data){
 
