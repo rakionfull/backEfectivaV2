@@ -34,13 +34,22 @@ class MUbicActivo extends Model
             // and ciudad='{$data['idciudad']}' 
             // and direccion='{$data['direccion_ubi']}'
             // and descripcion='{$data['desc_ubi']}'");
-            $query = $this->db->query("EXEC validaUbiActivo
-            @continente= '{$data[0]['idcontinente']}',
-            @pais= '{$data[0]['idpais']}' ,
-            @ciudad= '{$data[0]['idciudad']}',
-            @direccion = '{$data[0]['direccion_ubi']}',
-            @descripcion= '{$data[0]['desc_ubi']}'");
-            $query->getRow();
+            // $query = $this->db->query("EXEC validaUbiActivo
+            // @continente= '{$data[0]['idcontinente']}',
+            // @pais= '{$data[0]['idpais']}' ,
+            // @ciudad= '{$data[0]['idciudad']}',
+            // @direccion = '{$data[0]['direccion_ubi']}',
+            // @descripcion= '{$data[0]['desc_ubi']}'");
+            $sql = "CALL validaUbiActivo(?,?,?,?,?)";
+
+            $query = $this->db->query($sql, [
+                $data[0]['idcontinente'],
+                $data[0]['idpais'],
+                $data[0]['idciudad'],
+                $data[0]['direccion_ubi'], 
+                $data[0]['desc_ubi'],
+               
+            ]);
             if( $query->getRow()) return true;
             else return false;
     }
@@ -59,16 +68,9 @@ class MUbicActivo extends Model
     public function saveUbiActivo($data){       
 
       
-        // $query = $this->db->query("EXEC agregar_ubiactivo
-        // @continente= '{$data[0]['idcontinente']}',
-        // @pais= '{$data[0]['idpais']}' ,
-        // @ciudad= '{$data[0]['idciudad']}',
-        // @direccion = '{$data[0]['direccion_ubi']}',
-        // @descripcion= '{$data[0]['desc_ubi']}',
-        // @estado= '{$data[0]['est_ubi_activo']}',
-        // @idUserAdd= '{$data['user']}'");
+
          
-        $sql = "CALL editar_ubiactivo(?,?,?,?,?,?,?)";
+        $sql = "CALL agregar_ubiactivo(?,?,?,?,?,?,?)";
 
         $query = $this->db->query($sql, [
             $data[0]['idcontinente'],
@@ -83,16 +85,7 @@ class MUbicActivo extends Model
     }
     public function updateUbiActivo($data){  
     
-        
-        // $query = $this->db->query("EXEC editar_ubiactivo
-        // @idubiactivo= '{$data[0]['id']}',
-        // @continente= '{$data[0]['idcontinente']}',
-        // @pais= '{$data[0]['idpais']}' ,
-        // @ciudad= '{$data[0]['idciudad']}',
-        // @direccion = '{$data[0]['direccion_ubi']}',
-        // @descripcion= '{$data[0]['desc_ubi']}',
-        // @estado= '{$data[0]['est_ubi_activo']}',
-        // @idUserAdd= '{$data['user']}'");
+       
 
         $sql = "CALL editar_ubiactivo(?,?,?,?,?,?,?,?)";
 

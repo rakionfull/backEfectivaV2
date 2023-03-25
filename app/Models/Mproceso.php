@@ -121,4 +121,18 @@ class Mproceso extends Model
         ]);
         return $query->getResultArray();
     }
+    public function getProcesoByMacro($data){
+
+        
+        // $query = $this->db->query("EXEC listaProcesoByEstado");
+        $sql = "CALL listaProcesoByMacro(?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+            $data['idempresa'],
+            $data['idarea'],
+            $data['idunidad'],
+            $data['idmacroproceso'],
+        ]);
+        return $query->getResultArray();
+    }
 }

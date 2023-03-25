@@ -153,6 +153,7 @@ class MRegistroControles extends Model
             $data[0]['estado'],
             $data['user']
         ]);
+        
         $sql2 = "CALL last_id_Registro_Proceso()";
         $last_id = $this->db->query($sql2, []);
 
@@ -160,14 +161,13 @@ class MRegistroControles extends Model
     
         return  $last_id->getRow()->maxid;
     }
-    public function saveDtealle_Control($data){
+    public function saveDetalle_Control($data){
 
-        $sql = "CALL agregar_detalle_control(?,?,?,?,?)";
+        $sql = "CALL agregar_detalle_control(?,?,?,?)";
 
 	    $query = $this->db->query($sql, [
             $data['idControl'],
             $data['idCC'],
-            $data['IDC'],
             $data['nom_tabla'],
             $data['valor']
         ]);
@@ -244,26 +244,7 @@ class MRegistroControles extends Model
         inner join detalle_controles as DC on RC.id=DC.idControles inner join caracteristica_control as CC 
         on DC.idCC=CC.id");
 
-        // $query = $this ->db->query("
-        // declare @valor nvarchar(400)
-        
-        // set @valor = ''
-        
-        // SELECT @valor = @valor + '[' + T.caracteristica + '],' FROM
-        // (select caracteristica from caracteristica_control where 
-        // tipo='opcion' and clasificacion=0 and is_deleted=0 ) AS T
-        // set @valor = left(@valor,len(@valor)-1)
-        
-        
-        // Execute ('(SELECT id,nom_control,estado,'+@valor+' FROM
-        
-        // (SELECT RC.id as id,RC.nom_control,RC.estado,CC.caracteristica as dato,DC.valor from registro_controles 
-        // as RC inner join detalle_controles as DC on RC.id=DC.idControles 
-        // inner join caracteristica_control as CC on DC.idCC=CC.id) AS SourceTable
-        // PIVOT(
-        // MAX(valor)
-        // FOR dato IN ('+@valor+')
-        // ) as PivotTable)')");
+
         return $query->getResultArray();
     }
     public function getControlesRiesgos(){

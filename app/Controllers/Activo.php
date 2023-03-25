@@ -1415,7 +1415,48 @@ class Activo extends BaseController
 
            
     }
-    
+    public function listaProcesoByMacro(){
+
+        try {
+            $model = new Mproceso();
+            $input = $this->getRequestInput($this->request);
+                $response = [
+                    'data' =>  $model->getProcesoByMacro($input)
+                ];
+                return $this->respond($response, ResponseInterface::HTTP_OK);
+        
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                    [
+                        'error' => $ex->getMessage(),
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+        }
+
+           
+    }
+    public function listaCategoriaByActivo(){
+
+        try {
+            $model = new Mtipoactivo();
+            $input = $this->getRequestInput($this->request);
+                $response = [
+                    'data' =>  $model->listaCategoriaByActivo($input)
+                ];
+                return $this->respond($response, ResponseInterface::HTTP_OK);
+        
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                    [
+                        'error' => $ex->getMessage(),
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+        }
+
+           
+    }
     
     public function addMacroproceso()
     {

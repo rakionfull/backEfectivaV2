@@ -45,7 +45,7 @@ $routes->get('/newcaptcha', 'Login::newCaptcha');
 $routes->post('/validaCaptcha', 'Login::validaCaptcha');
 // http://localhost:8080/register
 $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
-$routes->post('/register2', 'Register::register');
+// $routes->post('/register2', 'Register::register');
 // $routes->cli('Task','Task::mensaje');
 
   $routes->get('Task','Task::mensaje');
@@ -120,6 +120,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('addTipoActivo', 'Activo::addTipoActivo',['filter' => 'authFilter']);
     $routes->post('updateTipoActivo', 'Activo::updateTipoActivo',['filter' => 'authFilter']);
     $routes->delete('deleteTipoActivo', 'Activo::deleteTipoActivo',['filter' => 'authFilter']);
+    $routes->get('listaCategoriaByActivo', 'Activo::listaCategoriaByActivo',['filter' => 'authFilter']);
 
     //CRUD Clasificacion de informacion
     $routes->post('validarClasInfo', 'Activo::validarClasInfo',['filter' => 'authFilter']);
@@ -150,6 +151,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('addMacroproceso', 'Activo::addMacroproceso',['filter' => 'authFilter']);
     $routes->post('updateMacroproceso', 'Activo::updateMacroproceso',['filter' => 'authFilter']);
     $routes->get('getMacroprocesoByActivo', 'Activo::getMacroprocesoByActivo',['filter' => 'authFilter']);
+    $routes->get('listaProcesoByMacro', 'Activo::listaProcesoByMacro',['filter' => 'authFilter']);
     $routes->delete('deleteMacroproceso', 'Activo::deleteMacroproceso',['filter' => 'authFilter']);
 
     //CRUD Procesos

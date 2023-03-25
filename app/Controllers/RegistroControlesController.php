@@ -332,7 +332,7 @@ class RegistroControlesController extends BaseController
                             'valor' => $value['valor'],
                             'nom_tabla' => $value['nom_tabla'],
                         ];
-                        $model->saveDtealle_Control($data);
+                        $model->saveDetalle_Control($data);
                     }
                     $msg = 'Registrado Correctamente';
                     $error = 1;

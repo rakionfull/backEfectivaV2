@@ -35,58 +35,47 @@ class MEvaluacionControl extends Model
         $query = $this->db->query("select * from caracteristica_control where tipo = 'opcion' and is_deleted=0 and estado= 1 and clasificacion=1 and idOpcion={$id}");
         return $query->getResultArray();
     }
-   
-    // public function validaEvaluacionControl($data){
-        
-    //     $query = $this->db->query("EXEC valida_Evaluacion_Control @disenio='".$data['disenio']."',
-    //     @operatividad='".$data['operatividad']."', @calificacion='".$data['calificacion']."'");
-
-    //     $sql = "CALL valida_Evaluacion_Control(?,?)";
-
-	//     $query = $this->db->query($sql, [
-    //         $data[0]['calificacion'],
-    //         $data['user'],
-    
-        
-    //     ]);
-
-    //     $query->getRow();
-    //     if( $query->getRow()) return true;
-    //     else return false;
-    // }
-    // public function getEvaluacionControl(){
-        
-    //     $query = $this->db->query("EXEC listar_Evaluacion_Control");
-    //     return $query->getResultArray();
-    // }
-   
+ 
     //aqui falta agregarles
     public function getEvaluacionControl(){
         
-        // $query = $this->db->query("
+  
+        // //primero consigo las columnas de las calificacion
+       
+
+
+        $cabeceras="SELECT caracteristica from caracteristica_control where tipo='submenu' and clasificacion=1 and is_deleted=0;";
+        $query= $this->db->query($cabeceras); 
+        $calificacion = $query -> getResultArray();
+            //construimos la consulta
+        $parte1="SELECT EC.id,DE.IEC,EC.calificacion ,";
         
-        //     declare @valor nvarchar(400)
 
-        //     set @valor = ''
+        $parte2= "";
+        for ($i=0; $i < count($calificacion) ; $i++) { 
+            if($i == count($calificacion) - 1){ 
+                $parte2= $parte2." MAX(CASE when (select caracteristica from caracteristica_control where 
+                clasificacion=1 and id=CC.idOpcion) = '{$calificacion[$i]['caracteristica'] }' THEN CC.caracteristica  ELSE 0 END) as '{$calificacion[$i]['caracteristica'] }' ";
+                
+            }else{
+                $parte2= $parte2." MAX(CASE when (select caracteristica from caracteristica_control where 
+                clasificacion=1 and id=CC.idOpcion) = '{$calificacion[$i]['caracteristica'] }' THEN CC.caracteristica ELSE 0 END) as  '{$calificacion[$i]['caracteristica'] }' , ";
+            }
+           
+          
+        }
+        
+        $parte3=", EC.calificacion FROM detalle_evaluacion_control as DE inner join evaluacion_control2 as EC on
+         DE.IEC = EC.id inner join caracteristica_control as CC on CC.id=DE.ID_CC  where EC.is_deleted=0 GROUP BY EC.id;";
+     
 
-        //     SELECT @valor = @valor + '[' + T.caracteristica + '],' FROM
-        //     (select caracteristica from caracteristica_control where 
-        //     tipo='submenu' and clasificacion=1 and is_deleted=0 ) AS T
-        //     set @valor = left(@valor,len(@valor)-1)
-
-        //     Execute ('(SELECT id,calificacion,IEC,'+@valor+',calificacion FROM
-
-        //     (SELECT EC.id,DE.IEC,CC.caracteristica,(select caracteristica from caracteristica_control where 
-        //     clasificacion=1 and id=CC.idOpcion) as dato,EC.calificacion from detalle_evaluacion_control as DE inner join evaluacion_control2 as EC on
-        //     DE.IEC = EC.id inner join caracteristica_control as CC on CC.id=DE.ID_CC  where EC.is_deleted=0) AS SourceTable
-        //     PIVOT(
-        //     MAX(caracteristica)
-        //     FOR dato IN ('+@valor+')
-        //     ) as PivotTable)')");
-        // if($query)  return $query->getResultArray();
-        // else 0;
-        // return $query->getResultArray();
-        return false;
+       // luego 
+        $query2 = $this->db->query($parte1.$parte2.$parte3);
+        
+        // return  count($calificacion);
+        return  $query2 -> getResultArray();
+        //return  $parte1.$parte2.$parte3;
+        //return $query2;
     }
     public function saveEvaluacionControl($data){       
 
