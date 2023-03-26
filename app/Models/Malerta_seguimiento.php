@@ -52,8 +52,9 @@ class Malerta_seguimiento extends Model
         $sql = "call agregar_AlertSeguimiento(?,?,?,?)";
         $query = $this->db->query($sql,[
             $data[0]['alerta'],
-            $data[0]['descripcion'],
             $data[0]['valor'],
+            $data[0]['descripcion'],
+           
             $data['user']
         ]);
         return $query;
@@ -63,8 +64,9 @@ class Malerta_seguimiento extends Model
         $sql = "call modificar_AlertSeguimiento(?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data[0]['alerta'],
-            $data[0]['descripcion'],
             $data[0]['valor'],
+            $data[0]['descripcion'],
+           
             $data['user'],
             $data[0]['id'],
         ]);

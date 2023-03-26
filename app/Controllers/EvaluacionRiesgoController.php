@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\EvaluacionRiesgo;
+use App\Models\EvaluacionRiesgosControles;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
@@ -100,7 +101,7 @@ class EvaluacionRiesgoController extends BaseController
                 'id_control' => 'required',
                 // 'riesgo_controlado_probabilidad' => 'required',
                 // 'riesgo_controlado_impacto' => 'required',
-                'riesgo_controlado_valor' => 'required',
+                // 'riesgo_controlado_valor' => 'required',
                 'estado' => 'required'
             ];
             $errors = [
@@ -123,10 +124,9 @@ class EvaluacionRiesgoController extends BaseController
                 'id_control' =>  ['required' => 'El campo control es requerido'],
                 // 'riesgo_controlado_probabilidad' =>  ['required' => 'El campo riesgo controlado probabilidad es requerido'],
                 // 'riesgo_controlado_impacto' =>  ['required' => 'El campo riesgo controlado impacto es requerido'],
-                'riesgo_controlado_valor' =>  ['required' => 'El campo riesgo controlado valor es requerido'],
+                // 'riesgo_controlado_valor' =>  ['required' => 'El campo riesgo controlado valor es requerido'],
                 'estado' =>  ['required' => 'El campo estado es requerido']
             ];
-
             $input = $this->getRequestInput($this->request);
             if (!$this->validateRequest($input, $rules, $errors)) {
                 $error = [
@@ -137,8 +137,20 @@ class EvaluacionRiesgoController extends BaseController
             }
 
             $model = new EvaluacionRiesgo();
+            $modelERC = new EvaluacionRiesgosControles();
             $result = $model->store($input);
             if($result){
+                $id = $model->get_last_id()[0];
+                foreach ($input['controles'] as $control) {
+                    # code...
+                    $data = [
+                        'id_evaluacion_riesgo' => $id,
+                        'id_control' => $control,
+                        'id_user_added' => $input['id_user_added'],
+                        'date_add' => $input['date_add']
+                    ];
+                    $modelERC->store($data);
+                }
                 return $this->getResponse(
                     [
                         'error' => false,
@@ -197,17 +209,50 @@ class EvaluacionRiesgoController extends BaseController
     }
 
     public function destroy($id){
+        $input = $this->getRequestInput($this->request);
+        $model = new EvaluacionRiesgo();
+        $found = $model->find($id);
+        $this->db->transBegin();
         try {
-            $input = $this->getRequestInput($this->request);
-            $model = new EvaluacionRiesgo();
-            $result = $model->destroy($id,$input);
-            return $this->getResponse(
-                [
-                    'error' => false,
-                    'msg' =>  $result
-                ]
-            );
+            if($found){
+                if($model->delete($id)){
+                    $this->db->transRollback();
+                    $input['is_deleted'] = 1;
+                    $model->update($id,$input);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  'Evaluacion de riesgo eliminado'
+                        ]
+                    );
+                }else{
+                    $input['is_deleted'] = 0;
+                    $input['date_deleted'] = null;
+                    $input['id_user_deleted'] = null;
+                    $model->update($id,$input);
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'msg' =>  'No se pudo eliminar'
+                        ]
+                    );
+                }
+            }else{
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'No existen datos'
+                    ]
+                ); 
+            }
+            $this->db->transCommit();
+           
         } catch (\Throwable $th) {
+            $input['estado'] = 1;
+            $input['is_deleted'] = 0;
+            $input['date_deleted'] = null;
+            $input['id_user_deleted'] = null;
+            $model->update($id,$input);
             return $this->getResponse(
                 [
                     'error' => true,
@@ -301,6 +346,23 @@ class EvaluacionRiesgoController extends BaseController
                     'msg' =>  $th->getMessage()
                 ]
             );
+        }
+    }
+
+    public function getEvaluacionRiesgoControlesByEvaluacion($id){
+        try {
+            $model = new EvaluacionRiesgosControles();
+            $response = [
+                'data' =>  $model->getByEvaluacionRiesgoId($id)
+            ];
+            return $this->respond($response, ResponseInterface::HTTP_OK);
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                    [
+                        'error' => $ex->getMessage(),
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
         }
     }
 }

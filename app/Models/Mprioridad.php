@@ -28,7 +28,11 @@ class Mprioridad extends Model
 
     public function validaPrioridad($data){
         
-        $query = $this->db->query("EXEC validaPrioridad @prioridad='".$data."'");
+      
+        $sql = "call validaPrioridad(?)";
+        $query = $this->db->query($sql,[
+            $data
+        ]);
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;

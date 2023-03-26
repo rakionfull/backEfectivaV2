@@ -18,8 +18,7 @@ class EvaluacionControlController extends BaseController
             $model = new MEvaluacionControl();
             $result = $model->getEvaluacionControl();
             for ($i=0; $i < 1 ; $i++) { 
-                // var_dump($response->data[$i]);
-                // $myKey = key($response->data[$i]);
+            
                 if($result){
                     $header = (array_keys(($result[$i])));
                 }else{

@@ -26,7 +26,7 @@ class Mperfil extends Model
         'is_deleted'
     ];
     public function lastIdPerfil(){
-        $maxID = $this->db->query('SELECT SCOPE_IDENTITY() as maxid FROM tb_perfiles');
+        $maxID = $this->db->query('SELECT MAX(id_perfil) as maxid FROM tb_perfiles');
     
         return $maxID->getRow()->maxid;
     }

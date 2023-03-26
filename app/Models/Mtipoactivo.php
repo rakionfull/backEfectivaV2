@@ -90,6 +90,17 @@ class Mtipoactivo extends Model
         return $query;
     }
  
+    public function listaCategoriaByActivo($data){
 
+        
+        // $query = $this->db->query("EXEC listaProcesoByEstado");
+        $sql = "CALL listaCategoriaByActivo(?)";
+
+        $query = $this->db->query($sql, [
+            $data['idactivo'],
+          
+        ]);
+        return $query->getResultArray();
+    }
 
 }
