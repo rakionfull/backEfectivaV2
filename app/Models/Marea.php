@@ -51,7 +51,7 @@ class Marea extends Model
                 // $query = $this->db->query("SELECT a.id,a.idempresa,e.empresa,a.area,a.estado
                 // from empresa as E inner join area as A on a.idempresa = e.id where a.idempresa=$dato");
                
-               $query = $this->db->query("EXEC listarAreaEmpresa @dato={$dato}");    
+            //    $query = $this->db->query("EXEC listarAreaEmpresa @dato={$dato}");    
                $sql = "CALL listarAreaEmpresa(?)";
 
                $query = $this->db->query($sql, [
