@@ -95,7 +95,7 @@ class InventarioClasificacionActivo extends Model
             // $this->store_historial($result[0]->id,$data);
             if($data['estado'] == '2'){
                 // return $data;
-                $response = $this->sendMail($result[0]->id,"ansir.manuel@gmail.com");
+                $response = $this->sendMail($result[0]->id,"youkai.miguel@gmail.com");
                 return $response;
             }
             return true;
@@ -182,14 +182,15 @@ class InventarioClasificacionActivo extends Model
                 $email = \Config\Services::email();
                 $email->setTo($mail);
                 $email->setBCC($mail);
-                $email->setFrom('noreply@gmail.com', 'Inventario Clasificacion Activo registrado');
+                $email->setFrom('youkai.miguel@gmail.com', 'Inventario Clasificacion Activo registrado');
                 $email->setSubject('Inventario Clasificacion Activo registrado');
                 $email->setMessage(
                    view('mail/register_inventario_clasificacion_activo',[
                     'data'=>$result[0]
                     ])
                 );
-                $email->send();
+                $valor = $email->send();
+                log_message('debug', $valor);
                 return $email;
             }
             return false;

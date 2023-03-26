@@ -1,0 +1,26 @@
+[
+    {
+        "name": "closure_6d423383ab4268faf35e9b4035611ad4",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-26 15:53:03",
+        "end_at": "2023-03-26 15:53:04",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta inicial de actividadCorreo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_6d423383ab4268faf35e9b4035611ad4",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-26 15:51:26",
+        "end_at": "2023-03-26 15:51:26",
+        "duration": "00:00:00",
+        "output": null,
+        "error": "{}",
+        "test_time": null
+    }
+]

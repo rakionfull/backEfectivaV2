@@ -3211,28 +3211,7 @@ public function deletePlanAccion(){
                     ]
                 );
             }
-            // if($model->delete($input[0]['id'])){
-            //     $this->db->transRollback();
-            //     $data['is_deleted'] = 1;
-            //     $model->update($input[0]['id'],$data);
-            //     return $this->getResponse(
-            //         [
-            //             'error' => false,
-            //             'msg' =>  'Eliminado Correctamente'
-            //         ]
-            //     );
-            // }else{
-            //     $data['is_deleted'] = 0;
-            //     $data['date_deleted'] = null;
-            //     $data['id_user_deleted'] = null;
-            //     $model->update($input[0]['id'],$data);
-            //     return $this->getResponse(
-            //         [
-            //             'error' => true,
-            //             'msg' =>  'No se pudo eliminar'
-            //         ]
-            //     );
-            // }
+          
         }else{
             return $this->getResponse(
                 [
@@ -3247,7 +3226,7 @@ public function deletePlanAccion(){
         $data['is_deleted'] = 0;
         $data['date_deleted'] = null;
         $data['id_user_deleted'] = null;
-        $model->update($input['id'],$data);
+        $model->update($input[0]['id'],$data);
         return $this->getResponse(
             [  
                 'error' => true,
@@ -3341,8 +3320,8 @@ public function addActividadPlan(){
     } catch (Exception $ex) {
         return $this->getResponse(
             [
-                // 'error' => $ex->getMessage(),
-                'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                 'error' => $ex->getMessage(),
+                //'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
             ],
             ResponseInterface::HTTP_OK
         );
