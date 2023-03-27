@@ -210,6 +210,7 @@ class Muser extends Model
     public function getEscenario(){
         $query = $this->db->query("SELECT escenario FROM escenario_active");
         return $query->getRow()->escenario;
+        // return $queryc->escenario;
     }
 
 }

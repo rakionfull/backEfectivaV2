@@ -106,9 +106,10 @@ class Home extends BaseController
 
         try {
             $model = new Muser();
+            $escenario = $model->getEscenario();
                 $response = [
                   
-                    'datos' =>  $model->getEscenario()
+                    'datos' =>  $escenario
                 ];
                 return $this->respond($response, ResponseInterface::HTTP_OK);
         

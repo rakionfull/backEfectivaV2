@@ -35,7 +35,8 @@ class ImpactoRiesgoController extends BaseController
         try {
             $model = new ImpactoRiesgo();
             $response = [
-                'data' =>  $model->where('estado','1')->where('escenario',$scene)->findAll(),
+                'data' =>  $model->where('estado','1')->where('escenario',$scene)
+                ->where('is_deleted',0)->findAll(),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {
@@ -123,8 +124,8 @@ class ImpactoRiesgoController extends BaseController
                 $result = $model->store_1($input);
     
                 $modelProbabilidad= new ProbabilidadRiesgo();
-                $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->findAll());
-                $registrosImpacto = count($model->where('estado','1')->findAll());
+                $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->where('is_deleted','0')->findAll());
+                $registrosImpacto = count($model->where('estado','1')->where('is_deleted','0')->findAll());
     
                 if($registrosProbabilidad == 0 && $registrosImpacto == 0){
                     $modelProbabilidad->updateScene($input,null);
@@ -217,8 +218,8 @@ class ImpactoRiesgoController extends BaseController
                     $result = $model->store_2($input,false);
     
                     $modelProbabilidad= new ProbabilidadRiesgo();
-                    $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->findAll());
-                    $registrosImpacto = count($model->where('estado','1')->findAll());
+                    $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->where('is_deleted','0')->findAll());
+                    $registrosImpacto = count($model->where('estado','1')->where('is_deleted','0')->findAll());
     
                     if($registrosProbabilidad == 0 && $registrosImpacto == 0){
                         $modelProbabilidad->updateScene($input,null);
@@ -252,8 +253,8 @@ class ImpactoRiesgoController extends BaseController
             $result = $model->edit_1($input);
         
             $modelProbabilidad= new ProbabilidadRiesgo();
-            $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->findAll());
-            $registrosImpacto = count($model->where('estado','1')->findAll());
+            $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->where('is_deleted','0')->findAll());
+            $registrosImpacto = count($model->where('estado','1')->where('is_deleted','0')->findAll());
 
             if($registrosProbabilidad == 0 && $registrosImpacto == 0){
                 $modelProbabilidad->updateScene($input,null);
@@ -284,8 +285,8 @@ class ImpactoRiesgoController extends BaseController
             $result = $model->edit_2($input);
 
             $modelProbabilidad= new ProbabilidadRiesgo();
-            $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->findAll());
-            $registrosImpacto = count($model->where('estado','1')->findAll());
+            $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->where('is_deleted','0')->findAll());
+            $registrosImpacto = count($model->where('estado','1')->where('is_deleted','0')->findAll());
 
             if($registrosProbabilidad == 0 && $registrosImpacto == 0){
                 $modelProbabilidad->updateScene($input,null);
