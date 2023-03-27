@@ -112,7 +112,8 @@ class Muser extends Model
     public function getUsers($data){
         $consulta = "";
         if($data['estado'] == 'all') {$consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us ";}
-        else { $consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} "; }
+        else { $consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU 
+        left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} ORDER BY TU.id_us LIMIT 1" ; }
 
         $Usuario = $this->db->query($consulta);
         return $Usuario->getResultArray();

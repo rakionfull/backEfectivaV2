@@ -34,9 +34,9 @@ class EvaluacionRiesgo extends Model
         return $result;
     }
 
-    public function getAllHistoricos(){
-        $sql = "call sp_list_evaluacion_riesgo_historial";
-        $result = $this->db->query($sql)->getResultArray();
+    public function getAllHistoricos($id){
+        $sql = "call sp_list_evaluacion_riesgo_historial (?)";
+        $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
 

@@ -12,11 +12,11 @@ class InventarioClasificacionActivoController extends BaseController
 {
     use ResponseTrait;
 
-    public function getAllHistoricos(){
+    public function getAllHistoricos($id){
         try {
             $model = new InventarioClasificacionActivo();
             $response = [
-                'data' =>  $model->getAllHistoricos(),
+                'data' =>  $model->getAllHistoricos($id),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {
@@ -28,11 +28,11 @@ class InventarioClasificacionActivoController extends BaseController
                 );
         }
     }
-    public function getAllHistoricosByUser($user_id){
+    public function getAllHistoricosByUser($user_id,$id){
         try {
             $model = new InventarioClasificacionActivo();
             $response = [
-                'data' =>  $model->getAllHistoricosByUser($user_id),
+                'data' =>  $model->getAllHistoricosByUser($user_id,$id),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {
@@ -226,7 +226,8 @@ class InventarioClasificacionActivoController extends BaseController
                 return $this->getResponse(
                     [
                         'error' => true,
-                        'msg' =>  'Ocurrio un error'
+                        'msg' =>  'Ocurrio un error',
+                       
                     ]
                 );
             }

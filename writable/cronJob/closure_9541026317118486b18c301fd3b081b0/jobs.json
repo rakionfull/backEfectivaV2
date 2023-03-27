@@ -1,0 +1,26 @@
+[
+    {
+        "name": "closure_9541026317118486b18c301fd3b081b0",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-26 18:14:35",
+        "end_at": "2023-03-26 18:14:36",
+        "duration": "00:00:00",
+        "output": "Es hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta incial de Plan de Accion y actuialziar el inicio1Correo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviadoEs hora de la alerta inicial de actividadCorreo registrado y enviado",
+        "error": "null",
+        "test_time": null
+    },
+    {
+        "name": "closure_9541026317118486b18c301fd3b081b0",
+        "type": "closure",
+        "action": "{}",
+        "environment": "[]",
+        "start_at": "2023-03-26 18:13:11",
+        "end_at": "2023-03-26 18:13:11",
+        "duration": "00:00:00",
+        "output": "",
+        "error": "null",
+        "test_time": null
+    }
+]

@@ -29,11 +29,11 @@ class EvaluacionRiesgoController extends BaseController
                 );
         }
     }
-    public function getListHistorial(){
+    public function getListHistorial($id){
         try {
             $model = new EvaluacionRiesgo();
             $response = [
-                'data' =>  $model->getAllHistoricos(),
+                'data' =>  $model->getAllHistoricos($id),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {

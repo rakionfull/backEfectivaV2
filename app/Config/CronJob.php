@@ -270,10 +270,11 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                             $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
                                             $email->setSubject('Prueba Job');
                                             $email->setMessage(
-                                                view('mail/plan_accion',[
+                                                view('mail/actividad',[
                                                     
                                                         'fullname' => $value2['nombres_us'].' '.$value2['apepat_us'].' '.$value2['apemat_us'],
                                                         'plan' => $value2['plan_accion'],
+                                                        'actividad' => $value2['descripcion'],
                                                         'estado' => 'Ha Iniciado',
                                                      'alerta' => $value2['alerta']
                                                     
@@ -314,11 +315,12 @@ class CronJob extends \Daycry\CronJob\Config\CronJob
                                           $email->setFrom('noreply@gmail.com', 'Ejecucion Job');
                                           $email->setSubject('Prueba Job');
                                           $email->setMessage(
-                                              view('mail/plan_accion',[
+                                              view('mail/actividad',[
                                                   
                                                       'fullname' => $value2['nombres_us'].' '.$value2['apepat_us'].' '.$value2['apemat_us'],
                                                       'plan' => $value2['plan_accion'],
-                                                      'estado' => 'Ha Iniciado',
+                                                      'actividad' => $value2['descripcion'],
+                                                      'estado' => 'Mensaje de alerta',
                                                       'alerta' => $value2['alerta']
                                                   
                                               ])

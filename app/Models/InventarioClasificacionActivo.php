@@ -36,14 +36,14 @@ class InventarioClasificacionActivo extends Model
         '5' => 'Por actualizar'
     ];
 
-    public function getAllHistoricos(){
-        $sql = "call sp_list_inventario_clasificacion_activo_historial";
-        $result = $this->db->query($sql)->getResultArray();
+    public function getAllHistoricos($id){
+        $sql = "call sp_list_inventario_clasificacion_activo_historial(?)";
+        $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
-    public function getAllHistoricosByUser($user_id){
-        $sql = "call sp_list_inventario_clasificacion_activo_historial_by_user(?)";
-        $result = $this->db->query($sql,[$user_id])->getResultArray();
+    public function getAllHistoricosByUser($user_id,$id){
+        $sql = "call sp_list_inventario_clasificacion_activo_historial_by_user(?,?)";
+        $result = $this->db->query($sql,[$user_id,$id])->getResultArray();
         return $result;
     }
 
@@ -190,7 +190,6 @@ class InventarioClasificacionActivo extends Model
                     ])
                 );
                 $valor = $email->send();
-                log_message('debug', $valor);
                 return $email;
             }
             return false;

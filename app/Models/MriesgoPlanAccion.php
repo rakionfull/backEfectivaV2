@@ -39,7 +39,7 @@ class MriesgoPlanAccion extends Model
     }
     public function getCorreoActividad(){
         
-        $query = $this->db->query("SELECT AP.progreso as progreso,AP.id as id_act,PA.plan_accion,AP.descripcion ,TU.id_us,TU.email_us,A.valor,AP.fecha_inicio as 
+        $query = $this->db->query("SELECT AP.progreso as progreso,AP.id as id_act,PA.plan_accion,AP.descripcion as descripcion,TU.id_us,TU.email_us,A.valor,AP.fecha_inicio as 
         fecha_ini,
         AP.fecha_fin as fecha_fin,TU.nombres_us,TU.apepat_us,TU.apemat_us ,A.alerta as alerta
         from actividades_plan as AP  inner join alert_seguimiento as A on AP.idalerta=A.id
