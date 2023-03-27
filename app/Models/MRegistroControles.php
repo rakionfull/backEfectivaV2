@@ -195,7 +195,7 @@ class MRegistroControles extends Model
         // @idControl= {$data[0]['id']}") ;
         $sql = "CALL modificar_Registro_Controles(?,?,?,?,?,?,?,?,?)";
 
-	    $this->db->query($sql, [
+        $query = $this->db->query($sql, [
             $data[0]['IDR'],
             $data[0]['riesgo'],
             $data[0]['IDC'],

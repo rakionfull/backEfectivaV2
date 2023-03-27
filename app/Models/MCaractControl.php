@@ -113,7 +113,7 @@ class MCaractControl extends Model
         // @idCaractControl='{$data[0]['id_op']}'") ;
 
 
-        $sql = "CALL modificar_caractControl(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "CALL modificar_caractControl(?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	    $query = $this->db->query($sql, [
             $data[0]['caracteristica'],
@@ -124,9 +124,10 @@ class MCaractControl extends Model
             $data[0]['condicion'],
             $data[0]['check_tabla'],
             $data[0]['nom_tabla'],
-            $data['user'],
+           
             $data[0]['calificacion'],
             $data[0]['seleccionable'],
+            $data['user'],
             $data[0]['id_op'],
         
         ]);
