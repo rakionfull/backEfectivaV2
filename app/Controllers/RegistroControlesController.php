@@ -404,60 +404,29 @@ class RegistroControlesController extends BaseController
     public function deleteControles()
     {
    
-        // try {
-        //     $input = $this->getRequestInput($this->request);
-
       
-        //     $model = new MRegistroControles();
-        
-           
-        //    $result = $model->deleteControles($input);
-        //     if($result){
-        //         $msg = 'Elimnado Correctamente';
-        //         $error = 1;
-        //     }else{
-        //         $msg = 'Error al Eliminar';
-        //         $error = 0;
-        //     }
-                
-        
-        //     return $this->getResponse(
-        //         [
-        //             'msg' => $msg,
-        //             'error' =>  $error
-        //         ]
-        //     );
-        // } catch (Exception $ex) {
-        //     return $this->getResponse(
-        //         [
-        //             'msg' => $ex->getMessage(),
-        //             'error' =>  0
-        //         ],
-        //         ResponseInterface::HTTP_OK
-        //     );
-        // }
         $input = $this->getRequestInput($this->request);
         $model = new MRegistroControles();
-        $model->find($input[0]['id']);
+        $model->find($input['id']);
         $this->db->transBegin();
         try {
             if($model){
-                if($model->delete($input[0]['id'])){
+                if($model->delete($input['id'])){
                     $this->db->transRollback();
                     $input['is_deleted'] = 1;
-                    $data['id_user_deleted'] = $input[0]['user'];
-                    $model->update($input[0]['id'],$input);
+                    $data['id_user_deleted'] = $input['user'];
+                    $model->update($input['id'],$input);
                     return $this->getResponse(
                         [
                             'error' => false,
-                            'msg' =>  'Nivel de riesgo eliminado'
+                            'msg' =>  'Registro de Control eliminado'
                         ]
                     );
                 }else{
                     $input['is_deleted'] = 0;
                     $input['date_deleted'] = null;
                     $input['id_user_deleted'] = null;
-                    $model->update($id,$input);
+                    $model->update($input['id'],$input);
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -479,7 +448,7 @@ class RegistroControlesController extends BaseController
             $input['is_deleted'] = 0;
             $input['date_deleted'] = null;
             $input['id_user_deleted'] = null;
-            $model->update($input[0]['id'],$input);
+            $model->update($input['id'],$input);
             return $this->getResponse(
                 [
                     'error' => true,

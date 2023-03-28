@@ -469,7 +469,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
       $routes->post('ejecutarEvaluacion','RegistroControlesController::ejecutarEvaluacion');
       $routes->post('addControles','RegistroControlesController::addControles');
       $routes->post('updateControles','RegistroControlesController::updateControles');
-      $routes->delete('deleteControles','RegistroControlesController::deleteControles');
+      $routes->post('deleteControles','RegistroControlesController::deleteControles');
 
       //consulta especial para vista de tabla contorles
       $routes->get('getRegistroControles2','RegistroControlesController::getRegistroControles2');

@@ -242,7 +242,7 @@ class MRegistroControles extends Model
         
         $query = $this->db->query("SELECT *,RC.id as IDRC ,RC.estado as RCEstado,DC.valor as RCValor from registro_controles  as RC 
         inner join detalle_controles as DC on RC.id=DC.idControles inner join caracteristica_control as CC 
-        on DC.idCC=CC.id");
+        on DC.idCC=CC.id where RC.is_deleted=0");
 
 
         return $query->getResultArray();
