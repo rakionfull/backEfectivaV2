@@ -190,5 +190,10 @@ class MEvaluacionControl extends Model
         return $query->getResultArray();
     }
   
+    public function getCaracteristicaOpcion(){
+        $sql = "call sp_get_caracteristica_control_opcion";
+        $result = $this->db->query($sql);
+        return $result->getResultArray();
+    }
     
 }
