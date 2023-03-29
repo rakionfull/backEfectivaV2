@@ -332,11 +332,11 @@ class EvaluacionControlController extends BaseController
 
            
     }
-    public function getCaracteristicaOpcion(){
+    public function getCaracteristicaOpcion($escenario){
         try {
             $model = new MEvaluacionControl();
             $response = [
-                'data' =>  $model->getCaracteristicaOpcion()
+                'data' =>  $model->getCaracteristicaOpcion($escenario)
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         

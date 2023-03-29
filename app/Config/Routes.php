@@ -476,7 +476,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
 
 
       //adicionales
-      $routes->get('getCaracteristicaOpcion','EvaluacionControlController::getCaracteristicaOpcion');
+      $routes->get('getCaracteristicaOpcion/(:num)','EvaluacionControlController::getCaracteristicaOpcion/$1');
 
       // LLENADO DE COMBOS MODAL ACTIVIDADES
       $routes->post('getUserByActivo', 'Activo::getUserByActivo',['filter' => 'authFilter']);
