@@ -15,7 +15,7 @@ use App\Models\Mvaloractivo;
 use App\Models\MaspectoSeg;
 use App\Models\Munidades;
 use App\Models\Mmacroprocesos;
-use App\Models\MProceso;
+use App\Models\Mproceso;
 use App\Models\MPosicion;
 use App\Models\MValoracionActivo;
 use App\Models\MCatActivo;
