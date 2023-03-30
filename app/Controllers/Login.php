@@ -36,8 +36,11 @@ class Login extends BaseController
             // 'username' => [
             //     'validateUser' => 'Usuario Incorrecto'
             // ],
+           
             'password' => [
-                'validateUser' => 'Credenciales Incorrectas'
+                'min_length[6]' => 'La contraseña debe ser mayor a 6 caracteres',
+                'validateUser' => 'Credenciales incorrectas',
+                
             ]
         ];
 
@@ -74,9 +77,9 @@ class Login extends BaseController
                                 // $error = new  \stdClass;
                                 // $error->password = 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
                                 // 2 min';
-                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
+                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se deshabilitará por 
                                 2 min'];
-                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará. Por favor contactar con su adminsitrador
+                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se deshabilitará. Por favor contactar con su adminsitrador
                                 del sistema'];
                             }else{
                                 $error = $this->validator->getErrors();
@@ -96,7 +99,7 @@ class Login extends BaseController
                         $modelsUser -> setIntento($input['username'],0);
                     
                         // $error->password = 'El usuario esta dabilitado por 2 min';
-                        $error = ['password' => 'El usuario esta Bloqueado, Contáctar con su administrador de sistema'];
+                        $error = ['password' => 'El usuario esta Bloqueado, Contactar con su administrador de sistema'];
                         return $this->getResponse(
                             $error, ResponseInterface::HTTP_OK
                             // ResponseInterface::HTTP_BAD_REQUEST
@@ -234,7 +237,7 @@ class Login extends BaseController
                 $model -> setIntento($username,0);
             
                 if($sesion){
-                    $error = ['password' => 'Hay otra sesión Activa'];
+                    $error = ['password' => 'Hay otra sesión activa'];
                     return $this->getResponse(
                         $error, ResponseInterface::HTTP_OK
                         // ResponseInterface::HTTP_BAD_REQUEST
@@ -252,12 +255,12 @@ class Login extends BaseController
                     $mensaje = '';
                     if($fecha_actual > $fecha_exp){
                         $msg = 0;
-                        $mensaje = 'Contraseña expirada, se redireccionara para cambio';
+                        $mensaje = 'Contraseña expirada, se redireccionará para cambio';
                     }
                     if($fecha_actual >= $fecha_recordatorio){
                         if($fecha_exp  > $fecha_recordatorio){
                        
-                            $mensaje = 'Recordatorio: Su contraseña está a punto expirar';
+                            $mensaje = 'Recordatorio: Su contraseña está a punto de expirar';
                         }
                     }
                    
@@ -269,7 +272,7 @@ class Login extends BaseController
                     if($user->change_pass == 0){
                         $token = getSignedJWTForUser($username);
                         $msg=0;
-                        $mensaje = 'Cambio de contrseña 1er logeo obligatorio';
+                        $mensaje = 'Cambio de contraseña 1er logeo obligatorio';
                       
                     }else{
                         $token = getSignedJWTForUser($username);
@@ -304,7 +307,7 @@ class Login extends BaseController
                    
                 }
             }else{
-                $error = ['password' => 'El usuario esta dabilitado o no existe'];
+                $error = ['password' => 'El usuario está dabilitado o no existe'];
                 return $this->getResponse(
                     $error, ResponseInterface::HTTP_OK
                     // ResponseInterface::HTTP_BAD_REQUEST

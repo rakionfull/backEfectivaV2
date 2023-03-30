@@ -46,14 +46,14 @@ class Mperfil extends Model
     //retorna todos los perfiles
     public function getPerfiles($data){
         $consulta = "";
-        if($data['estado'] =='all'){ $consulta="SELECT * FROM  tb_perfiles";
-        }else{ $consulta ="SELECT * FROM  tb_perfiles where est_perfil={$data['estado']}"; }
+        if($data['estado'] =='all'){ $consulta="SELECT * FROM  tb_perfiles where is_deleted=0";
+        }else{ $consulta ="SELECT * FROM  tb_perfiles where est_perfil={$data['estado']}  and is_deleted=0"; }
         $query = $this->db->query($consulta);
         return $query->getResultArray();
     }
     public function validaPerfil($data){
       
-        $query = $this->db->query("SELECT * FROM tb_perfiles where perfil='{$data}'");
+        $query = $this->db->query("SELECT * FROM tb_perfiles where perfil='{$data}' AND is_deleted=0");
         $query->getRow();
         if( $query->getRow()) return true;
         else return false;

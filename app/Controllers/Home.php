@@ -15,11 +15,12 @@ use App\Models\Mvaloractivo;
 use App\Models\MaspectoSeg;
 use App\Models\Munidades;
 use App\Models\Mmacroprocesos;
-use App\Models\MProceso;
+use App\Models\Mproceso;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use App\Libraries\Capcha;
+use App\Models\MdetallePerfil;
 
 use Exception;
 use ReflectionException;
@@ -588,26 +589,30 @@ class Home extends BaseController
     
       $input = $this->getRequestInput($this->request);
       $model = new Mperfil();
+      $modelDetalle = new MdetallePerfil();
       $modelUser = new Muser();
-      $found = $model->find($input['id']);
+      $found = $model->find($input['data']);
       
-
+      $perfil =  $model->getPerfilById($input['data']);
       $user =  $modelUser->getUserbyId($input['id']);
+
       $this->db->transBegin();
 
       try{
           if($found){
               try {
-                  $result = $model->delete($input['id']);
+                  $result = $model->delete($input['data']);
+                 
                   if($result){
                       $this->db->transRollback();
                       $data['date_deleted'] = date("Y-m-d H:i:s");
-                      $data['id_user_deleted'] = $input['user'];
+                      $data['id_user_deleted'] = $input['id'];
                       $data['is_deleted'] = 1;
                        log_acciones(
-                        'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
-                        ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
-                      $model->update($input['id'],$data);
+                        'El usuario '.$input['username'].' ah eliminado el perfil : '.$perfil->desc_perfil
+                        ,$input['terminal'],$input['ip'],$input['id'],0,$input['username']);
+                      $model->update($input['data'],$data);
+                      $modelDetalle->update($input['data'],$data);
                       return $this->getResponse(
                           [
                               'error' => false,
@@ -619,7 +624,7 @@ class Home extends BaseController
               } catch (Exception $ex) {
                   return $this->getResponse(
                       [
-                          'error' => true,
+                          'error' => $ex->getMessage(),
                           'msg' =>  'No se pudo eliminar'
                       ]
                   );
@@ -639,11 +644,12 @@ class Home extends BaseController
           $data['is_deleted'] = 0;
           $data['date_deleted'] = null;
           $data['id_user_deleted'] = null;
-          $model->update($input['id'],$data);
+          $model->update($input['data'],$data);
+          $modelDetalle->update($input['data'],$data);
           return $this->getResponse(
               [
-                  'error' => true,
-                  'msg' => 'Unidad está asignado, no es posible eliminarlo',
+                  'error' => $ex->getMessage(),
+                  'msg' => 'Perfil está asignado, no es posible eliminarlo',
               ]
           );
       }

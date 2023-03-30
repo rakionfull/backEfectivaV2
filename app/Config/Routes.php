@@ -67,7 +67,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('addPerfil', 'Home::addPerfil',['filter' => 'authFilter']);
     $routes->post('validarPerfil', 'Home::validarPerfil',['filter' => 'authFilter']);
     $routes->post('updatePerfil', 'Home::updatePerfil',['filter' => 'authFilter']);
-    $routes->delete('deletePerfil', 'Home::deletePerfil',['filter' => 'authFilter']);
+    $routes->post('deletePerfil', 'Home::deletePerfil',['filter' => 'authFilter']);
     $routes->get('getDetPerfil', 'Home::getDetPerfil',['filter' => 'authFilter']);
     $routes->get('getEscenario', 'Home::getEscenario',['filter' => 'authFilter']);
 
