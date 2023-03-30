@@ -64,13 +64,12 @@ class TipoAmenazaController extends BaseController
 
     public function update($id){
         $rules = [
-            'tipo' => 'required|is_unique[tipo_amenaza.tipo]',
+            'tipo' => 'required',
             'estado' => 'required'
         ];
         $errors = [
             'tipo' => [
-                'required' => 'Debe ingresar el tipo',
-                'is_unique' => 'Este tipo de amenaza ya existe en nuestros registros'
+                'required' => 'Debe ingresar el tipo'
             ],
             'estado' => [
                 'required' => 'Debe ingresar el estado'
@@ -122,7 +121,7 @@ class TipoAmenazaController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -147,7 +146,7 @@ class TipoAmenazaController extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' =>  'No se puede eliminar'
+                    'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                 ]
             );
         }
