@@ -95,6 +95,7 @@ class InventarioClasificacionActivo extends Model
             // $this->store_historial($result[0]->id,$data);
             if($data['estado'] == '2'){
                 // return $data;
+                //recuperar el correo del usuario?
                 $response = $this->sendMail($result[0]->id,"youkai.miguel@gmail.com");
                 return $response;
             }

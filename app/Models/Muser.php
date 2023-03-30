@@ -80,7 +80,7 @@ class Muser extends Model
     public function getUserbyId($id){
 
         $Usuario = $this->db->query("SELECT * FROM  tb_users as TU INNER JOIN tb_historial_claves AS TH
-        on TU.id_us=TH.id_us WHERE TU.id_us= '{$id}' and TU.estado_us='1' ORDER BY TH.id_cl DESC LIMIT 1");
+        on TU.id_us=TH.id_us WHERE TU.id_us= '{$id}' ORDER BY TH.id_cl DESC LIMIT 1");
        
         return $Usuario->getRow();
     }
