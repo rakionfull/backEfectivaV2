@@ -28,11 +28,18 @@ class Marea extends Model
     
     public function validaArea($data){
         
-        $query = $this->db->query("SELECT * FROM area 
-        where  idempresa='{$data['empresa']}' 
-        and  is_deleted=0 and area='{$data['area']}'");
+        // $query = $this->db->query("SELECT * FROM area 
+        // where  idempresa='{$data['empresa']}' 
+        // and  is_deleted=0 and area='{$data['area']}'");
          
-            $query->getRow();
+         $sql = "CALL validaArea(?,?)";
+
+         $query = $this->db->query($sql, [
+            $data['area'],
+            $data['empresa']
+           
+         ]);  
+
             if( $query->getRow()) return true;
             else return false;
     }
@@ -62,10 +69,7 @@ class Marea extends Model
 
         public function saveArea($data){
 
-            // $query=$this->db->query("EXEC agregar_area @area= '{$data[0]['area']}',
-            // @empresa= {$data[0]['empresa']} ,
-            // @estado=  {$data[0]['estado']},
-            // @idUserAdd=  {$data['user']} ");
+        
             $sql = "CALL agregar_area(?,?,?,?)";
 
                $query = $this->db->query($sql, [
@@ -79,12 +83,7 @@ class Marea extends Model
 
         public function updateArea($data){
            
-            // $query=$this->db->query("EXEC editar_area
-            // @area = '{$data[0]['area']}',
-            // @empresa = '{$data[0]['idempresa']}',
-            // @estado = '{$data[0]['estado']}',
-            // @idUserAdd = '{$data['user']}',
-            // @idarea = '{$data[0]['id']}'") ;
+        
             $sql = "CALL editar_area(?,?,?,?,?)";
 
             $query = $this->db->query($sql, [
@@ -101,7 +100,7 @@ class Marea extends Model
 
         public function getAreasByActivo($data){
 
-            // $query = $this->db->query("EXEC listarAreaByActivo @empresa ={$data}");
+          
             $sql = "CALL listarAreaByActivo(?)";
 
             $query = $this->db->query($sql, [
@@ -112,7 +111,7 @@ class Marea extends Model
       
         public function getAreasEmpresa($id){
        
-            // $query = $this->db->query("EXEC listarAreaByActivo @empresa ={$data}");
+         
             $sql = "CALL listarAreaByActivo(?)";
 
             $query = $this->db->query($sql, [
@@ -120,12 +119,12 @@ class Marea extends Model
             ]);
             return $query->getResultArray();
         }
-        public function getComboAreas(){
-        //    $query = $this->db->query("EXEC listarAreaByEstado");
-           $sql = "CALL listarAreaByEstado(?)";
+        // public function getComboAreas(){
+        // //    $query = $this->db->query("EXEC listarAreaByEstado");
+        //    $sql = "CALL listarAreaByEstado()";
 
-           $query = $this->db->query($sql, [
-           ]);
-            return $query->getResultArray();
-        }
+        //    $query = $this->db->query($sql, [
+        //    ]);
+        //     return $query->getResultArray();
+        // }
 }

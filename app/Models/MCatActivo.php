@@ -27,10 +27,16 @@ class MCatActivo extends Model
     ];
     public function validarCatActivo($data){
         
-            $query = $this->db->query("SELECT * FROM categoria_activo 
-            where categoria='{$data['categoria']}' 
-             and idtipo='{$data['idtipo']}'");
-           
+            // $query = $this->db->query("SELECT * FROM categoria_activo 
+            // where categoria='{$data['categoria']}' 
+            //  and idtipo='{$data['idtipo']}'");
+             $sql = "CALL validaCatActivo(?,?)";
+
+            $query = $this->db->query($sql, [
+                $data['categoria'],
+                $data['idtipo']
+            ]);
+
             if( $query->getRow()) return true;
             else return false;
     }

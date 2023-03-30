@@ -75,7 +75,10 @@ class Mprioridad extends Model
  
     public function getPrioridadByActivo(){
 
-        $query = $this->db->query("SELECT * FROM prioridad where is_deleted=0");
+        $sql = "call listar_prioridad()";
+        $query = $this->db->query($sql,[
+          
+        ]);
         return $query->getResultArray();
     }
 

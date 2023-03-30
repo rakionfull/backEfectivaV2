@@ -27,12 +27,24 @@ class Mproceso extends Model
     ];
     public function validaProceso($data){
         
-        $query = $this->db->query("SELECT * FROM proceso where  proceso='{$data['proceso']}' 
-        and idempresa='{$data['idempresa']}' 
-        and  idarea='{$data['idarea']}' and is_deleted=0 and  idunidad='{$data['idunidad']}'
-        and  idmacroproceso='{$data['idmacroproceso']}'");
+        // $query = $this->db->query("SELECT * FROM proceso where  proceso='{$data['proceso']}' 
+        // and idempresa='{$data['idempresa']}' 
+        // and  idarea='{$data['idarea']}' and is_deleted=0 and  idunidad='{$data['idunidad']}'
+        // and  idmacroproceso='{$data['idmacroproceso']}'");
 
-     
+        $sql = "CALL validaProceso(?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+            
+            $data['idarea'],
+            $data['idempresa'],
+            $data['idunidad'],
+            $data['idmacroproceso'],
+            $data['proceso']
+           
+           
+        ]);
+
         if( $query->getRow()) return true;
         else return false;
     }
@@ -62,14 +74,6 @@ class Mproceso extends Model
     
     public function saveProceso($data){
     
-        // $query=$this->db->query("EXEC agregar_proceso
-        // @area = {$data[0]['idarea']},
-        // @empresa={$data[0]['idempresa']} ,
-        // @unidad= {$data[0]['idunidad']},
-        // @macroproceso={$data[0]['idmacroproceso']} ,
-        // @proceso='{$data[0]['proceso']}' ,
-        // @estado= {$data[0]['estado']},
-        // @idUserAdd={$data['user']} ");
         $sql = "CALL agregar_proceso(?,?,?,?,?,?,?)";
 
         $query = $this->db->query($sql, [
@@ -85,16 +89,7 @@ class Mproceso extends Model
     }
     public function updateProceso($data){
       
-               
-        // $query=$this->db->query("EXEC editar_proceso
-        // @area = {$data[0]['idarea']},
-        // @empresa={$data[0]['idempresa']} ,
-        // @unidad= {$data[0]['idunidad']},
-        // @macroproceso={$data[0]['idmacroproceso']} ,
-        // @proceso='{$data[0]['proceso']}' ,
-        // @estado= {$data[0]['estado']},
-        // @idproceso= {$data[0]['id']},
-        // @idUserAdd={$data['user']} ");
+     
 
         $sql = "CALL editar_proceso(?,?,?,?,?,?,?,?)";
 

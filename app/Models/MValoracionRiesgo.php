@@ -32,8 +32,16 @@ class MValoracionRiesgo extends Model
         
       
       
-        $query = $this->db->query("SELECT *  FROM valoracion_riesgo where 
-        idProbabilidad={$data['probabilidad']} and IdImpacto={$data['impacto']} and is_deleted=0");
+        // $query = $this->db->query("SELECT *  FROM valoracion_riesgo where 
+        // idProbabilidad={$data['probabilidad']} and IdImpacto={$data['impacto']} and is_deleted=0");
+
+        $sql = "call valida_ValoracionRiesgo(?,?)";
+
+        $query=$this->db->query($sql,[
+            $data['probabilidad'],
+            $data['impacto'],
+           
+        ]);
 
         if( $query->getRow()) return true;
         else return false;
@@ -84,13 +92,15 @@ class MValoracionRiesgo extends Model
     public function getDataMatriz(){
         
   
-          $query = $this->db->query("SELECT  concat(PR.valor1,' - ',PR.valor2) as valorProbabilidad 
-          ,concat(IR.valor1,' - ',IR.valor2) as  valorImpacto,VR.id,VR.idProbabilidad,VR.idImpacto,VR.valor, 
-           PR.descripcion as probabilidad, IR.descripcion as impacto
-           from valoracion_riesgo as VR inner join probabilidad_riesgo as PR 
-           on VR.idProbabilidad = PR.id inner join impacto_riesgo as IR on VR.idImpacto=IR.id
-          where VR.is_deleted=0 and PR.estado=1  and  IR.estado=1  and PR.tipo_regla='2 Valores' 
-          and IR.tipo_regla='2 Valores' order by valorProbabilidad DESC ");
+        //   $query = $this->db->query("SELECT  concat(PR.valor1,' - ',PR.valor2) as valorProbabilidad 
+        //   ,concat(IR.valor1,' - ',IR.valor2) as  valorImpacto,VR.id,VR.idProbabilidad,VR.idImpacto,VR.valor, 
+        //    PR.descripcion as probabilidad, IR.descripcion as impacto
+        //    from valoracion_riesgo as VR inner join probabilidad_riesgo as PR 
+        //    on VR.idProbabilidad = PR.id inner join impacto_riesgo as IR on VR.idImpacto=IR.id
+        //   where VR.is_deleted=0 and PR.estado=1  and  IR.estado=1  and PR.tipo_regla='2 Valores' 
+        //   and IR.tipo_regla='2 Valores' order by valorProbabilidad DESC ");
+          
+          $query = $this->db->query("call getDataMatriz()",[]);
         return $query->getResultArray();
     }
 

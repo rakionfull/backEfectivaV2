@@ -30,8 +30,11 @@ class Malerta_seguimiento extends Model
     public function validaAlerta_seguimiento($data){
         
     
-        $query = $this->db->query("SELECT * FROM alert_seguimiento where alerta = '{$data}' and is_deleted='0'");
-       
+        // $query = $this->db->query("SELECT * FROM alert_seguimiento where alerta = '{$data}' and is_deleted='0'");
+        $sql = "call listar_alert_seguimiento(?)";
+        $query = $this->db->query($sql,[
+            $data
+        ]);
         if( $query->getRow()) return true;
         else return false;
     }
@@ -76,7 +79,11 @@ class Malerta_seguimiento extends Model
    
     public function getAlertaByActivo(){
 
-        $query = $this->db->query("SELECT * FROM alert_seguimiento where is_deleted='0'");
+        // $query = $this->db->query("SELECT * FROM alert_seguimiento where is_deleted='0'");
+        $sql = "call listar_alert_seguimiento()";
+        $query = $this->db->query($sql,[
+         
+        ]);
         return $query->getResultArray();
     }
 

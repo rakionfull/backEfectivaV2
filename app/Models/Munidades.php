@@ -27,11 +27,19 @@ class Munidades extends Model
     ];
     public function validaUnidad($data){
         
-        $query = $this->db->query("SELECT * FROM unidades where  
-        idempresa='{$data['idempresa']}' 
-        and idarea='{$data['idarea']}' and is_deleted=0 and  
-        unidad='{$data['unidad']}'");
-        
+        // $query = $this->db->query("SELECT * FROM unidades where  
+        // idempresa='{$data['idempresa']}' 
+        // and idarea='{$data['idarea']}' and is_deleted=0 and  
+        // unidad='{$data['unidad']}'");
+
+         $sql = "CALL validaUnidad(?,?,?)";
+
+         $query = $this->db->query($sql, [
+            $data['idempresa'],
+            $data['idarea'],
+            $data['unidad']
+        ]);
+     
         if( $query->getRow()) return true;
         else return false;
     }

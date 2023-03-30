@@ -27,8 +27,12 @@ class Mvaloractivo extends Model
     ];
     public function validarValActivo($data){
         
-            $query = $this->db->query("SELECT * FROM valor_activo where valor='{$data[0]['valor']}' and is_deleted=0");
-         
+            // $query = $this->db->query("SELECT * FROM valor_activo where valor='{$data[0]['valor']}' and is_deleted=0");
+            $sql = "CALL validaValorActivo(?)";
+
+            $query = $this->db->query($sql, [
+                $data[0]['valor']
+            ]);
             if( $query->getRow()) return true;
             else return false;
     }

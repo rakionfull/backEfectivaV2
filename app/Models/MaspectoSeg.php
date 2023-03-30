@@ -27,9 +27,13 @@ class MaspectoSeg extends Model
     ];
     public function validaAspectoSeg($data){
       
-        $query = $this->db->query("SELECT * FROM aspectos_seguridad 
-        where aspecto='{$data}' where is_deleted=0");
-    
+        // $query = $this->db->query("SELECT * FROM aspectos_seguridad 
+        // where aspecto='{$data}' where is_deleted=0");
+
+        $sql = "CALL validaAspecto()";
+        $query = $this->db->query($sql, [
+            $data
+        ]);
         if( $query->getRow()) return true;
         else return false;
     } 

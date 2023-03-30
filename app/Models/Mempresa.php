@@ -28,15 +28,19 @@ class Mempresa extends Model
 
     public function validaEmpresa($data){
         
-        $query = $this->db->query("SELECT * from empresa  
-        where empresa ='{$data['empresa']}' and is_deleted=0;");
-    
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL validaEmpresa(?)";
+
+        $query = $this->db->query($sql, [
+          $data['empresa']
+        ]);
         return  $query->getRow();
     }
     //retorna todos los perfiles
     public function getEmpresas(){
 
-        // $query = $this->db->query("EXEC listarEmpresa");
+      
         $sql = "CALL listarEmpresa()";
 
 	      $query = $this->db->query($sql, [
@@ -46,7 +50,7 @@ class Mempresa extends Model
     }
     public function getEmpresasByActivo(){
 
-        // $query = $this->db->query("EXEC listarEmpresaByAcivo");
+    
         $sql = "CALL listarEmpresaByAcivo()";
 
 	    $query = $this->db->query($sql, [
@@ -57,8 +61,7 @@ class Mempresa extends Model
     public function saveEmpresa($data){
     
  
-        //   $query=$this->db->query("EXEC agregar_empresa @empresa='{$data[0]['empresa']}',
-        //   @estado={$data[0]['estado']} ,@idUserAdd={$data['user']}") ;
+  
           $sql = "CALL agregar_empresa(?,?,?)";
 
           $query = $this->db->query($sql, [
@@ -70,13 +73,7 @@ class Mempresa extends Model
     }
     public function updateEmpresa($data){
       
-        
-        // $query=$this->db->query("EXEC editar_empresa 
-        //      @empresa = '{$data[0]['empresa']}',
-        //      @estado = '{$data[0]['estado']}',
-        //      @idempresa= {$data[0]['id']},
-        //      @idUserAdd= {$data['user']} ") ;
-
+ 
         $sql = "CALL editar_empresa(?,?,?,?)";
 
           $query = $this->db->query($sql, [

@@ -27,12 +27,24 @@ class MPosicion extends Model
     ];
     public function validaPosicion($data){
         
-            $query = $this->db->query("SELECT * FROM posicion_puesto 
-            where posicion_puesto='{$data['posicion']}'
-            and idempresa={$data['idempresa']} and
-             idarea={$data['idarea']} and 
-             idunidad={$data['idunidad']}");
-          
+            // $query = $this->db->query("SELECT * FROM posicion_puesto 
+            // where posicion_puesto='{$data['posicion']}'
+            // and idempresa={$data['idempresa']} and
+            //  idarea={$data['idarea']} and 
+            //  idunidad={$data['idunidad']}");
+
+           $sql = "CALL validaPosicion(?,?,?,?)";
+
+           $query = $this->db->query($sql, [
+            $data['idarea'],
+            $data['idempresa'],
+            $data['idunidad'],
+            $data['posicion']
+           
+           
+           
+           ]);
+
             if( $query->getRow()) return true;
             else return false;
     }
@@ -63,13 +75,7 @@ class MPosicion extends Model
     
     public function savePosicion($data){       
 
-        //  $query = $this->db->query("EXEC agregar_posicion 
-        // @area ={$data[0]['idarea']},
-        // @empresa ={$data[0]['idempresa']},
-        // @unidad = {$data[0]['idunidad']},
-        // @posicion = '{$data[0]['posicion']}',
-        // @estado ={$data[0]['estado']},
-        // @idUserAdd ={$data['user']}");
+      
 
         $sql = "CALL agregar_posicion(?,?,?,?,?,?)";
 
@@ -85,15 +91,7 @@ class MPosicion extends Model
     }
     public function updatePosicion($data){  
         
-     
-        // $query = $this->db->query("EXEC editar_posicion 
-        // @area ={$data[0]['idarea']},
-        // @empresa ={$data[0]['idempresa']},
-        // @unidad = {$data[0]['idunidad']},
-        // @posicion = '{$data[0]['posicion']}',
-        // @idposicion ={$data[0]['id']},
-        // @estado ={$data[0]['estado']},
-        // @idUserAdd ={$data['user']}");
+   
         $sql = "CALL editar_posicion(?,?,?,?,?,?,?)";
 
         $query = $this->db->query($sql, [

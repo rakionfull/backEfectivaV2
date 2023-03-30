@@ -131,15 +131,7 @@ class MRegistroControles extends Model
 
     public function saveControles($data){
 
-        // $query=$this->db->query("EXEC agregar_Registro_Controles
-        // @IDR='{$data[0]['IDR']}',
-        // @riesgo='{$data[0]['riesgo']}',
-        // @IDC='{$data[0]['IDC']}',
-        // @control='{$data[0]['control']}',
-        // @cobertura='{$data[0]['cobertura']}',
-        // @evaluacion='{$data[0]['evaluacion']}',
-        // @estado='{$data[0]['estado']}',
-        // @idUserAdd= {$data['user']}") ;
+      
        
         $sql = "CALL agregar_Registro_Controles(?,?,?,?,?,?,?,?)";
 
@@ -172,27 +164,14 @@ class MRegistroControles extends Model
             $data['valor']
         ]);
 
-        // $query=$this->db->query("EXEC agregar_detalle_control
-        // @idControl='{$data['idControl']}',
-        // @idCC='{$data['idCC']}',
-        // @nom_tabla='{$data['nom_tabla']}',
-        // @valor='{$data['valor']}'") ;
+     
        
         return  $query;
     }
     
     public function updateControles($data){
 
-        // $query=$this->db->query("EXEC modificar_Registro_Controles
-        // @IDR='{$data[0]['IDR']}',
-        // @riesgo='{$data[0]['riesgo']}',
-        // @IDC='{$data[0]['IDC']}',
-        // @control='{$data[0]['control']}',
-        // @cobertura='{$data[0]['cobertura']}',
-        // @evaluacion='{$data[0]['evaluacion']}',
-        // @estado='{$data[0]['estado']}',
-        // @idUserAdd= {$data['user']},
-        // @idControl= {$data[0]['id']}") ;
+     
         $sql = "CALL modificar_Registro_Controles(?,?,?,?,?,?,?,?,?)";
 
         $query = $this->db->query($sql, [
@@ -225,19 +204,19 @@ class MRegistroControles extends Model
 
         return  $query;
     }
-    public function deleteControles($data){
+    // public function deleteControles($data){
 
-        $query=$this->db->query("EXEC eliminar_Registro_Controles 
-        @idUserAdd= {$data['user']},@idControl={$data['id'] }") ;
-        $sql = "CALL eliminar_Registro_Controles(?,?)";
+    //     $query=$this->db->query("EXEC eliminar_Registro_Controles 
+    //     @idUserAdd= {$data['user']},@idControl={$data['id'] }") ;
+    //     $sql = "CALL eliminar_Registro_Controles(?,?)";
 
-            $query = $this->db->query($sql, [
-                $data['user'],
-                $data['id']
-            ]);
+    //         $query = $this->db->query($sql, [
+    //             $data['user'],
+    //             $data['id']
+    //         ]);
 
-        return  $query;
-    }
+    //     return  $query;
+    // }
     public function getRegistroControles2(){
         
         $query = $this->db->query("SELECT *,RC.id as IDRC ,RC.estado as RCEstado,DC.valor as RCValor from registro_controles  as RC 

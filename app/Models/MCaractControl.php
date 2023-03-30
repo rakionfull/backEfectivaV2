@@ -28,9 +28,16 @@ class MCaractControl extends Model
     public function validaCaractControl($data){
         
         //$query = $this->db->query("EXEC valida_caractControl @caracteristica='".$data[0]['caracteristica']."', @idOpcion='".$data[0]['id']."'");
-        $query = $this->db->query("SELECT * FROM caracteristica_control where caracteristica='{$data[0]['caracteristica']}'
-        and idOpcion={$data[0]['id']} and is_deleted=0");
-      
+        // $query = $this->db->query("SELECT * FROM caracteristica_control where caracteristica='{$data[0]['caracteristica']}'
+        // and idOpcion={$data[0]['id']} and is_deleted=0");
+
+        $sql = "CALL valida_caractControl(?,?)";
+
+        $query = $this->db->query($sql, [
+            $data[0]['caracteristica'],
+            $data[0]['id']
+        ]);
+
         if( $query->getRow()) return true;
         else return false;
     }
@@ -38,10 +45,20 @@ class MCaractControl extends Model
         
         // $query = $this->db->query("EXEC listar_caractControl");
         if($id == 0){
-            $query = $this->db->query("SELECT * FROM caracteristica_control where tipo='menu' and estado=1 and is_deleted=0 ");
+            // $query = $this->db->query("SELECT * FROM caracteristica_control where tipo='menu' and estado=1 and is_deleted=0 ");
+            $sql = "CALL getCaractControl()";
+
+            $query = $this->db->query($sql, [
+              
+            ]);
         }else{
-                    $query = $this->db->query("SELECT * FROM caracteristica_control 
-                    where estado=1 and is_deleted=0  and idOpcion={$id}");
+                    // $query = $this->db->query("SELECT * FROM caracteristica_control 
+                    // where estado=1 and is_deleted=0  and idOpcion={$id}");
+                     $sql = "CALL getCaractControlById(?)";
+
+                     $query = $this->db->query($sql, [
+                        $id
+                     ]);
             
         }
         
@@ -55,26 +72,19 @@ class MCaractControl extends Model
     // }
     public function getOpcionesCaracteristica($tipo){
         
-        $query = $this->db->query("SELECT * from caracteristica_control where is_deleted=0 and estado=1 and tipo='{$tipo}' order by date_add ");
+        // $query = $this->db->query("SELECT * from caracteristica_control where is_deleted=0 and estado=1 and tipo='{$tipo}' order by date_add ");
+        
+        $sql = "CALL getOpcionesCaracteristica(?)";
+
+                     $query = $this->db->query($sql, [
+                        $tipo
+                     ]);
+            
         return $query->getResultArray();
     }
     public function saveCaractControl($data){       
 
-        // $query=$this->db->query("EXEC agregar_caractControl 
-        // @caracteristica='{$data[0]['caracteristica']}',
-        // @descripcion='{$data[0]['descripcion']}', 
-        //  @estado='{$data[0]['estado']}',
-        // @peso='{$data[0]['peso']}',
-        // @valor='{$data[0]['valor']}',
-        // @condicion='{$data[0]['condicion']}',
-        // @tipo='{$data[0]['tipo']}',
-        // @idOpcion='{$data[0]['id']}',
-        // @calificacion='{$data[0]['calificacion']}'
-        // ,@check_tabla='{$data[0]['check_tabla']}'
-        // ,@nom_tabla='{$data[0]['nom_tabla']}', 
-        // @seleccionable='{$data[0]['seleccionable']}',
-        // @idUserAdd= {$data['user']}") ;
-
+    
         $sql = "CALL agregar_caractControl(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 	    $query = $this->db->query($sql, [
@@ -98,20 +108,6 @@ class MCaractControl extends Model
     }
     public function updateCaractControl($data){  
         
-        // $query= $this->db->query("EXEC modificar_caractControl 
-        // @caracteristica='{$data[0]['caracteristica']}',
-        // @descripcion='{$data[0]['descripcion']}',  
-        // @estado='{$data[0]['estado']}',
-        // @peso='{$data[0]['peso']}',
-        // @valor='{$data[0]['valor']}',
-        // @condicion = '{$data[0]['condicion']}',
-        // @check_tabla='{$data[0]['check_tabla']}',
-        // @nom_tabla='{$data[0]['nom_tabla']}',
-        // @idUserAdd= '{$data['user']}',
-        // @calificacion='{$data[0]['calificacion']}',
-        // @seleccionable='{$data[0]['seleccionable']}',
-        // @idCaractControl='{$data[0]['id_op']}'") ;
-
 
         $sql = "CALL modificar_caractControl(?,?,?,?,?,?,?,?,?,?,?,?)";
 

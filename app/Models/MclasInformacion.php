@@ -27,9 +27,15 @@ class MclasInformacion extends Model
     ];
     public function validarClasInfo($data){
             
-            $query = $this->db->query("SELECT * FROM clasificacion_informacion 
-            where clasificacion='{$data}'");
-         
+            // $query = $this->db->query("SELECT * FROM clasificacion_informacion 
+            // where clasificacion='{$data}'");
+
+           $sql = "CALL validaClasInfo(?)";
+
+           $query = $this->db->query($sql, [
+             $data
+           ]);
+
             if( $query->getRow()) return true;
             else return false;
     }

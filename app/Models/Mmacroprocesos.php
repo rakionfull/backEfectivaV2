@@ -27,9 +27,18 @@ class Mmacroprocesos extends Model
     ];
     public function validaMacroproceso($data){
         
-        $query = $this->db->query("SELECT * FROM macroproceso where  macroproceso='{$data['macroproceso']}' 
-        and idempresa='{$data['idempresa']}' and  idarea='{$data['idarea']}' and is_deleted= 0 and  idunidad='{$data['idunidad']}'");
-        
+        // $query = $this->db->query("SELECT * FROM macroproceso where  macroproceso='{$data['macroproceso']}' 
+        // and idempresa='{$data['idempresa']}' and  idarea='{$data['idarea']}' and is_deleted= 0 and  idunidad='{$data['idunidad']}'");
+          
+          $sql = "CALL validaMacroproceso(?,?,?,?)";
+
+          $query = $this->db->query($sql, [
+            $data['idarea'],
+            $data['idempresa'],
+            $data['idunidad'],
+            $data['macroproceso']         
+          
+          ]);
     
         if( $query->getRow()) return true;
         else return false;
@@ -61,15 +70,7 @@ class Mmacroprocesos extends Model
     }
    
     public function saveMacroproceso($data){
-       
-        // $query=$this->db->query("EXEC agregar_macroproceso 
-        // @area = {$data[0]['idarea']},
-        // @empresa= {$data[0]['idempresa']},
-        // @unidad=  {$data[0]['idunidad']},
-        // @macroproceso= '{$data[0]['macroproceso']}',
-        // @estado= {$data[0]['estado']},
-        // @idUserAdd= {$data['user']}
-        // ");
+     
         $sql = "CALL agregar_macroproceso(?,?,?,?,?,?)";
 
         $query = $this->db->query($sql, [
@@ -84,16 +85,7 @@ class Mmacroprocesos extends Model
     }
     public function updateMacroproceso($data){
       
-        
-        
-        // $query=$this->db->query("EXEC editar_macroproceso
-        // @area = {$data[0]['idarea']},
-        // @empresa= {$data[0]['idempresa']},
-        // @unidad=  {$data[0]['idunidad']},
-        // @macroproceso= '{$data[0]['macroproceso']}',
-        // @estado= {$data[0]['estado']},
-        // @idmacroproceso= {$data[0]['id']},
-        // @idUserAdd= {$data['user']}");
+    
 
         $sql = "CALL editar_macroproceso(?,?,?,?,?,?,?)";
 

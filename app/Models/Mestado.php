@@ -29,8 +29,13 @@ class Mestado extends Model
     public function validaEstado($data){
         
        
-        $query = $this->db->query("SELECT * FROM estado where estado='{$data}' and is_deleted=0");
-      
+        // $query = $this->db->query("SELECT * FROM estado where estado='{$data}' and is_deleted=0");
+
+        $sql = "CALL validaEstado(?)";
+
+        $query = $this->db->query($sql, [
+            $data
+        ]);
         if( $query->getRow()) return true;
         else return false;
     }
@@ -72,7 +77,12 @@ class Mestado extends Model
 
     public function getEstadoByActivo(){
 
-        $query = $this->db->query("SELECT * FROM estado where is_deleted=0");
+        // $query = $this->db->query("SELECT * FROM estado where is_deleted=0");
+        $sql = "CALL validaEstado(?)";
+
+        $query = $this->db->query($sql, [
+            $data
+        ]);
         return $query->getResultArray();
     }
 

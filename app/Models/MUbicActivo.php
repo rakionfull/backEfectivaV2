@@ -40,7 +40,7 @@ class MUbicActivo extends Model
             // @ciudad= '{$data[0]['idciudad']}',
             // @direccion = '{$data[0]['direccion_ubi']}',
             // @descripcion= '{$data[0]['desc_ubi']}'");
-            $sql = "CALL validaUbiActivo(?,?,?,?,?)";
+            $sql = "call validaUbiActivo(?,?,?,?,?)";
 
             $query = $this->db->query($sql, [
                 $data[0]['idcontinente'],

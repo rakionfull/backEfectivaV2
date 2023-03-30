@@ -27,8 +27,13 @@ class MCobertura extends Model
     ];
     public function validaCobertura($data){
         
-        $query = $this->db->query("SELECT * FROM cobertura where cobertura = '".$data."' and is_deleted=0");
-      
+        // $query = $this->db->query("SELECT * FROM cobertura where cobertura = '".$data."' and is_deleted=0");
+
+        $sql = "CALL valida_cobertura(?)";
+
+	    $query = $this->db->query($sql, [
+            $data
+        ]);
     
         if( $query->getRow()) return true;
         else return false;

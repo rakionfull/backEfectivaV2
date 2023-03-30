@@ -28,10 +28,14 @@ class Mtipoactivo extends Model
 
     public function validarTipoActivo($data){
       
-         $query = $this->db->query("SELECT * FROM tipo_activo 
-         where tipo='{$data[0]['tipo']}'");
-        //$query = $this->db->query("EXEC validaTipoActivo @tipo='{$data[0]['tipo']}'");
-     
+        //  $query = $this->db->query("SELECT * FROM tipo_activo 
+        //  where tipo='{$data[0]['tipo']}'");
+      
+        $sql = "CALL validaTipoActivo(?)";
+
+        $query = $this->db->query($sql, [
+            $data[0]['tipo']
+        ]);
         if( $query->getRow()) return true;
         else return false;
     } 
