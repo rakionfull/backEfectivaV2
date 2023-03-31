@@ -113,26 +113,6 @@ class CaractControlController extends BaseController
     }
     public function deleteCaractControl()
     {
-   
-        // try{
-        //     $input = $this->getRequestInput($this->request);
-
-        
-        //     $model = new MCaractControl();
-        //     $result = $model->deleteCaractControl($input);
-        
-        //     return $this->getResponse(
-        //         [
-        //             'msg' =>  'Eliminado Correctamente'
-        //         ]
-        //     );
-        // } catch (Exception $ex) {
-        //     return $this->getResponse(
-        //         [
-        //             'error' => 'Caracteristiva de Control está asignado, no es posible eliminarlo',
-        //         ]
-        //     );
-        // }
         $input = $this->getRequestInput($this->request);
         $model = new MCaractControl();
         $found = $model->find($input[0]['id']);
@@ -157,7 +137,7 @@ class CaractControlController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -179,7 +159,7 @@ class CaractControlController extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Cracterística de Control está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }

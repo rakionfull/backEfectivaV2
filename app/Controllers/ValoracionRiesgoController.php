@@ -120,7 +120,7 @@ class ValoracionRiesgoController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -134,7 +134,7 @@ class ValoracionRiesgoController extends BaseController
             $model->update($input[0]['id'],$input);
             return $this->getResponse(
                 [
-                    'error' => 'Valoracion de Riesgo está asignado, no es posible eliminarlo',
+                    'error' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }

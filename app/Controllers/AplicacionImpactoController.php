@@ -94,26 +94,6 @@ class AplicacionImpactoController extends BaseController
     }
     public function deleteAplicacionImpacto()
     {
-   
-        // try{
-        //     $input = $this->getRequestInput($this->request);
-
-        
-        //     $model = new MAplicacionImpacto();
-        //     $result = $model->deleteAplicacionImpacto($input);
-        
-        //     return $this->getResponse(
-        //         [
-        //             'msg' =>  'Eliminado Correctamente'
-        //         ]
-        //     );
-        // } catch (Exception $ex) {
-        //     return $this->getResponse(
-        //         [
-        //             'error' => 'AplicacionImpacto está asignado, no es posible eliminarlo',
-        //         ]
-        //     );
-        // }
         $input = $this->getRequestInput($this->request);
         $model = new MAplicacionImpacto();
         $found = $model->find($input[0]['id']);
@@ -138,7 +118,7 @@ class AplicacionImpactoController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -160,7 +140,7 @@ class AplicacionImpactoController extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Aplicacion de Impacto está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }

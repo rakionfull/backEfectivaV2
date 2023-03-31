@@ -233,7 +233,7 @@ class EvaluacionRiesgoController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -256,7 +256,7 @@ class EvaluacionRiesgoController extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' =>  $th->getMessage()." line ".$th->getLine()." file ".$th->getFile()
+                    'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                 ]
             );
         

@@ -178,7 +178,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -201,7 +201,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'Empresa está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -345,7 +345,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -392,7 +392,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Área está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -630,7 +630,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -673,7 +673,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'El Valor activo está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -838,7 +838,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -860,7 +860,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'El tipo de activo está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -995,7 +995,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -1017,7 +1017,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'La clasificación de infromación está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -1158,7 +1158,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -1180,7 +1180,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'El Apecto de Seguridad está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -1322,32 +1322,10 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete('id')){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Unidad eliminada'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
             }else{
                 return $this->getResponse(
                     [
@@ -1366,7 +1344,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'Unidad está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -1551,32 +1529,10 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
             }else{
                 return $this->getResponse(
                     [
@@ -1595,7 +1551,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'Macroproceso está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -1737,32 +1693,11 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+               
             }else{
                 return $this->getResponse(
                     [
@@ -1781,7 +1716,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'Proceso está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -1975,32 +1910,11 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Posicion/Puesto eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+                
             }else{
                 return $this->getResponse(
                     [
@@ -2019,7 +1933,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'Posicion/Puesto está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -2156,32 +2070,11 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+                
             }else{
                 return $this->getResponse(
                     [
@@ -2200,7 +2093,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'No es posible eliminarlo, ya que esta siendo usado',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -2333,32 +2226,11 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+                
             }else{
                 return $this->getResponse(
                     [
@@ -2377,7 +2249,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'No es posible eliminarlo, está siendo usado por otra relación',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -2514,32 +2386,11 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+                
             }else{
                 return $this->getResponse(
                     [
@@ -2558,7 +2409,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'No es posible eliminarlo, está siendo usado por otra relación',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -2740,7 +2591,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -2763,7 +2614,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Estado está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -2879,7 +2730,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -2902,7 +2753,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Prioridad está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -3020,7 +2871,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -3043,7 +2894,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Alerta de seguimiento está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -3207,7 +3058,7 @@ public function deletePlanAccion(){
                 return $this->getResponse(
                     [
                         'error' => true,
-                        'msg' =>  'No se pudo eliminar'
+                        'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                     ]
                 );
             }
@@ -3230,7 +3081,7 @@ public function deletePlanAccion(){
         return $this->getResponse(
             [  
                 'error' => true,
-                'msg' => 'No es posible eliminarlo',
+                'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
             ]
         );
     }
@@ -3373,7 +3224,7 @@ public function deleteActividadPlan(){
     } catch (Exception $ex) {
         
         return $this->getResponse([
-            'error' => $ex->getMessage()
+            'error' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
         ], ResponseInterface::HTTP_OK);
     }
 }

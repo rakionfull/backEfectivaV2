@@ -441,7 +441,7 @@ class Home extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'El Usuario esta asignado y no se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -464,7 +464,7 @@ class Home extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' => 'El Usuario está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
@@ -625,7 +625,7 @@ class Home extends BaseController
                   return $this->getResponse(
                       [
                           'error' => $ex->getMessage(),
-                          'msg' =>  'No se pudo eliminar'
+                          'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                       ]
                   );
               }
@@ -649,7 +649,7 @@ class Home extends BaseController
           return $this->getResponse(
               [
                   'error' => $ex->getMessage(),
-                  'msg' => 'Perfil está asignado, no es posible eliminarlo',
+                  'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
               ]
           );
       }
