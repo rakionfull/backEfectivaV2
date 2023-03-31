@@ -104,8 +104,7 @@ class MEvaluacionControl extends Model
     }
     public function saveDetalleEvaluacionControl($data){       
 
-        // $query=$this->db->query("EXEC agregar_detalle_Evaluacion_Control  @IEC='{$data['id']}',
-        // @IDCC='{$data['valor']}'") ;    
+  
         $sql = "CALL agregar_detalle_Evaluacion_Control(?,?)";
 
 	    $query = $this->db->query($sql, [
@@ -117,8 +116,7 @@ class MEvaluacionControl extends Model
     }
     public function updateEvaluacionControl($data){  
         
-        // $query= $this->db->query("EXEC modificar_Evaluacion_Control @calificacion='{$data[0]['calificacion']}',
-        // @idUserAdd= {$data['user']},@idEvaluacionControl={$data[0]['id']}") ;
+   
 
         $sql = "CALL modificar_Evaluacion_Control(?,?,?)";
         $query = $this->db->query($sql, [

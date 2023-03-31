@@ -160,7 +160,7 @@ class EvaluacionControlController extends BaseController
             }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  $delete
                 ]
             );
             
