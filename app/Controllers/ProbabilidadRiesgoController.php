@@ -122,6 +122,7 @@ class ProbabilidadRiesgoController extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
+                    'type' => 'error',
                     'msg' =>  "No se pude ingresar registros a otro escenario distinto"
                 ]
             );
@@ -131,7 +132,8 @@ class ProbabilidadRiesgoController extends BaseController
                 return $this->getResponse(
                     [
                         'error' => true,
-                        'msg' =>  'Ya hay un escenario configurado'
+                        'type' => 'escenario',
+                        'msg' =>  'Para este tipo de escenario ya se tiene una configuracion establecida, por lo que no puede crear otra.'
                     ]
                 );
             }else{

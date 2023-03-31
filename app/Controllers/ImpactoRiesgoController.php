@@ -95,7 +95,8 @@ class ImpactoRiesgoController extends BaseController
         $input = $this->getRequestInput($this->request);
         if (!$this->validateRequest($input, $rules, $errors)) {
             $error = [
-                'error' => 'validar',
+                'error' => true,
+                'type' => 'error',
                 'datos' => $this->validator->getErrors()
             ];
             return ($this->getResponse($error,ResponseInterface::HTTP_OK));
@@ -108,6 +109,7 @@ class ImpactoRiesgoController extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
+                    'type' => 'error',
                     'msg' =>  "No se pude ingresar registros a otro escenario distinto"
                 ]
             );
@@ -117,7 +119,8 @@ class ImpactoRiesgoController extends BaseController
                 return $this->getResponse(
                     [
                         'error' => true,
-                        'msg' =>  'Ya hay un escenario configurado'
+                        'type' => 'escenario',
+                        'msg' =>  'Para este tipo de escenario ya se tiene una configuracion establecida, por lo que no puede crear otra.'
                     ]
                 );
             }else{
