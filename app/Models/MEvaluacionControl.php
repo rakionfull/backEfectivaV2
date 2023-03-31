@@ -27,12 +27,14 @@ class MEvaluacionControl extends Model
     ];
     public function getCalificacionSubMenu(){
         
-        $query = $this->db->query("select * from caracteristica_control where tipo = 'submenu' and is_deleted=0 and estado= 1 and clasificacion=1");
+        $query = $this->db->query("select * from caracteristica_control where 
+        tipo = 'submenu' and is_deleted=0 and estado= 1 and clasificacion=1");
         return $query->getResultArray();
     }
     public function getCalificacionOpcion($id){
         
-        $query = $this->db->query("select * from caracteristica_control where tipo = 'opcion' and is_deleted=0 and estado= 1 and clasificacion=1 and idOpcion={$id}");
+        $query = $this->db->query("select * from caracteristica_control where tipo = 'opcion'
+         and is_deleted=0 and estado= 1 and clasificacion=1 and idOpcion={$id}");
         return $query->getResultArray();
     }
  

@@ -272,7 +272,7 @@ class Login extends BaseController
                     if($user->change_pass == 0){
                         $token = getSignedJWTForUser($username);
                         $msg=0;
-                        $mensaje = 'Cambio de contraseña 1er logeo obligatorio';
+                        $mensaje = 'Cambio de contraseña 1er logueo obligatorio';
                       
                     }else{
                         $token = getSignedJWTForUser($username);
