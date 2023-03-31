@@ -87,7 +87,7 @@ class DescripcionAmenazaController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => false,
-                            'msg' =>  'Descripcion de amenaza eleminado'
+                            'msg' =>  'Descripcion de amenaza eliminado'
                         ]
                     );
                 }else{
@@ -113,6 +113,7 @@ class DescripcionAmenazaController extends BaseController
             $model->update($id,$input);
             return $this->getResponse(
                 [
+                    'error' => true,
                     'msg' =>  'No se puede eliminar'
                 ]
             );

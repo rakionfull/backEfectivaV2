@@ -94,25 +94,7 @@ class CoberturaController extends BaseController
     public function deleteCobertura()
     {
    
-        // try{
-        //     $input = $this->getRequestInput($this->request);
-
-        
-        //     $model = new MCobertura();
-        //     $result = $model->deleteCobertura($input);
-        
-        //     return $this->getResponse(
-        //         [
-        //             'msg' =>  'Eliminado Correctamente'
-        //         ]
-        //     );
-        // } catch (Exception $ex) {
-        //     return $this->getResponse(
-        //         [
-        //             'error' => 'Cobertura está asignado, no es posible eliminarlo',
-        //         ]
-        //     );
-        // }
+     
         $input = $this->getRequestInput($this->request);
         $model = new MCobertura();
         $found = $model->find($input[0]['id']);

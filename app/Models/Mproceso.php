@@ -99,8 +99,8 @@ class Mproceso extends Model
          $data[0]['idunidad'],
          $data[0]['idmacroproceso'],
          $data[0]['proceso'],
-         $data[0]['estado'],
          $data[0]['id'],
+         $data[0]['estado'],
          $data['user'],
         ]);
         return $query;
