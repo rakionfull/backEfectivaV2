@@ -27,9 +27,7 @@ class MCaractControl extends Model
     ];
     public function validaCaractControl($data){
         
-        //$query = $this->db->query("EXEC valida_caractControl @caracteristica='".$data[0]['caracteristica']."', @idOpcion='".$data[0]['id']."'");
-        // $query = $this->db->query("SELECT * FROM caracteristica_control where caracteristica='{$data[0]['caracteristica']}'
-        // and idOpcion={$data[0]['id']} and is_deleted=0");
+
 
         $sql = "CALL valida_caractControl(?,?)";
 

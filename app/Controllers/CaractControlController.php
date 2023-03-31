@@ -115,14 +115,16 @@ class CaractControlController extends BaseController
     {
         $input = $this->getRequestInput($this->request);
         $model = new MCaractControl();
-        $found = $model->find($input[0]['id']);
+        $found = $model->find($input[0]['id_op']);
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input[0]['id'])){
+                if($model->delete($input[0]['id_op'])){
                     $this->db->transRollback();
+                    $data['date_deleted'] = date("Y-m-d H:i:s");
+                    $data['id_user_deleted'] = $input['user'];
                     $data['is_deleted'] = 1;
-                    $model->update($input[0]['id'],$data);
+                    $model->update($input[0]['id_op'],$data);
                     return $this->getResponse(
                         [
                             'error' => false,
@@ -133,7 +135,7 @@ class CaractControlController extends BaseController
                     $data['is_deleted'] = 0;
                     $data['date_deleted'] = null;
                     $data['id_user_deleted'] = null;
-                    $model->update($input[0]['id'],$data);
+                    $model->update($input[0]['id_op'],$data);
                     return $this->getResponse(
                         [
                             'error' => true,
@@ -149,13 +151,14 @@ class CaractControlController extends BaseController
                     ]
                 );
             }
+            
             $this->db->transCommit();
 
         } catch (Exception $ex) {
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id_op'],$data);
             return $this->getResponse(
                 [  
                     'error' => true,
