@@ -99,7 +99,7 @@ class DescripcionAmenazaController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -113,7 +113,7 @@ class DescripcionAmenazaController extends BaseController
             $model->update($id,$input);
             return $this->getResponse(
                 [
-                    'msg' =>  'No se puede eliminar'
+                    'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                 ]
             );
         }

@@ -93,26 +93,6 @@ class CoberturaController extends BaseController
     }
     public function deleteCobertura()
     {
-   
-        // try{
-        //     $input = $this->getRequestInput($this->request);
-
-        
-        //     $model = new MCobertura();
-        //     $result = $model->deleteCobertura($input);
-        
-        //     return $this->getResponse(
-        //         [
-        //             'msg' =>  'Eliminado Correctamente'
-        //         ]
-        //     );
-        // } catch (Exception $ex) {
-        //     return $this->getResponse(
-        //         [
-        //             'error' => 'Cobertura está asignado, no es posible eliminarlo',
-        //         ]
-        //     );
-        // }
         $input = $this->getRequestInput($this->request);
         $model = new MCobertura();
         $found = $model->find($input[0]['id']);
@@ -137,7 +117,7 @@ class CoberturaController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -159,7 +139,7 @@ class CoberturaController extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Cobertura está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }

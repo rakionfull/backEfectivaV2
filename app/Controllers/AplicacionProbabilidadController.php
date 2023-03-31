@@ -94,26 +94,6 @@ class AplicacionProbabilidadController extends BaseController
     }
     public function deleteAplicacionProbabilidad()
     {
-   
-        // try{
-        //     $input = $this->getRequestInput($this->request);
-
-        
-        //     $model = new MAplicacionProbabilidad();
-        //     $result = $model->deleteAplicacionProbabilidad($input);
-        
-        //     return $this->getResponse(
-        //         [
-        //             'msg' =>  'Eliminado Correctamente'
-        //         ]
-        //     );
-        // } catch (Exception $ex) {
-        //     return $this->getResponse(
-        //         [
-        //             'error' => 'AplicacionProbabilidad está asignado, no es posible eliminarlo',
-        //         ]
-        //     );
-        // }
         $input = $this->getRequestInput($this->request);
         $model = new MAplicacionProbabilidad();
         $found = $model->find($input[0]['id']);
@@ -138,7 +118,7 @@ class AplicacionProbabilidadController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -160,7 +140,7 @@ class AplicacionProbabilidadController extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Aplicacion de la Probabilidad está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }

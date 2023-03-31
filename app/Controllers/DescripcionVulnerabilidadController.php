@@ -103,7 +103,7 @@ class DescripcionVulnerabilidadController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -124,7 +124,7 @@ class DescripcionVulnerabilidadController extends BaseController
             return $this->getResponse(
                 [
                     // 'msg' =>  'Ocurrio un error '.$th->getMessage()
-                    'msg' =>'No se pudo eliminar'
+                    'msg' =>'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                 ]
             );
         

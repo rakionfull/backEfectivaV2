@@ -222,7 +222,7 @@ class EvaluacionControlController extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
-                            'msg' =>  'No se pudo eliminar'
+                            'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
                 }
@@ -244,7 +244,7 @@ class EvaluacionControlController extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
-                    'msg' => 'Evaluacion de Control está asignado, no es posible eliminarlo',
+                    'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
         }
