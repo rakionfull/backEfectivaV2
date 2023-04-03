@@ -2575,7 +2575,7 @@ class Activo extends BaseController
                     if($result){
                         $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
-                        $data['id_user_deleted'] = $input['user'];
+                        $data['id_user_deleted'] = $input['id'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
@@ -2614,6 +2614,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [  
                     'error' => true,
+                    
                     'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
@@ -2714,7 +2715,7 @@ class Activo extends BaseController
                     if($result){
                         $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
-                        $data['id_user_deleted'] = $input['user'];
+                        $data['id_user_deleted'] = $input['id'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
@@ -2855,7 +2856,7 @@ class Activo extends BaseController
                     if($result){
                         $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
-                        $data['id_user_deleted'] = $input['user'];
+                        $data['id_user_deleted'] = $input['id'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
