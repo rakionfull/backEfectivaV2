@@ -31,7 +31,7 @@ class Malerta_seguimiento extends Model
         
     
         // $query = $this->db->query("SELECT * FROM alert_seguimiento where alerta = '{$data}' and is_deleted='0'");
-        $sql = "call listar_alert_seguimiento(?)";
+        $sql = "call validaAlerta_seguimiento(?)";
         $query = $this->db->query($sql,[
             $data
         ]);
@@ -43,9 +43,7 @@ class Malerta_seguimiento extends Model
 
       
         $sql = "call listar_alert_seguimiento()";
-        $query = $this->db->query($sql,[
-         
-        ]);
+        $query = $this->db->query($sql,[]);
         return $query->getResultArray();
     }
 
@@ -57,7 +55,6 @@ class Malerta_seguimiento extends Model
             $data[0]['alerta'],
             $data[0]['valor'],
             $data[0]['descripcion'],
-           
             $data['user']
         ]);
         return $query;
