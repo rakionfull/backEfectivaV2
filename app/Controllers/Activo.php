@@ -2977,7 +2977,7 @@ public function addPlanAccion(){
         }else{
             $result = 0;
             $msg = 'Plan ya registrado';
-            $error = 1;
+            $error = 0;
         }
        
 
