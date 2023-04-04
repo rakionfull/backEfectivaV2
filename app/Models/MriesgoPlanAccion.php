@@ -77,7 +77,7 @@ class MriesgoPlanAccion extends Model
     public function updateEstadoPLan($id){
         
       
-        $sql = "call updateEstadoPLan(?,?,?)";
+        $sql = "call updateEstadoPLan(?)";
         $query = $this->db->query($sql, [
             $id,
             

@@ -253,19 +253,10 @@ class Login extends BaseController
                    
                     $msg=1;
                     $mensaje = '';
-                    if($fecha_actual > $fecha_exp){
-                        $msg = 0;
-                        $mensaje = 'Contraseña expirada, se redireccionará para cambio';
-                    }
-                    if($fecha_actual >= $fecha_recordatorio){
-                        if($fecha_exp  > $fecha_recordatorio){
-                       
-                            $mensaje = 'Recordatorio: Su contraseña está a punto de expirar';
-                        }
-                    }
+                    
                    
                     helper('jwt');
-    
+                    //cambiar aqui
                     $token = [];
                     $permisos = [];
                     $escenario=$model->getEscenario();
@@ -276,10 +267,23 @@ class Login extends BaseController
                       
                     }else{
                         $token = getSignedJWTForUser($username);
-                        $modelSesion->saveSesion($token, $user->id_us);
-                        $permisos=$modelPerfil->getPermisos($user->perfil_us);
-                        
                        
+                        if($fecha_actual >= $fecha_exp){
+                            $msg = 0;
+                            $mensaje = 'Contraseña expirada, se redireccionará para cambio';
+                        }else{
+                                $modelSesion->saveSesion($token, $user->id_us);
+                                $permisos=$modelPerfil->getPermisos($user->perfil_us);
+                                if($fecha_actual >= $fecha_recordatorio){
+                                    if($fecha_exp  > $fecha_recordatorio){
+                                   
+                                        $mensaje = 'Recordatorio: Su contraseña está a punto expirar';
+                                    }
+                                }
+                        }
+                       
+                       
+
                         // $escenario=$model->getEscenario();
                         
                        

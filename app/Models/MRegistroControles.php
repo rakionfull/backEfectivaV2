@@ -282,12 +282,13 @@ class MRegistroControles extends Model
 
     public function validaRegistroControl($data){
        
-        $sql = "CALL listar_riesgos()";
+        $sql = "CALL validaRegistroControl(?)";
 
 	    $query = $this->db->query($sql, [
-            $data
+            $data['control']
         ]);
-        return $query->getResultArray();
+        if( $query->getRow()) return true;
+        else return false;
     }
     public function getPlanControl(){
       

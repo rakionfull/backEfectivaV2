@@ -50,7 +50,7 @@ class MEvaluacionControl extends Model
         $query= $this->db->query($cabeceras); 
         $calificacion = $query -> getResultArray();
             //construimos la consulta
-        $parte1="SELECT EC.id,DE.IEC,EC.calificacion ,";
+        $parte1="SELECT EC.id,DE.IEC,EC.calificacion as califica ,";
         
 
         $parte2= "";
@@ -67,7 +67,7 @@ class MEvaluacionControl extends Model
           
         }
         
-        $parte3=", EC.calificacion FROM detalle_evaluacion_control as DE inner join evaluacion_control2 as EC on
+        $parte3=", EC.calificacion as Calificacion FROM detalle_evaluacion_control as DE inner join evaluacion_control2 as EC on
          DE.IEC = EC.id inner join caracteristica_control as CC on CC.id=DE.ID_CC  where EC.is_deleted=0 GROUP BY EC.id;";
      
 

@@ -78,10 +78,10 @@ class Mestado extends Model
     public function getEstadoByActivo(){
 
         // $query = $this->db->query("SELECT * FROM estado where is_deleted=0");
-        $sql = "CALL validaEstado(?)";
+        $sql = "CALL listar_estado()";
 
         $query = $this->db->query($sql, [
-            $data
+            
         ]);
         return $query->getResultArray();
     }
