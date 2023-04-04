@@ -209,6 +209,7 @@ class InventarioClasificacionActivo extends Model
                 $data['val_i'],
                 $data['val_d'],
             ])->getResultArray();
+            
             return $result;
         } catch (\Throwable $th) {
             log_message('error',$th->getMessage()." linea ".$th->getLine()." file ".$th->getFile());

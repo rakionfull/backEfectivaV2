@@ -431,7 +431,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
       $routes->post('addInventarioClasificacionActivo','InventarioClasificacionActivoController::store');
       $routes->post('updateInventarioClasificacionActivo/(:num)','InventarioClasificacionActivoController::update/$1');
       $routes->post('deleteInventarioClasificacionActivo/(:num)','InventarioClasificacionActivoController::destroy/$1');
-      $routes->post('getValorByValoraciones','InventarioClasificacionActivoController::getValorByValoraciones');
+      $routes->post('getvaloracionesporvalor','InventarioClasificacionActivoController::getValorByValoraciones');
       $routes->post('listByValoraciones','InventarioClasificacionActivoController::listByValoraciones');
       $routes->post('updateStatus/(:num)','InventarioClasificacionActivoController::updateStatus/$1');
   

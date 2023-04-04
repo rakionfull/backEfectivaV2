@@ -53,6 +53,8 @@ class InventarioClasificacionActivoController extends BaseController
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {
+            log_message('error',$ex->getMessage()." linea ".$ex->getLine()." file ".$ex->getFile());
+
             return $this->getResponse(
                     [
                         'error' => $ex->getMessage(),
