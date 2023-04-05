@@ -158,4 +158,15 @@ class EvaluacionRiesgo extends Model
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
+    public function update_status_riesgo($data){
+        $sql = "call sp_change_status_riesgo_by_activo(?,?)";
+        $result = $this->db->query($sql,[
+            $data['id_activo'],
+            $data['estado']
+        ])->getResultArray();
+        if($result){
+            return true;
+        }
+        return false;
+    }
 }

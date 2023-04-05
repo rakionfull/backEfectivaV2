@@ -121,7 +121,7 @@ class EvaluacionRiesgoController extends BaseController
                 'valor_impacto' =>  ['required' => 'El campo valor impacto es requerido'],
                 // 'impacto' =>  ['required' => 'El campo impacto es requerido'],
                 'valor' =>  ['required' => 'El campo valor es requerido'],
-                'id_control' =>  ['required' => 'El campo control es requerido'],
+                // 'id_control' =>  ['required' => 'El campo control es requerido'],
                 // 'riesgo_controlado_probabilidad' =>  ['required' => 'El campo riesgo controlado probabilidad es requerido'],
                 // 'riesgo_controlado_impacto' =>  ['required' => 'El campo riesgo controlado impacto es requerido'],
                 // 'riesgo_controlado_valor' =>  ['required' => 'El campo riesgo controlado valor es requerido'],
@@ -184,6 +184,24 @@ class EvaluacionRiesgoController extends BaseController
             $model = new EvaluacionRiesgo();
             $result = $model->edit($id,$input);
             if($result){
+                $modelERC = new EvaluacionRiesgosControles();
+                $modelERC->where('id_evaluacion_riesgo',$id)->update(null,[
+                    'is_deleted' => '1'
+                ]);
+                $modelERC->where('id_evaluacion_riesgo',$id)->delete();
+                if(isset($input['controles'])){
+                    if(count($input['controles']) > 0){
+                        foreach ($input['controles'] as $control) {
+                            $data = [
+                                'id_evaluacion_riesgo' => $id,
+                                'id_control' => $control,
+                                'id_user_added' => $input['id_user_added'],
+                                'date_add' => $input['date_add']
+                            ];
+                            $modelERC->store($data);
+                        }
+                    }
+                }
                 return $this->getResponse(
                     [
                         'error' => false,
@@ -219,6 +237,11 @@ class EvaluacionRiesgoController extends BaseController
                     $this->db->transRollback();
                     $input['is_deleted'] = 1;
                     $model->update($id,$input);
+                    $modelERC = new EvaluacionRiesgosControles();
+                    $modelERC->where('id_evaluacion_riesgo',$id)->update(null,[
+                        'is_deleted' => '1'
+                    ]);
+                    $modelERC->where('id_evaluacion_riesgo',$id)->delete();
                     return $this->getResponse(
                         [
                             'error' => false,

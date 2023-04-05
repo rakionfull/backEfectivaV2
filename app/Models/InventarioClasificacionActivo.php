@@ -33,7 +33,9 @@ class InventarioClasificacionActivo extends Model
         '2' => 'Registrado',
         '3' => 'Observado',
         '4' => 'Aprobado',
-        '5' => 'Por actualizar'
+        '5' => 'Por actualizar',
+        '6' => 'Activo',
+        '7' => 'Inactivo'
     ];
 
     public function getAllHistoricos($id){
