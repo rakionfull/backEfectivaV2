@@ -257,11 +257,10 @@ class InventarioClasificacionActivoController extends BaseController
                 $input['date_add'] = $input['date_modify'];
                 $model->store_historial($id,$input);
             }
-            if( $input['estado'] == "7"){
-                $data['id_activo'] = $id;
-                $data['estado'] = "2";
-                $modelEvaluarionRiesgo->update_status_riesgo($data);
-            }
+            
+            $data['id_activo'] = $id;
+            $data['estado'] = $input['estado_2'];
+            $modelEvaluarionRiesgo->update_status_riesgo($data);
 
             $result = $model->edit($id,$input);
             
