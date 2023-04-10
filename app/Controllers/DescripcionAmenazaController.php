@@ -114,7 +114,7 @@ class DescripcionAmenazaController extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' =>  'No se puede eliminar'
+                    'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                 ]
             );
         }

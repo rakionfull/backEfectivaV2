@@ -30,7 +30,7 @@ class TipoAmenazaController extends BaseController
     }
     public function store(){
         $rules = [
-            'tipo' => 'required|is_unique[tipo_amenaza.tipo]',
+            'tipo' => 'required',
             'estado' => 'required'
         ];
         $errors = [
@@ -53,6 +53,15 @@ class TipoAmenazaController extends BaseController
         }
 
         $model = new TipoAmenaza();
+        $found = $model->where('tipo',$input['tipo'])->where('is_deleted','0')->findAll();
+        if(count($found) > 0){
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'Ya existe este tipo de amenaza'
+                ]
+            );
+        }
         $result = $model->store($input);
         return $this->getResponse(
             [
