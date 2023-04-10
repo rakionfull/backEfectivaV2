@@ -8,6 +8,7 @@ class EvaluacionRiesgosControles extends Model
 {
     protected $table            = 'evaluacion_riesgos_controles';
     protected $primaryKey       = 'id';
+    protected $useSoftDeletes   = true;
     protected $allowedFields    = [
         'id_evaluacion_riesgo',
         'id_control',

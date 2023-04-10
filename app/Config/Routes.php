@@ -493,7 +493,11 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
       $routes->get('getComboPosicion', 'Activo::getComboPosicion',['filter' => 'authFilter']);
       $routes->get('getUserNombreByActivo', 'Activo::getUserNombreByActivo',['filter' => 'authFilter']);
       $routes->get('getAlerta', 'Activo::getAlerta',['filter' => 'authFilter']);
+
+      // update riesgos controlados
+      $routes->get('updateRiesgosControlados/(:num)','EvaluacionRiesgoController::updateRiesgosControlados/$1');
       });
+
 
 /*
  * --------------------------------------------------------------------

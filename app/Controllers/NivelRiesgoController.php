@@ -76,6 +76,17 @@ class NivelRiesgoController extends BaseController
             return ($this->getResponse($error,ResponseInterface::HTTP_OK));
         }
         $model = new NivelRiesgo();
+        $existeCombinatoria = $model->where('operador1',$input['operador1'])->where('operador2',$input['operador2'])
+        ->where('valor1',$input['valor1'])->where('valor2',$input['valor2'])
+        ->where('estado',1)->where('is_deleted',0)->findAll();
+        if(count($existeCombinatoria) > 0){
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'Esta combinatoria ya existe'
+                ]
+            );
+        }
         $result = $model->store($input);
         return $this->getResponse(
             [

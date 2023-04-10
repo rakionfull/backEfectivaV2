@@ -33,7 +33,9 @@ class InventarioClasificacionActivo extends Model
         '2' => 'Registrado',
         '3' => 'Observado',
         '4' => 'Aprobado',
-        '5' => 'Por actualizar'
+        '5' => 'Por actualizar',
+        '6' => 'Activo',
+        '7' => 'Inactivo'
     ];
 
     public function getAllHistoricos($id){
@@ -66,7 +68,7 @@ class InventarioClasificacionActivo extends Model
     }
 
     public function store($data){
-        $sql = "call sp_add_inventario_clasificacion_activo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "call sp_add_inventario_clasificacion_activo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $data['idempresa'],
             $data['idarea'],
@@ -87,7 +89,8 @@ class InventarioClasificacionActivo extends Model
             $data['estado'],
             $data['comentario'],
             $data['id_user_added'],
-            $data['date_add']
+            $data['date_add'],
+            $data['estado_2']
         ]);
         if($result){
             $sql = "call sp_get_last_id";
@@ -104,7 +107,7 @@ class InventarioClasificacionActivo extends Model
         return false;
     }
     public function store_historial($id_ica,$data){
-        $sql = "call sp_add_inventario_clasificacion_activo_historial(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "call sp_add_inventario_clasificacion_activo_historial(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id_ica,
             $data['idempresa'],
@@ -126,7 +129,8 @@ class InventarioClasificacionActivo extends Model
             $data['estado'],
             $data['comentario'],
             $data['id_user_added'],
-            $data['date_add']
+            $data['date_add'],
+            $data['estado_2']
         ]);
         if($result){
             return true;
@@ -135,7 +139,7 @@ class InventarioClasificacionActivo extends Model
     }
 
     public function edit($id,$data){
-        $sql = "call sp_edit_inventario_clasificacion_activo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        $sql = "call sp_edit_inventario_clasificacion_activo(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $result = $this->db->query($sql,[
             $id,
             $data['idempresa'],
@@ -158,7 +162,8 @@ class InventarioClasificacionActivo extends Model
             $data['comentario'],
             $data['id_user_updated'],
             $data['date_modify'],
-            $data['observacion']
+            $data['observacion'],
+            $data['estado_2']
         ]);
         if($result){
             if($data['estado'] == '2' || $data['estado'] == '3'){

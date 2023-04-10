@@ -124,6 +124,25 @@ class ImpactoRiesgoController extends BaseController
                     ]
                 );
             }else{
+                $split_formula = explode(" ",$input['formula']);
+                $array_formula = array();
+                for ($index = 0; $index < count($split_formula); $index=$index+3) {
+                    array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+                }
+                for ($i=0; $i < count($array_formula); $i++) { 
+                    for ($j=$i+1; $j < count($array_formula); $j++) { 
+                        if($array_formula[$i] == $array_formula[$j]){
+                            return $this->getResponse(
+                                [
+                                    'error' => true,
+                                    'type' => 'escenario',
+                                    'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
+                                ]
+                            );
+                        }
+                    }
+                }
+
                 $result = $model->store_1($input);
     
                 $modelProbabilidad= new ProbabilidadRiesgo();
@@ -253,6 +272,26 @@ class ImpactoRiesgoController extends BaseController
             $input = $this->getRequestInput($this->request);
 
             $model = new ImpactoRiesgo();
+
+            $split_formula = explode(" ",$input['formula']);
+            $array_formula = array();
+            for ($index = 0; $index < count($split_formula); $index=$index+3) {
+                array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+            }
+            for ($i=0; $i < count($array_formula); $i++) { 
+                for ($j=$i+1; $j < count($array_formula); $j++) { 
+                    if($array_formula[$i] == $array_formula[$j]){
+                        return $this->getResponse(
+                            [
+                                'error' => true,
+                                'type' => 'escenario',
+                                'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
+                            ]
+                        );
+                    }
+                }
+            }
+
             $result = $model->edit_1($input);
         
             $modelProbabilidad= new ProbabilidadRiesgo();

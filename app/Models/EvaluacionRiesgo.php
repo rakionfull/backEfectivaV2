@@ -19,6 +19,27 @@ class EvaluacionRiesgo extends Model
 
     protected $allowedFields = [
         'id',
+        'id_tipo_riesgo',
+        'id_empresa',
+        'id_area',
+        'id_unidad',
+        'id_macroproceso',
+        'id_proceso',
+        'id_activo',
+        'id_tipo_amenaza',
+        'id_descripcion_amenaza',
+        'id_tipo_vulnerabilidad',
+        'id_descripcion_vulnerabilidad',
+        'riesgo',
+        'valor_probabilidad',
+        'probabilidad',
+        'valor_impacto',
+        'impacto',
+        'valor',
+        'id_control',
+        'riesgo_controlado_probabilidad',
+        'riesgo_controlado_impacto',
+        'riesgo_controlado_valor',
         'date_add',
         'date_modify',
         'date_deleted',
@@ -157,5 +178,16 @@ class EvaluacionRiesgo extends Model
         $sql = "call sp_get_last_evaluacion_riesgo";
         $result = $this->db->query($sql)->getResultArray();
         return $result;
+    }
+    public function update_status_riesgo($data){
+        $sql = "call sp_change_status_riesgo_by_activo(?,?)";
+        $result = $this->db->query($sql,[
+            $data['id_activo'],
+            $data['estado']
+        ])->getResultArray();
+        if($result){
+            return true;
+        }
+        return false;
     }
 }

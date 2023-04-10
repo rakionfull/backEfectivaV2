@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\EvaluacionRiesgo;
 use App\Models\InventarioClasificacionActivo;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -249,12 +250,17 @@ class InventarioClasificacionActivoController extends BaseController
             $input = $this->getRequestInput($this->request);
     
             $model = new InventarioClasificacionActivo();
+            $modelEvaluarionRiesgo = new EvaluacionRiesgo();
             $ica = $model->find($id);
             if($ica['estado'] != $input['estado']){
                 $input['id_user_added'] = $input['id_user_updated'];
                 $input['date_add'] = $input['date_modify'];
                 $model->store_historial($id,$input);
             }
+            
+            $data['id_activo'] = $id;
+            $data['estado'] = $input['estado_2'];
+            $modelEvaluarionRiesgo->update_status_riesgo($data);
 
             $result = $model->edit($id,$input);
             

@@ -5,6 +5,15 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\EvaluacionRiesgo;
 use App\Models\EvaluacionRiesgosControles;
+use App\Models\ImpactoRiesgo;
+use App\Models\MAplicacionImpacto;
+use App\Models\MAplicacionProbabilidad;
+use App\Models\MEvaluacionControl;
+use App\Models\MRegistroControles;
+use App\Models\Muser;
+use App\Models\MValoracionRiesgo;
+use App\Models\NivelRiesgo;
+use App\Models\ProbabilidadRiesgo;
 use CodeIgniter\API\ResponseTrait;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
@@ -121,7 +130,7 @@ class EvaluacionRiesgoController extends BaseController
                 'valor_impacto' =>  ['required' => 'El campo valor impacto es requerido'],
                 // 'impacto' =>  ['required' => 'El campo impacto es requerido'],
                 'valor' =>  ['required' => 'El campo valor es requerido'],
-                'id_control' =>  ['required' => 'El campo control es requerido'],
+                // 'id_control' =>  ['required' => 'El campo control es requerido'],
                 // 'riesgo_controlado_probabilidad' =>  ['required' => 'El campo riesgo controlado probabilidad es requerido'],
                 // 'riesgo_controlado_impacto' =>  ['required' => 'El campo riesgo controlado impacto es requerido'],
                 // 'riesgo_controlado_valor' =>  ['required' => 'El campo riesgo controlado valor es requerido'],
@@ -184,6 +193,24 @@ class EvaluacionRiesgoController extends BaseController
             $model = new EvaluacionRiesgo();
             $result = $model->edit($id,$input);
             if($result){
+                $modelERC = new EvaluacionRiesgosControles();
+                $modelERC->where('id_evaluacion_riesgo',$id)->update(null,[
+                    'is_deleted' => '1'
+                ]);
+                $modelERC->where('id_evaluacion_riesgo',$id)->delete();
+                if(isset($input['controles'])){
+                    if(count($input['controles']) > 0){
+                        foreach ($input['controles'] as $control) {
+                            $data = [
+                                'id_evaluacion_riesgo' => $id,
+                                'id_control' => $control,
+                                'id_user_added' => $input['id_user_added'],
+                                'date_add' => $input['date_add']
+                            ];
+                            $modelERC->store($data);
+                        }
+                    }
+                }
                 return $this->getResponse(
                     [
                         'error' => false,
@@ -219,6 +246,11 @@ class EvaluacionRiesgoController extends BaseController
                     $this->db->transRollback();
                     $input['is_deleted'] = 1;
                     $model->update($id,$input);
+                    $modelERC = new EvaluacionRiesgosControles();
+                    $modelERC->where('id_evaluacion_riesgo',$id)->update(null,[
+                        'is_deleted' => '1'
+                    ]);
+                    $modelERC->where('id_evaluacion_riesgo',$id)->delete();
                     return $this->getResponse(
                         [
                             'error' => false,
@@ -363,6 +395,334 @@ class EvaluacionRiesgoController extends BaseController
                     ],
                     ResponseInterface::HTTP_OK
                 );
+        }
+    }
+    public function updateRiesgosControlados($id_riesgo){
+        try {
+            //code...
+            $evaluacionRiesgoModel = new EvaluacionRiesgo();
+            $riesgo = $evaluacionRiesgoModel->find($id_riesgo);
+            if($riesgo['is_deleted'] == "1"){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'message' => 'Esta evaluacion de riesgo está eliminado'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
+            $posiciones_probabilidad = [];
+            $posiciones_impacto = [];
+            $probabilidadModel = new ProbabilidadRiesgo();
+            $impactoModel = new ImpactoRiesgo();
+            $user = new Muser();
+            $escenario = $user->getEscenario();
+            $evaluacionControl = new MEvaluacionControl();
+            $caracteristicas = $evaluacionControl->getCaracteristicaOpcion($escenario);
+            $posiciones_control = array();
+            $caracteristicas_controles = array();
+            $pp = $probabilidadModel->getAll($escenario);
+            $pi = $impactoModel->getAll($escenario);
+            $riesgo_controlado_impacto = $riesgo['riesgo_controlado_impacto'];
+            $riesgo_controlado_probabilidad = $riesgo['riesgo_controlado_probabilidad'];
+            $riesgo_controlado_valor = $riesgo['riesgo_controlado_valor'];
+            foreach ($pp as $item) {
+                array_push($posiciones_probabilidad,$item['descripcion']);
+            }
+
+            foreach ($pi as $item) {
+                array_push($posiciones_impacto,$item['descripcion']);
+            }
+
+            if(count($caracteristicas) > 0){
+                foreach ($caracteristicas as $item) {
+
+                    $posicion = intval(explode("%",$item['posicion'])[0]);
+                    array_push($posiciones_control,$posicion);
+                    array_push($caracteristicas_controles,strtoupper($item['caracteristica']));
+                }
+
+                for ($i = 1; $i < count($posiciones_control); $i++) {
+                    for ($j = 0; $j < (count($posiciones_control) - $i); $j++) {
+                        if($posiciones_control[$j] <= $posiciones_control[$j+1]){
+                            $aux = $posiciones_control[$j];
+                            $posiciones_control[$j] = $posiciones_control[$j+1];
+                            $posiciones_control[$j+1] = $aux;
+        
+                            $aux_caracteristica = $caracteristicas_controles[$j];
+                            $caracteristicas_controles[$j] =$caracteristicas_controles[$j+1];
+                            $caracteristicas_controles[$j+1] = $aux_caracteristica;
+        
+                        }
+                    }
+                }
+
+                foreach ($caracteristicas_controles as $caracteristica_control) {
+                    $evaluacionRiesgosControles = new EvaluacionRiesgosControles();
+                    $controles = $evaluacionRiesgosControles->getByEvaluacionRiesgoId($id_riesgo);
+                    
+                    if(count($controles) > 0){
+                        foreach ($controles as $control) {
+                            $control_id = intval($control['id_control']);
+                            // el control seleccionado = $control_id
+                            $found = false;
+                            if(!$found){
+                                $registroControlModel = new MRegistroControles();
+                                $registroControl = $registroControlModel->getRegistroControl($control_id);
+
+                                $cobertura = $registroControl->idCobertura;
+                                $evaluacion = strtolower($registroControl->evaluacion);
+                                $firstLetter = strtoupper(substr($evaluacion,0,1));
+                                $caracteristica = $firstLetter.substr($evaluacion,1,strlen($evaluacion));
+                                $caracteristica_upper = strtoupper($caracteristica);
+                                $caracteristica_control_1 = strtoupper($caracteristica_control);
+                                
+                                if($caracteristica_upper == $caracteristica_control_1){
+                                    $found = true;
+                                    $cobertura = intval($cobertura);
+                                    $control_selected = $control_id;
+                                    switch ($cobertura) {
+                                        case 1:
+                                            $riesgo_controlado_probabilidad = $this->getAplicacionProbabilidad($caracteristica,$escenario,$posiciones_probabilidad,$riesgo);
+                                            $riesgo_controlado_valor = $this->getRiesgoControladoValor($riesgo['valor_probabilidad'],$riesgo['valor_impacto'],$riesgo_controlado_probabilidad,$riesgo['riesgo_controlado_impacto'],$escenario);
+                                            break;
+                                        case 2:
+                                            $riesgo_controlado_impacto = $this->getAplicacionImpacto($caracteristica,$escenario,$posiciones_impacto,$riesgo);
+                                            $riesgo_controlado_valor = $this->getRiesgoControladoValor($riesgo['valor_probabilidad'],$riesgo['valor_impacto'],$riesgo['riesgo_controlado_probabilidad'],$riesgo_controlado_impacto,$escenario);
+                                            
+                                            break;
+                                        case 3:
+                                            $riesgo_controlado_probabilidad = $this->getAplicacionProbabilidad($caracteristica,$escenario,$posiciones_probabilidad,$riesgo);
+                                            $riesgo_controlado_impacto = $this->getAplicacionImpacto($caracteristica,$escenario,$posiciones_impacto,$riesgo);
+                                            
+                                            $riesgo_controlado_valor = $this->getRiesgoControladoValor($riesgo['valor_probabilidad'],$riesgo['valor_impacto'],$riesgo_controlado_probabilidad,$riesgo_controlado_impacto,$escenario);
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                        $riesgo['id_control'] = $control_selected;
+                        $riesgo['riesgo_controlado_probabilidad'] = $riesgo_controlado_probabilidad;
+                        $riesgo['riesgo_controlado_impacto'] = $riesgo_controlado_impacto;
+                        $riesgo['riesgo_controlado_valor'] = $riesgo_controlado_valor;
+                        $evaluacionRiesgoModel->update($id_riesgo,$riesgo);
+                        return $this->getResponse(
+                            [
+                                'error' => false,
+                                'message' => 'Valores de riesgos controlados actualizados en evaluación de riesgo',
+                                'data' => $riesgo
+                            ],
+                            ResponseInterface::HTTP_OK
+                        );
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'message' => $th->getMessage(),
+                    'line' => $th->getLine(),
+                    'file' => $th->getFile()
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+    }
+
+    public function getAplicacionProbabilidad($caracteristica,$escenario,$posiciones_probabilidad,$riesgo){
+        $MAplicacionProbabilidad = new MAplicacionProbabilidad();
+        $respuestaCaracteristica = $MAplicacionProbabilidad->getByCaracteristica(['caracteristica' => $caracteristica,'escenario' => $escenario])[0];
+        // var_dump($respuestaCaracteristica);die();
+        
+        if(intval($escenario) == 2){
+            $probabilidad_actual = $riesgo['probabilidad'];
+            foreach ($posiciones_probabilidad as $key => $value) {
+                if($value == $probabilidad_actual){
+                    $index = $key;
+                }
+            }
+            $posicion = intval($index) - intval($respuestaCaracteristica['posicion']);
+            if($posicion <= 0){
+                $posicion = 0;
+            }else{
+                $posicion = $posicion;
+            }
+            $new_posicion = $posiciones_probabilidad[$posicion];
+            $riesgo_controlado_probabilidad = $new_posicion;
+        }else if(intval($escenario) == 1){
+            $value = intval(explode("%",$respuestaCaracteristica['posicion'])[0])/100;
+            $probabilidad_actual = $riesgo['valor_probabilidad'];
+            $new_probabilidad = $probabilidad_actual - ($probabilidad_actual * $value);
+            $riesgo_controlado_probabilidad = $new_probabilidad;
+        }
+        return $riesgo_controlado_probabilidad;
+    }
+
+    public function getAplicacionImpacto($caracteristica,$escenario,$posiciones_impacto,$riesgo){
+        $MAplicacionImpacto = new MAplicacionImpacto();
+        $respuestaCaracteristica = $MAplicacionImpacto->getByCaracteristica(['caracteristica' => $caracteristica,'escenario' => $escenario]);
+        var_dump($respuestaCaracteristica);
+        if(intval($escenario) == 2){
+            $impacto_actual = $riesgo['impacto'];
+            foreach ($posiciones_impacto as $key => $value) {
+                if($value == $impacto_actual){
+                    $index = $key;
+                }
+            }
+            $posicion = intval($index) - intval($respuestaCaracteristica['posicion']);
+            if($posicion <= 0){
+                $posicion = 0;
+            }else{
+                $posicion = $posicion;
+            }
+            $new_posicion = $posiciones_impacto[$posicion];
+            $riesgo_controlado_impacto = $new_posicion;
+        }else if(intval($escenario) == 1){
+            $value = intval(explode("%",$respuestaCaracteristica['posicion'])[0])/100;
+            $impacto_actual = $riesgo['valor_impacto'];
+            $new_impacto = $impacto_actual - ($impacto_actual * $value);
+            $riesgo_controlado_impacto = $new_impacto;
+        }
+        return $riesgo_controlado_impacto;
+    }
+
+    public function getRiesgoControladoValor($valorProb = 0,$valorImp = 0,$descripcionProb = "",$descripcionImp = "",$escenario){
+        if(intval($escenario) == 2){
+            $probabilidadModel = new ProbabilidadRiesgo();
+            $p1 = $probabilidadModel->getByDescription(['descripcion'=>$descripcionProb])[0];
+            $idProbabilidad = $p1['id'];
+            $impactoModel = new ImpactoRiesgo();
+            $p2 = $impactoModel->getByDescription(['descripcion'=>$descripcionImp])[0];
+            $idImpacto = $p2['id'];
+            $MValoracionRiesgo = new MValoracionRiesgo();
+            $respuesta = $MValoracionRiesgo->getByProbabilidadImpacto(['id_probabilidad' => $idProbabilidad,'id_impacto' => $idImpacto])[0];
+            return $respuesta['valor'];
+        }else if(intval($escenario) == 1){
+            $value = $valorProb * $valorImp;
+            $model = new NivelRiesgo();
+            $niveles = $model->getAll();
+            $found_nivel = false;
+            foreach ($niveles as $nivel) {
+                if(!$found_nivel){
+                    if($nivel->operador1 == ">"){
+                        if($nivel->operador2 == "<"){
+                            if($value>$nivel->valor1 && $value<$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador2 == "<="){
+                            if($value>$nivel->valor1 && $value<=$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    if($nivel->operador1 == ">="){
+                        if($nivel->operador2 == "<"){
+                            if($value>=$nivel->valor1 && $value<$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador2 == "<="){
+                            if($value>=$nivel->valor1 && $value<=$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    if($nivel->operador1 == "<"){
+                        if($nivel->operador2 == ">"){
+                            if($value<$nivel->valor1 && $value>$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador2 == ">="){
+                            if($value<$nivel->valor1 && $value>=$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    if($nivel->operador1 == "<="){
+                        if($nivel->operador2 == ">"){
+                            if($value<=$nivel->valor1 && $value>$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador2 == ">="){
+                            if($value<=$nivel->valor1 && $value>=$nivel->valor2){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    // OPERADOR 2
+                    if($nivel->operador2 == ">"){
+                        if($nivel->operador1 == "<"){
+                            if($value > $nivel->valor2 && $value<$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador1 == "<="){
+                            if($value>$nivel->valor && $value<=$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    if($nivel->operador2 == ">="){
+                        if($nivel->operador1 == "<"){
+                            if($value >= $nivel->valor2 && $value<$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador1 == "<="){
+                            if($value>=$nivel->valor && $value<=$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    if($nivel->operador2 == "<"){
+                        if($nivel->operador1 == "<"){
+                            if($value < $nivel->valor2 && $value<$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador1 == "<="){
+                            if($value<$nivel->valor && $value<=$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                    if($nivel->operador2 == "<="){
+                        if($nivel->operador1 == "<"){
+                            if($value <= $nivel->valor2 && $value<$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                        if($nivel->operador1 == "<="){
+                            if($value <= $nivel->valor && $value<=$nivel->valor1){
+                                $found_nivel = true;
+                                $descripcion = $nivel->descripcion;
+                            }
+                        }
+                    }
+                }
+            }
+            return $descripcion;
         }
     }
 }

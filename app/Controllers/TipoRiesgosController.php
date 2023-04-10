@@ -28,54 +28,83 @@ class TipoRiesgosController extends BaseController
         }
     }
     public function store(){
-        $rules = [
-            'tipo_riesgo' => 'required|is_unique[tipo_riesgo.tipo_riesgo]',
-            'descripcion' => 'required',
-            'estado' => 'required'
-        ];
-        $errors = [
-            'tipo_riesgo' => [
-                'required' => 'Debe ingresar el tipo de riesgo',
-                'is_unique' => 'El campo tipo de riesgo debe ser único'
-            ],
-            'descripcion' => [
-                'required' => 'Debe ingresar la descripcion'
-            ],
-            'estado' => [
-                'required' => 'Debe ingresar el estado'
-            ]
-        ];
-
-        $input = $this->getRequestInput($this->request);
-        if (!$this->validateRequest($input, $rules, $errors)) {
-            $error = [
-                'error' => 'validar',
-                'datos' => $this->validator->getErrors()
+        try {
+            $rules = [
+                'tipo_riesgo' => 'required',
+                'descripcion' => 'required',
+                'estado' => 'required'
             ];
-            return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            $errors = [
+                'tipo_riesgo' => [
+                    'required' => 'Debe ingresar el tipo de riesgo',
+                    'is_unique' => 'El campo tipo de riesgo debe ser único'
+                ],
+                'descripcion' => [
+                    'required' => 'Debe ingresar la descripcion'
+                ],
+                'estado' => [
+                    'required' => 'Debe ingresar el estado'
+                ]
+            ];
+    
+            $input = $this->getRequestInput($this->request);
+            if (!$this->validateRequest($input, $rules, $errors)) {
+                $error = [
+                    'error' => 'validar',
+                    'datos' => $this->validator->getErrors()
+                ];
+                return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            }
+    
+            
+            $model = new TipoRiesgo();
+            $found = $model->where('tipo_riesgo',$input['tipo_riesgo'])->where('is_deleted','0')->findAll();
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Ya existe este tipo de riesgo'
+                    ]
+                );
+            }
+           $model->store($input);
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Tipo de riesgo creado correctamente'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'No se pudo guardar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
+                ]
+            );
         }
-
-        $model = new TipoRiesgo();
-        $result = $model->store($input);
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+        
     }
 
     public function update(){
-        $input = $this->getRequestInput($this->request);
-
-      
-        $model = new TipoRiesgo();
-        $result = $model->edit($input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+        try {
+            $input = $this->getRequestInput($this->request);
+            $model = new TipoRiesgo();
+            $model->edit($input);
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Tipo de riesgo actualizado correctament'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'No se pudo guardar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
+                ]
+            );
+        }
+        
     }
 
     public function destroy($id){
