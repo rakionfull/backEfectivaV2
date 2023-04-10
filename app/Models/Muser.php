@@ -126,7 +126,7 @@ class Muser extends Model
     public function updateUser($data,$id){
       
         $actualizacion_us = date('Y-m-d H:i:s');
-        $query=$this->db->query("UPDATE tb_users SET nombres_us = '{$data['nombres_us']}',
+        $query=$this->db->query("UPDATE tb_users SET nombres_us = '{$data['nombres_us']}', docident_us = '{$data['docident_us']}',
         apepat_us = '{$data['apepat_us']}',apemat_us= '{$data['apemat_us']}',perfil_us= '{$data['perfil_us']}',
         estado_us= '{$data['estado_us']}',
         email_us= '{$data['email_us']}' ,actualizacion_us='{$actualizacion_us}',idempresa='{$data['id_empresa']}'

@@ -22,11 +22,11 @@ class EvaluacionRiesgoController extends BaseController
 {
     use ResponseTrait;
 
-    public function index($id){
+    public function index(){
         try {
             $model = new EvaluacionRiesgo();
             $response = [
-                'data' =>  $model->getAll($id),
+                'data' =>  $model->getAll(),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {

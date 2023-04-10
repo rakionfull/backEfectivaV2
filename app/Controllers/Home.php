@@ -427,18 +427,18 @@ class Home extends BaseController
                     $result = $model->delete($id);
                     if($result){
                         $this->db->transRollback();
-                        // $data['date_deleted'] = date("Y-m-d H:i:s");
-                        // $data['id_user_deleted'] = $id;
-                        // $data['is_deleted'] = 1;
+                        $data['date_deleted'] = date("Y-m-d H:i:s");
+                        $data['id_user_deleted'] = $id;
+                        $data['is_deleted'] = 1;
                        
-                        // $model->update($id,$data);
-                        // log_acciones(
-                        //     'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
-                        //     ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
+                        $model->update($id,$data);
+                        log_acciones(
+                            'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
+                            ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
 
                         return $this->getResponse(
                             [
-                                'error' =>$result,
+                                'error' => false,
                                 'msg' =>  'Eliminado Correctamente'
                             ]
                         );

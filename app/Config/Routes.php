@@ -47,7 +47,7 @@ $routes->post('/validaCaptcha', 'Login::validaCaptcha');
 $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
 // $routes->post('/register2', 'Register::register');
 // $routes->cli('Task','Task::mensaje');
-
+$routes->get('listEvaluacionRiesgosExtra','EvaluacionRiesgoController::index');
   $routes->get('Task','Task::mensaje');
 // http://localhost:8080/api/
 $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
@@ -437,7 +437,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
   
 
       // CRUD EVALUACION RIESGO
-      $routes->get('listEvaluacionRiesgos/(:num)','EvaluacionRiesgoController::index/$1',['filter' => 'authFilter']);
+      // $routes->get('listEvaluacionRiesgosExtra','EvaluacionRiesgoController::index');
       $routes->get('getListHistorial/(:num)','EvaluacionRiesgoController::getListHistorial/$1',['filter' => 'authFilter']);
       $routes->get('getEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::show/$1',['filter' => 'authFilter']);
       $routes->get('countByValor','EvaluacionRiesgoController::countByValor',['filter' => 'authFilter']);
