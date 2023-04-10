@@ -21,7 +21,7 @@ class Muser extends Model
         'date_modify',
         'date_deleted',
         'id_user_added',
-        'id_user_modify',
+        'id_user_updated',
         'id_user_deleted',
         'is_deleted'
     ];
@@ -111,9 +111,11 @@ class Muser extends Model
     //retorna todos los usuarios
     public function getUsers($data){
         $consulta = "";
-        if($data['estado'] == 'all') {$consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU left join tb_sesiones as TS on TU.id_us=TS.id_us ";}
+   
+        if($data['estado'] == 'all') {$consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU 
+        left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.is_deleted=0 ORDER BY TU.id_us";}
         else { $consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU 
-        left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} ORDER BY TU.id_us LIMIT 1" ; }
+        left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} and TU.is_deleted=0  ORDER BY TU.id_us"; }
 
         $Usuario = $this->db->query($consulta);
         return $Usuario->getResultArray();

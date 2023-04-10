@@ -46,7 +46,7 @@ class MEvaluacionControl extends Model
        
 
 
-        $cabeceras="SELECT caracteristica from caracteristica_control where tipo='submenu' and clasificacion=1 and is_deleted=0;";
+        $cabeceras="SELECT caracteristica from caracteristica_control where tipo='submenu' and estado=1 and clasificacion=1 and is_deleted=0;";
         $query= $this->db->query($cabeceras); 
         $calificacion = $query -> getResultArray();
             //construimos la consulta
@@ -56,19 +56,19 @@ class MEvaluacionControl extends Model
         $parte2= "";
         for ($i=0; $i < count($calificacion) ; $i++) { 
             if($i == count($calificacion) - 1){ 
-                $parte2= $parte2." MAX(CASE when (select caracteristica from caracteristica_control where 
-                clasificacion=1 and id=CC.idOpcion) = '{$calificacion[$i]['caracteristica'] }' THEN CC.caracteristica  ELSE 0 END) as '{$calificacion[$i]['caracteristica'] }' ";
+                $parte2= $parte2." MAX(CASE when (select caracteristica from caracteristica_control where estado=1 and
+                clasificacion=1 and id=CC.idOpcion and is_deleted=0) = '{$calificacion[$i]['caracteristica'] }' THEN CC.caracteristica  ELSE 0 END) as '{$calificacion[$i]['caracteristica'] }' ";
                 
             }else{
-                $parte2= $parte2." MAX(CASE when (select caracteristica from caracteristica_control where 
-                clasificacion=1 and id=CC.idOpcion) = '{$calificacion[$i]['caracteristica'] }' THEN CC.caracteristica ELSE 0 END) as  '{$calificacion[$i]['caracteristica'] }' , ";
+                $parte2= $parte2." MAX(CASE when (select caracteristica from caracteristica_control where estado=1 and
+                clasificacion=1 and id=CC.idOpcion and is_deleted=0) = '{$calificacion[$i]['caracteristica'] }' THEN CC.caracteristica ELSE 0 END) as  '{$calificacion[$i]['caracteristica'] }' , ";
             }
            
           
         }
         
         $parte3=", EC.calificacion as Calificacion FROM detalle_evaluacion_control as DE inner join evaluacion_control2 as EC on
-         DE.IEC = EC.id inner join caracteristica_control as CC on CC.id=DE.ID_CC  where EC.is_deleted=0 GROUP BY EC.id;";
+         DE.IEC = EC.id inner join caracteristica_control as CC on CC.id=DE.ID_CC  where EC.is_deleted=0  GROUP BY EC.id;";
      
 
        // luego 

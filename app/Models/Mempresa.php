@@ -35,7 +35,8 @@ class Mempresa extends Model
         $query = $this->db->query($sql, [
           $data['empresa']
         ]);
-        return  $query->getRow();
+        if( $query->getRow()) return true;
+        else return false;
     }
     //retorna todos los perfiles
     public function getEmpresas(){

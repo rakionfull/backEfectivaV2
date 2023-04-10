@@ -36,14 +36,15 @@ class MValoracionActivo extends Model
             // and valoracion2='{$data['nom_val2']}' 
             // and valoracion3='{$data['nom_val3']}'");
            
-           $query = $this->db->query("call validaValoracionActivo(?,?,?,?,?,?,?)",[
+           $query = $this->db->query("call validaValoracionActivo(?,?,?,?,?,?)",[
             $data['id_aspecto1'],
             $data['id_aspecto2'],
             $data['id_aspecto3'],
-            $data['id_valor_val'],
+           
             $data['nom_val1'],
             $data['nom_val2'],
-            $data['nom_val3']
+            $data['nom_val3'],
+            // $data['id_valor_val'],
            ]);
 
             if( $query->getRow()) return true;

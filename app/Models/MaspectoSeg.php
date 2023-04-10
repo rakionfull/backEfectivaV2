@@ -30,7 +30,7 @@ class MaspectoSeg extends Model
         // $query = $this->db->query("SELECT * FROM aspectos_seguridad 
         // where aspecto='{$data}' where is_deleted=0");
 
-        $sql = "CALL validaAspecto()";
+        $sql = "CALL validaAspecto(?)";
         $query = $this->db->query($sql, [
             $data
         ]);

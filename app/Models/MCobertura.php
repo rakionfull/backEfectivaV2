@@ -78,16 +78,16 @@ class MCobertura extends Model
 
         return $query;
     }
-    public function deleteCobertura($data){
+    // public function deleteCobertura($data){
             
-        //$query=$this->db->query("EXEC eliminar_cobertura @idUserAdd={$data['user']}, @idCobertura={$data[0]['id']}") ;
-        $sql = "CALL eliminar_cobertura(?,?)";
+    //     //$query=$this->db->query("EXEC eliminar_cobertura @idUserAdd={$data['user']}, @idCobertura={$data[0]['id']}") ;
+    //     $sql = "CALL eliminar_cobertura(?,?)";
 
-	    $query = $this->db->query($sql, [
-            $data['user'],
-            $data[0]['id']
-        ]);
+	//     $query = $this->db->query($sql, [
+    //         $data['user'],
+    //         $data[0]['id']
+    //     ]);
 
-        return $query;
-    }
+    //     return $query;
+    // }
 }

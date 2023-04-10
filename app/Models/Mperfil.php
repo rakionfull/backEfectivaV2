@@ -106,15 +106,15 @@ class Mperfil extends Model
     //permisos de usuario segun rol
     public function getPermisos($id){
 
-        $query = $this->db->query("SELECT * from tb_detalle_perfil 
-         where id_perfil={$id} order by id_det_per ASC" );
+        $query = $this->db->query("SELECT * from tb_detalle_perfil as TDP inner join tb_perfiles as TP on TDP.id_perfil=TP.id_perfil
+         where TDP.id_perfil={$id}  and TP.est_perfil=1 order by id_det_per ASC" );
         return $query->getResultArray();
     }
     public function getPermisosByPerfil($data){
 
         $query = $this->db->query("SELECT * from tb_detalle_perfil as TDP inner join tb_perfiles as TP
         on TDP.id_perfil=TP.id_perfil inner join tb_item as TI on TI.id_item = TDP.id where TP.perfil='{$data['perfil'] }' and
-		TDP.tabla='tb_item' and TI.desc_item='{$data['opcion'] }' order by TDP.id_det_per ASC" );
+		TDP.tabla='tb_item' and TI.desc_item='{$data['opcion'] }' and TP.est_perfil=1 order by TDP.id_det_per ASC" );
         return $query->getRow();
     }
     //agregar el detalle de perfil
@@ -175,13 +175,14 @@ class Mperfil extends Model
     }
     public function getItem($data){
         
-        $query = $this->db->query("SELECT * FROM tb_detalle_perfil as DP inner join tb_item as TI on DP.id=TI.id_item where DP.tabla='tb_item' and DP.id_perfil={$data['id_perfil']}" );
+        $query = $this->db->query("SELECT * FROM tb_detalle_perfil as DP 
+        inner join tb_item as TI on DP.id=TI.id_item where DP.tabla='tb_item' and DP.id_perfil={$data['id_perfil']} order by TI.id_op ASC" );
         return $query->getResultArray();
 
     }
     public function getAllItems(){
         
-        $query = $this->db->query("SELECT * FROM tb_item" );
+        $query = $this->db->query("SELECT * FROM tb_item order by id_op ASC" );
         return $query->getResultArray();
 
     }

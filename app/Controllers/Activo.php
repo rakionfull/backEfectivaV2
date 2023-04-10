@@ -1340,7 +1340,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [
                     'error' => true,
@@ -1547,7 +1547,7 @@ class Activo extends BaseController
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
             $data['id_user_deleted'] = null;
-            $model->update($input['id'],$data);
+            $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [
                     'error' => true,

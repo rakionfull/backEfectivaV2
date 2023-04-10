@@ -38,7 +38,7 @@ class Login extends BaseController
             // ],
            
             'password' => [
-                'min_length[6]' => 'La contraseña debe ser mayor a 6 caracteres',
+                'min_length' => 'La contraseña debe ser mayor a 6 caracteres',
                 'validateUser' => 'Credenciales incorrectas',
                 
             ]
@@ -56,55 +56,57 @@ class Login extends BaseController
                 
                    
 
-                    // if($time_actual > $intento -> bloqueo_time){
-                    if($intento -> bloqueo_us != 1){
-                         if (!$this->validateRequest($input, $rules, $errors)) {
-                        
-                
-                            $intento =  $modelsUser -> getIntento($input['username']);
-                            $dato = $intento->intentos_us;
-                            if($intento->intentos_us == 4) $dato = 0;
-                            $modelsUser -> setIntento($input['username'],$dato);
+                   
+                        if($intento -> bloqueo_us != 1){
+                            if (!$this->validateRequest($input, $rules, $errors)) {
+                            
                     
-                            $modelConfigPass = new MconfigPass();
-                
-                            $configuracion = $modelConfigPass -> getConfigPass();
-                
-                            if($intento->intentos_us  >= $configuracion[0]['intentos']){
-                                //si llega al maximo de intentos mandar error y actualizar tb_user con el tiempo para desabilitar
-                                // $modelsUser -> setTimeIntento($input['username']);
-                                $modelsUser -> setTimeIntento($input['username']);
-                                // $error = new  \stdClass;
-                                // $error->password = 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
-                                // 2 min';
-                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se deshabilitará por 
-                                2 min'];
-                                $error = ['password' => 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se deshabilitará. Por favor contactar con su adminsitrador
-                                del sistema'];
-                            }else{
-                                $error = $this->validator->getErrors();
+                                $intento =  $modelsUser -> getIntento($input['username']);
+                                $dato = $intento->intentos_us;
+                                if($intento->intentos_us == 4) $dato = 0;
+                                $modelsUser -> setIntento($input['username'],$dato);
+                        
+                                $modelConfigPass = new MconfigPass();
+                    
+                                $configuracion = $modelConfigPass -> getConfigPass();
+                    
+                                if($intento->intentos_us  >= $configuracion[0]['intentos']){
+                                    //si llega al maximo de intentos mandar error y actualizar tb_user con el tiempo para desabilitar
+                                    // $modelsUser -> setTimeIntento($input['username']);
+                                    $modelsUser -> setTimeIntento($input['username']);
+                                    // $error = new  \stdClass;
+                                    // $error->password = 'Se ha intentato '.$configuracion[0]['intentos'].' veces, el usuario se dabilitará por 
+                                    // 2 min';
+                                    $error = ['password' => 'Se ha intentado '.$configuracion[0]['intentos'].' veces, el usuario se deshabilitará por 
+                                    2 min'];
+                                    $error = ['password' => 'Se ha intentado '.$configuracion[0]['intentos'].' veces, el usuario se deshabilitará. Por favor contactar con su administrador
+                                    del sistema'];
+                                }else{
+                                    $error = $this->validator->getErrors();
+                                }
+                            
+                    
+                                    return $this->getResponse(
+                                        $error, ResponseInterface::HTTP_OK
+                                        // ResponseInterface::HTTP_BAD_REQUEST
+                                    );
+                                
                             }
+                            
+                        return $this->getJWTForUser($input["username"],$input["ip"],$input["terminal"]);
+                        }else{
+                            // $error = new  \stdClass;
+                            $modelsUser -> setIntento($input['username'],0);
                         
-                
-                                return $this->getResponse(
-                                    $error, ResponseInterface::HTTP_OK
-                                    // ResponseInterface::HTTP_BAD_REQUEST
-                                );
-                             
+                            // $error->password = 'El usuario esta dabilitado por 2 min';
+                            $error = ['password' => 'El usuario esta Bloqueado, Contactar con su administrador de sistema'];
+                            return $this->getResponse(
+                                $error, ResponseInterface::HTTP_OK
+                                // ResponseInterface::HTTP_BAD_REQUEST
+                            );
                         }
-                        
-                       return $this->getJWTForUser($input["username"],$input["ip"],$input["terminal"]);
-                    }else{
-                        // $error = new  \stdClass;
-                        $modelsUser -> setIntento($input['username'],0);
                     
-                        // $error->password = 'El usuario esta dabilitado por 2 min';
-                        $error = ['password' => 'El usuario esta Bloqueado, Contactar con su administrador de sistema'];
-                        return $this->getResponse(
-                            $error, ResponseInterface::HTTP_OK
-                            // ResponseInterface::HTTP_BAD_REQUEST
-                        );
-                    }
+                
                 
                         
         
@@ -299,6 +301,8 @@ class Login extends BaseController
                                 'perfil' => $user->perfil,
                                 'id' => $user->id_us,
                                 'escenario' => $escenario,
+                                'sesion' => $configuracion[0]['sesion'],
+                                'tiempo' => $configuracion[0]['inactividad'],
                                 'permisos' => $permisos,
                                 'access_token' => $token,
                                 'is_user_negocio' => $user->negocio,
@@ -311,7 +315,7 @@ class Login extends BaseController
                    
                 }
             }else{
-                $error = ['password' => 'El usuario está dabilitado o no existe'];
+                $error = ['password' => 'El usuario se encuentra no registrado o inactivo'];
                 return $this->getResponse(
                     $error, ResponseInterface::HTTP_OK
                     // ResponseInterface::HTTP_BAD_REQUEST

@@ -31,7 +31,7 @@ class MAplicacionProbabilidad extends Model
         // posicion= '{$data['posicion']}' and escenario='{$data['escenario']}' and is_deleted=0");
 
 
-        $sql = "CALL listar_AplicacionProbabilidad(?,?,?)";
+        $sql = "CALL valida_AplicacionProbabilidad(?,?,?)";
 
         $query = $this->db->query($sql, [
             $data['disenio'],

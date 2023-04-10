@@ -64,13 +64,14 @@ class CategoriasVulnerabilidadController extends BaseController
 
     public function update($id){
         $rules = [
-            'categoria' => 'required|is_unique[categoria_vulnerabilidad.categoria]',
+            // 'categoria' => 'required|is_unique[categoria_vulnerabilidad.categoria]',
+            'categoria' => 'required',
             'estado' => 'required',
         ];
         $errors = [
             'categoria' => [
                 'required' => 'Debe ingresar la categoria de la vulnerabilidad',
-                'is_unique' => 'Esta categoria de vulnerabilidad ya existe en nuestros registros',
+                // 'is_unique' => 'Esta categoria de vulnerabilidad ya existe en nuestros registros',
             ],
             'estado' => [
                 'required' => 'Debe ingresar el estado'

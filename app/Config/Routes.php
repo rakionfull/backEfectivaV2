@@ -437,46 +437,46 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
   
 
       // CRUD EVALUACION RIESGO
-      $routes->get('listEvaluacionRiesgos/(:num)','EvaluacionRiesgoController::index/$1');
-      $routes->get('getListHistorial/(:num)','EvaluacionRiesgoController::getListHistorial/$1');
-      $routes->get('getEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::show/$1');
-      $routes->get('countByValor','EvaluacionRiesgoController::countByValor');
-      $routes->post('addEvaluacionRiesgo','EvaluacionRiesgoController::store');
-      $routes->post('addEvaluacionRiesgoHistorial','EvaluacionRiesgoController::store_historial');
-      $routes->post('updateEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::update/$1');
-      $routes->post('deleteEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::destroy/$1');
-      $routes->post('getValoracionByProbabilidadImpacto','ValoracionRiesgoController::getValoracionByProbabilidadImpacto');
-      $routes->post('getAplicacionProbabilidadByCaracteristica','AplicacionProbabilidadController::getByCaracteristica');
-      $routes->post('getAplicacionImpactoByCaracteristica','AplicacionImpactoController::getByCaracteristica');
-      $routes->post('getProbabilidadByDescription','ProbabilidadRiesgoController::getByDescription');
-      $routes->post('getImpactoByDescription','ImpactoRiesgoController::getByDescription');
-      $routes->get('getEvaluacionRiesgoControlesByEvaluacion/(:num)','EvaluacionRiesgoController::getEvaluacionRiesgoControlesByEvaluacion/$1');
+      $routes->get('listEvaluacionRiesgos/(:num)','EvaluacionRiesgoController::index/$1',['filter' => 'authFilter']);
+      $routes->get('getListHistorial/(:num)','EvaluacionRiesgoController::getListHistorial/$1',['filter' => 'authFilter']);
+      $routes->get('getEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::show/$1',['filter' => 'authFilter']);
+      $routes->get('countByValor','EvaluacionRiesgoController::countByValor',['filter' => 'authFilter']);
+      $routes->post('addEvaluacionRiesgo','EvaluacionRiesgoController::store',['filter' => 'authFilter']);
+      $routes->post('addEvaluacionRiesgoHistorial','EvaluacionRiesgoController::store_historial',['filter' => 'authFilter']);
+      $routes->post('updateEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::update/$1',['filter' => 'authFilter']);
+      $routes->post('deleteEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::destroy/$1',['filter' => 'authFilter']);
+      $routes->post('getValoracionByProbabilidadImpacto','ValoracionRiesgoController::getValoracionByProbabilidadImpacto',['filter' => 'authFilter']);
+      $routes->post('getAplicacionProbabilidadByCaracteristica','AplicacionProbabilidadController::getByCaracteristica',['filter' => 'authFilter']);
+      $routes->post('getAplicacionImpactoByCaracteristica','AplicacionImpactoController::getByCaracteristica',['filter' => 'authFilter']);
+      $routes->post('getProbabilidadByDescription','ProbabilidadRiesgoController::getByDescription',['filter' => 'authFilter']);
+      $routes->post('getImpactoByDescription','ImpactoRiesgoController::getByDescription',['filter' => 'authFilter']);
+      $routes->get('getEvaluacionRiesgoControlesByEvaluacion/(:num)','EvaluacionRiesgoController::getEvaluacionRiesgoControlesByEvaluacion/$1',['filter' => 'authFilter']);
 
 
       //DATOS PARA REGISTRO DE CONTROLES
-      $routes->get('getControlRiesgo','RegistroControlesController::getControlRiesgo');
-      $routes->get('getPlanControl','RegistroControlesController::getPlanControl');
-      $routes->get('getRegistroControles','RegistroControlesController::getRegistroControles');
-      $routes->get('getRegistroControl/(:num)','RegistroControlesController::getRegistroControl/$1');
-      $routes->get('getRegistroDetalleControl/(:num)','RegistroControlesController::getRegistroDetalleControl/$1');
-      $routes->get('LastIdControles','RegistroControlesController::LastIdControles');
-      $routes->get('getCCMenu','RegistroControlesController::getCCMenu');
-      $routes->get('getCCSubMenu','RegistroControlesController::getCCSubMenu');
-      $routes->get('getCCOpciones','RegistroControlesController::getCCOpciones');
-      $routes->get('getCoberturaByActivo','RegistroControlesController::getCoberturaByActivo');
-      $routes->get('getData/(:num)','RegistroControlesController::getData/$1');
-      $routes->post('calificarControl/(:num)','RegistroControlesController::calificarControl/$1');
-      $routes->post('ejecutarEvaluacion','RegistroControlesController::ejecutarEvaluacion');
-      $routes->post('addControles','RegistroControlesController::addControles');
-      $routes->post('updateControles','RegistroControlesController::updateControles');
-      $routes->post('deleteControles','RegistroControlesController::deleteControles');
+      $routes->get('getControlRiesgo','RegistroControlesController::getControlRiesgo',['filter' => 'authFilter']);
+      $routes->get('getPlanControl','RegistroControlesController::getPlanControl',['filter' => 'authFilter']);
+      $routes->get('getRegistroControles','RegistroControlesController::getRegistroControles',['filter' => 'authFilter']);
+      $routes->get('getRegistroControl/(:num)','RegistroControlesController::getRegistroControl/$1',['filter' => 'authFilter']);
+      $routes->get('getRegistroDetalleControl/(:num)','RegistroControlesController::getRegistroDetalleControl/$1',['filter' => 'authFilter']);
+      $routes->get('LastIdControles','RegistroControlesController::LastIdControles',['filter' => 'authFilter']);
+      $routes->get('getCCMenu','RegistroControlesController::getCCMenu',['filter' => 'authFilter']);
+      $routes->get('getCCSubMenu','RegistroControlesController::getCCSubMenu',['filter' => 'authFilter']);
+      $routes->get('getCCOpciones','RegistroControlesController::getCCOpciones',['filter' => 'authFilter']);
+      $routes->get('getCoberturaByActivo','RegistroControlesController::getCoberturaByActivo',['filter' => 'authFilter']);
+      $routes->get('getData/(:num)','RegistroControlesController::getData/$1',['filter' => 'authFilter']);
+      $routes->post('calificarControl/(:num)','RegistroControlesController::calificarControl/$1',['filter' => 'authFilter']);
+      $routes->post('ejecutarEvaluacion','RegistroControlesController::ejecutarEvaluacion',['filter' => 'authFilter']);
+      $routes->post('addControles','RegistroControlesController::addControles',['filter' => 'authFilter']);
+      $routes->post('updateControles','RegistroControlesController::updateControles',['filter' => 'authFilter']);
+      $routes->post('deleteControles','RegistroControlesController::deleteControles',['filter' => 'authFilter']);
 
       //consulta especial para vista de tabla contorles
-      $routes->get('getRegistroControles2','RegistroControlesController::getRegistroControles2');
+      $routes->get('getRegistroControles2','RegistroControlesController::getRegistroControles2',['filter' => 'authFilter']);
 
 
       //adicionales
-      $routes->get('getCaracteristicaOpcion/(:num)','EvaluacionControlController::getCaracteristicaOpcion/$1');
+      $routes->get('getCaracteristicaOpcion/(:num)','EvaluacionControlController::getCaracteristicaOpcion/$1',['filter' => 'authFilter']);
 
       // LLENADO DE COMBOS MODAL ACTIVIDADES
       $routes->post('getUserByActivo', 'Activo::getUserByActivo',['filter' => 'authFilter']);

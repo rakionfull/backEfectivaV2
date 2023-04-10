@@ -35,8 +35,8 @@ class Munidades extends Model
          $sql = "CALL validaUnidad(?,?,?)";
 
          $query = $this->db->query($sql, [
-            $data['idempresa'],
             $data['idarea'],
+            $data['idempresa'],
             $data['unidad']
         ]);
      

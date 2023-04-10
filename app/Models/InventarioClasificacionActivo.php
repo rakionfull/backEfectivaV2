@@ -96,7 +96,7 @@ class InventarioClasificacionActivo extends Model
             if($data['estado'] == '2'){
                 // return $data;
                 //recuperar el correo del usuario?
-                $response = $this->sendMail($result[0]->id,"youkai.miguel@gmail.com");
+                $response = $this->sendMail($result[0]->id,"jbazant@valtx.pe");
                 return $response;
             }
             return true;
@@ -164,7 +164,7 @@ class InventarioClasificacionActivo extends Model
             if($data['estado'] == '2' || $data['estado'] == '3'){
                 // return $data;
                 // send email area seguridad informacion
-                $response = $this->sendMail($id,"youkai.miguel@gmail.com");
+                $response = $this->sendMail($id,"jbazant@valtx.pe");
                 return $response;
             }
             return true;
@@ -183,7 +183,7 @@ class InventarioClasificacionActivo extends Model
                 $email = \Config\Services::email();
                 $email->setTo($mail);
                 $email->setBCC($mail);
-                $email->setFrom('youkai.miguel@gmail.com', 'Inventario Clasificacion Activo registrado');
+                $email->setFrom('jbazant@valtx.pe', 'Inventario Clasificacion Activo registrado');
                 $email->setSubject('Inventario Clasificacion Activo registrado');
                 $email->setMessage(
                    view('mail/register_inventario_clasificacion_activo',[

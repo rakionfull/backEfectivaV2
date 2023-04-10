@@ -104,9 +104,11 @@ class MriesgoPlanAccion extends Model
 
         $sql = "CALL validaPlanAccion(?)";
 
-        $query = $this->db->query($sql, [ $data['plan_accion']  ]);
+        $query = $this->db->query($sql, [ 
+            $data['plan_accion']  
+        ]);
 
-        $query->getRow();
+        
         if( $query->getRow()) return true;
         else return false;
     }

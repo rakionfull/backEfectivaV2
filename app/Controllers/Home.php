@@ -141,22 +141,28 @@ class Home extends BaseController
         $errors = [
             'docident_us' => [
                 'required' => 'Debe ingresar DNI',
-                'is_unique' => 'El campo DNI debe ser único'
+                'is_unique' => 'El campo DNI debe ser único',
+                'min_length' => 'El campo DNI debe tener 8 digitos',
+                'max_length' => 'El campo DNI debe tener 8 digitos'
             ],
             'nombres_us' => [
                 'required' => 'Debe ingresar Nombres',
+                'min_length' => 'El campo nombre debe tener minimo 2 caracteres'
               
             ],
             'apemat_us' => [
-                'required' => 'Debe ingresar Apellido Paterno',
+                'required' => 'Debe ingresar apellido materno',
+                'min_length' => 'El campo nombre debe tener minimo 2 caracteres'
               
             ],
             'apepat_us' => [
-                'required' => 'Debe ingresar Apellido Paterno',
+                'required' => 'Debe ingresar apellido paterno',
+                'min_length' => 'El campo nombre debe tener minimo 2 caracteres'
               
             ],
             'email_us' => [
-                'required' => 'Debe ingresar Correo',
+                'required' => 'Debe ingresar correo',
+                'min_length' => 'El campo nombre debe tener minimo 2 caracteres'
                 // 'is_unique' => 'El campo correo debe ser único'
             ],
             'estado_us' => [
@@ -164,8 +170,9 @@ class Home extends BaseController
                 // 'is_unique' => 'El campo correo debe ser único'
             ],
             'usuario_us' => [
-                'required' => 'Debe ingresar Usuario',
-                'is_unique' => 'El campo usuario debe ser único'
+                'required' => 'Debe ingresar usuario',
+                'is_unique' => 'El campo usuario debe ser único',
+                'min_length' => 'El campo usuario debe tener minimo 5 caracteres'
             ],
             'perfil_us' => [
                 'required' => 'Debe Seleccionar una opcion',
@@ -420,23 +427,28 @@ class Home extends BaseController
                     $result = $model->delete($id);
                     if($result){
                         $this->db->transRollback();
-                        $data['date_deleted'] = date("Y-m-d H:i:s");
-                        $data['id_user_deleted'] = $input['username'];
-                        $data['is_deleted'] = 1;
+                        // $data['date_deleted'] = date("Y-m-d H:i:s");
+                        // $data['id_user_deleted'] = $id;
+                        // $data['is_deleted'] = 1;
                        
-                        $model->update($id,$data);
-                        log_acciones(
-                            'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
-                            ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
+                        // $model->update($id,$data);
+                        // log_acciones(
+                        //     'El usuario '.$input['username'].' ah eliminado al usuario : '.$user->usuario_us
+                        //     ,$input['terminal'],$input['ip'],$input['id'],$id,$input['username']);
 
                         return $this->getResponse(
                             [
-                                'error' => false,
+                                'error' =>$result,
                                 'msg' =>  'Eliminado Correctamente'
                             ]
                         );
                     }
-                   
+                    // return $this->getResponse(
+                    //     [
+                    //         'error' => $result,
+                    //         'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
+                    //     ]
+                    // );
                 } catch (Exception $ex) {
                     return $this->getResponse(
                         [
