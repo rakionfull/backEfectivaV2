@@ -17,6 +17,9 @@ class Munidades extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'idarea',
+        'idempresa',
+        'estado',
         'date_add',
         'date_modify',
         'date_deleted',

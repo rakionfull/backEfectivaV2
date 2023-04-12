@@ -17,6 +17,9 @@ class Mproceso extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'idempresa',
+        'idunidad',
+        'estado',
         'date_add',
         'date_modify',
         'date_deleted',

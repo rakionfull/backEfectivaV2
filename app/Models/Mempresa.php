@@ -85,5 +85,15 @@ class Mempresa extends Model
           ]);
         return $query;
     }
+
+    public function validateEmpresaModify($data){
+      $sql = "call sp_validate_empresa_modify(?,?)";
+      $query = $this->db->query($sql,[
+        $data[0]['id'],
+        $data[0]['empresa']
+      ]);
+      return $query->getResultArray();
+
+    }
    
 }

@@ -17,6 +17,10 @@ class Mmacroprocesos extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'idarea',
+        'idunidad',
+        'estado',
+        'idempresa',
         'date_add',
         'date_modify',
         'date_deleted',
