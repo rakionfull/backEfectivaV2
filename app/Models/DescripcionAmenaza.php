@@ -56,4 +56,13 @@ class DescripcionAmenaza extends Model
         }
         return false;
     }
+    public function validateModify($data){
+        $sql = "call sp_validate_descripcion_amenaza_modify(?,?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['amenaza'],
+            $data['idtipo_amenaza']
+        ]);
+        return $query->getResultArray();
+    }
 }

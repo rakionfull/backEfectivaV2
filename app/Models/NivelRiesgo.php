@@ -81,4 +81,12 @@ class NivelRiesgo extends Model
         return false;
     }
 
+    public function validateModify($data){
+        $sql = "call sp_validate_nivel_riesgo_modify(?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['descripcion']
+        ]);
+        return $query->getResultArray();
+    }
 }

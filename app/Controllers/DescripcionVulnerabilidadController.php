@@ -62,16 +62,38 @@ class DescripcionVulnerabilidadController extends BaseController
     }
 
     public function update($id){
-        $input = $this->getRequestInput($this->request);
-
-        $model = new DescripcionVulnerabilidad();
-        $result = $model->edit($id,$input);
+        try {
+            $input = $this->getRequestInput($this->request);
     
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new DescripcionVulnerabilidad();
+            $input['id'] = $id;
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Descripcion de vulnerabilidad ya registrado'
+                    ]
+                );
+            }
+            $model->edit($id,$input);
+        
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Descripcion de vulnerabilidad actualizada correctamente'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'ex' => $th->getMessage(),
+                    'msg' =>  'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
+
+                ]
+            );
+        }
     }
 
     public function destroy($id){

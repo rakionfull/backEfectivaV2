@@ -172,4 +172,14 @@ class ProbabilidadRiesgo extends Model
         ])->getResultArray();
         return $result;
     }
+
+    public function validateModify($data){
+        $sql = "call sp_validate_probabilidad_riesgo_modify(?,?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['descripcion'],
+            $data['escenario']
+        ]);
+        return $query->getResultArray();
+    }
 }

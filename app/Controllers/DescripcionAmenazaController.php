@@ -52,6 +52,15 @@ class DescripcionAmenazaController extends BaseController
         }
 
         $model = new DescripcionAmenaza();
+        $found = $model->where('amenaza',$input['amenaza'])->where('idtipo_amenaza',$input['idtipo_amenaza'])->where('is_deleted','0')->findAll();
+        if(count($found) > 0){
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'Ya existe este tipo de amenaza'
+                ]
+            );
+        }
         $result = $model->store($input);
         return $this->getResponse(
             [
@@ -61,16 +70,37 @@ class DescripcionAmenazaController extends BaseController
     }
 
     public function update($id){
-        $input = $this->getRequestInput($this->request);
+        try {
+            $input = $this->getRequestInput($this->request);
 
-        $model = new DescripcionAmenaza();
-        $result = $model->edit($id,$input);
-    
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+            $model = new DescripcionAmenaza();
+            $input['id'] = $id;
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Descripcion de Amenaza ya registrada'
+                    ]
+                );
+            }
+            $model->edit($id,$input);
+        
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Descripcion de amenaza modificada correctamente'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
+                ]
+            );
+        }
+        
     }
 
     public function destroy($id){

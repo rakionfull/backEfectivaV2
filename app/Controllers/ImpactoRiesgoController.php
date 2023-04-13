@@ -67,103 +67,115 @@ class ImpactoRiesgoController extends BaseController
         }
     }
     public function store_escenario_1(){
-        $rules = [
-            'descripcion' => 'required',
-            'tipo_regla' => 'required',
-            'tipo_valor' => 'required',
-            'estado' => 'required',
-            'comentario' => 'required'
-        ];
-        $errors = [
-            'descripcion' => [
-                'required' => 'Debe ingresar la descripcion'
-            ],
-            'tipo_regla' => [
-                'required' => 'Debe ingresar el tipo de regla'
-            ],
-            'tipo_valor' => [
-                'required' => 'Debe ingresar el tipo de valor'
-            ],
-            'estado' => [
-                'required' => 'Debe ingresar el estado'
-            ],
-            'comentario' => [
-                'required' => 'Debe ingresar el comentario'
-            ]
-        ];
-
-        $input = $this->getRequestInput($this->request);
-        if (!$this->validateRequest($input, $rules, $errors)) {
-            $error = [
-                'error' => true,
-                'type' => 'error',
-                'datos' => $this->validator->getErrors()
+        try {
+            $rules = [
+                'descripcion' => 'required',
+                'tipo_regla' => 'required',
+                'tipo_valor' => 'required',
+                'estado' => 'required',
+                'comentario' => 'required'
             ];
-            return ($this->getResponse($error,ResponseInterface::HTTP_OK));
-        }
-        $model = new ImpactoRiesgo();
-        $user = new Muser();
-        $userData = $user->getUserbyId($input['id_user']);
-       
-        if($userData->escenario == 2){
-            return $this->getResponse(
-                [
+            $errors = [
+                'descripcion' => [
+                    'required' => 'Debe ingresar la descripcion'
+                ],
+                'tipo_regla' => [
+                    'required' => 'Debe ingresar el tipo de regla'
+                ],
+                'tipo_valor' => [
+                    'required' => 'Debe ingresar el tipo de valor'
+                ],
+                'estado' => [
+                    'required' => 'Debe ingresar el estado'
+                ],
+                'comentario' => [
+                    'required' => 'Debe ingresar el comentario'
+                ]
+            ];
+    
+            $input = $this->getRequestInput($this->request);
+            if (!$this->validateRequest($input, $rules, $errors)) {
+                $error = [
                     'error' => true,
                     'type' => 'error',
-                    'msg' =>  "No se pude ingresar registros a otro escenario distinto"
-                ]
-            );
-        }else{
-            $activesScene1 = $model->getActivesScene1();
-            if(count($activesScene1) > 0){
+                    'datos' => $this->validator->getErrors()
+                ];
+                return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            }
+            $model = new ImpactoRiesgo();
+            $user = new Muser();
+            $userData = $user->getUserbyId($input['id_user']);
+           
+            if($userData->escenario == 2){
                 return $this->getResponse(
                     [
                         'error' => true,
-                        'type' => 'escenario',
-                        'msg' =>  'Para este tipo de escenario ya se tiene una configuracion establecida, por lo que no puede crear otra.'
+                        'type' => 'error',
+                        'msg' =>  "No se pude ingresar registros a otro escenario distinto"
                     ]
                 );
             }else{
-                $split_formula = explode(" ",$input['formula']);
-                $array_formula = array();
-                for ($index = 0; $index < count($split_formula); $index=$index+3) {
-                    array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
-                }
-                for ($i=0; $i < count($array_formula); $i++) { 
-                    for ($j=$i+1; $j < count($array_formula); $j++) { 
-                        if($array_formula[$i] == $array_formula[$j]){
-                            return $this->getResponse(
-                                [
-                                    'error' => true,
-                                    'type' => 'escenario',
-                                    'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
-                                ]
-                            );
+                $activesScene1 = $model->getActivesScene1();
+                if(count($activesScene1) > 0){
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'type' => 'escenario',
+                            'msg' =>  'Para este tipo de escenario ya se tiene una configuracion establecida, por lo que no puede crear otra.'
+                        ]
+                    );
+                }else{
+                    if(isset($input['formula']) && $input['formula'] != ""){
+                        $split_formula = explode(" ",$input['formula']);
+                        $array_formula = array();
+                        for ($index = 0; $index < count($split_formula); $index=$index+3) {
+                            array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+                        }
+                        for ($i=0; $i < count($array_formula); $i++) { 
+                            for ($j=$i+1; $j < count($array_formula); $j++) { 
+                                if($array_formula[$i] == $array_formula[$j]){
+                                    return $this->getResponse(
+                                        [
+                                            'error' => true,
+                                            'type' => 'escenario',
+                                            'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
+                                        ]
+                                    );
+                                }
+                            }
                         }
                     }
+    
+                    $result = $model->store_1($input);
+        
+                    $modelProbabilidad= new ProbabilidadRiesgo();
+                    $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->where('is_deleted','0')->findAll());
+                    $registrosImpacto = count($model->where('estado','1')->where('is_deleted','0')->findAll());
+        
+                    if($registrosProbabilidad == 0 && $registrosImpacto == 0){
+                        $modelProbabilidad->updateScene($input,null);
+                    }else{
+                        $modelProbabilidad->updateScene($input,1);
+                    }
+        
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  $result
+                        ]
+                    );
+    
                 }
-
-                $result = $model->store_1($input);
-    
-                $modelProbabilidad= new ProbabilidadRiesgo();
-                $registrosProbabilidad = count($modelProbabilidad->where('estado','1')->where('is_deleted','0')->findAll());
-                $registrosImpacto = count($model->where('estado','1')->where('is_deleted','0')->findAll());
-    
-                if($registrosProbabilidad == 0 && $registrosImpacto == 0){
-                    $modelProbabilidad->updateScene($input,null);
-                }else{
-                    $modelProbabilidad->updateScene($input,1);
-                }
-    
-                return $this->getResponse(
-                    [
-                        'error' => false,
-                        'msg' =>  $result
-                    ]
-                );
-
             }
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  $th->getMessage()
+                ]
+            );
         }
+       
     }
     public function store_escenario_2(){
         try {
@@ -272,22 +284,33 @@ class ImpactoRiesgoController extends BaseController
             $input = $this->getRequestInput($this->request);
 
             $model = new ImpactoRiesgo();
-
-            $split_formula = explode(" ",$input['formula']);
-            $array_formula = array();
-            for ($index = 0; $index < count($split_formula); $index=$index+3) {
-                array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+            $input['escenario'] = "1";
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Impacto de riesgo ya registrado'
+                    ]
+                );
             }
-            for ($i=0; $i < count($array_formula); $i++) { 
-                for ($j=$i+1; $j < count($array_formula); $j++) { 
-                    if($array_formula[$i] == $array_formula[$j]){
-                        return $this->getResponse(
-                            [
-                                'error' => true,
-                                'type' => 'escenario',
-                                'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
-                            ]
-                        );
+            if(isset($input['formula']) && $input['formula'] != ""){
+                $split_formula = explode(" ",$input['formula']);
+                $array_formula = array();
+                for ($index = 0; $index < count($split_formula); $index=$index+3) {
+                    array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+                }
+                for ($i=0; $i < count($array_formula); $i++) { 
+                    for ($j=$i+1; $j < count($array_formula); $j++) { 
+                        if($array_formula[$i] == $array_formula[$j]){
+                            return $this->getResponse(
+                                [
+                                    'error' => true,
+                                    'type' => 'escenario',
+                                    'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
+                                ]
+                            );
+                        }
                     }
                 }
             }
@@ -324,6 +347,16 @@ class ImpactoRiesgoController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new ImpactoRiesgo();
+            $input['escenario'] = "2";
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Impacto de riesgo ya registrado'
+                    ]
+                );
+            }
             $result = $model->edit_2($input);
 
             $modelProbabilidad= new ProbabilidadRiesgo();
