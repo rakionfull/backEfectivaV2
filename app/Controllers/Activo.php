@@ -1642,29 +1642,21 @@ class Activo extends BaseController
                         ]
                     );
                     if($result){
-                        //$this->db->transRollback();
+                        $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $valor  = $model->update($input[0]['id'],$data);
-                        // if($valor){
-                            // return $this->getResponse(
-                            //     [
-                            //         // 'error' => false,
-                            //         'msg' =>  'Eliminado Correctamente',
-                            //         'dato' => $valor
-                            //     ]
-                            // );
-                        // }else{
-                        //     return $this->getResponse(
-                        //         [
-                        //             'error' => false,
-                        //             'msg' =>  'Error',
-                        //             'dato' => $valor
-                        //         ]
-                        //     );
-                        // }
+                       
+                            return $this->getResponse(
+                                [
+                                    // 'error' => false,
+                                    'msg' =>  'Eliminado Correctamente',
+                                    'dato' => $valor
+                                ]
+                            );
+                     
                        
                     }else{
                         return $this->getResponse(
@@ -3610,26 +3602,26 @@ public function getAlertaByActivo(){
        
 }
 //probando el eliminar
-public function deletePrueba(){
+// public function deletePrueba(){
 
-    try {
-        $model = new Mmacroprocesos();
-            $response = [
-                'data' =>  $model->deleteMacroproceso()
-            ];
-            return $this->respond($response, ResponseInterface::HTTP_OK);
+//     try {
+//         $model = new Mmacroprocesos();
+//             $response = [
+//                 'data' =>  $model->deleteMacroproceso()
+//             ];
+//             return $this->respond($response, ResponseInterface::HTTP_OK);
     
-    } catch (Exception $ex) {
-        return $this->getResponse(
-                [
-                    'error' => $ex->getMessage()." line ".$ex->getLine()." file ".$ex->getFile()
-                ],
-                ResponseInterface::HTTP_OK
-            );
-    }
+//     } catch (Exception $ex) {
+//         return $this->getResponse(
+//                 [
+//                     'error' => $ex->getMessage()." line ".$ex->getLine()." file ".$ex->getFile()
+//                 ],
+//                 ResponseInterface::HTTP_OK
+//             );
+//     }
 
        
-}
+// }
 
 
 }
