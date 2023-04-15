@@ -42,6 +42,24 @@ class Munidades extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateUnidadModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_unidad_modify(?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['unidad'],
+            $data[0]['idempresa'],
+            $data[0]['idarea'],
+           
+            
+        ]);
+        return $query->getResultArray();
+
+    }
     //retorna todas las Unidades
     public function getUnidades($dato){
         if($dato == 0){

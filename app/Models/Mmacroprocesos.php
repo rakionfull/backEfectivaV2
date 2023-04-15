@@ -47,7 +47,25 @@ class Mmacroprocesos extends Model
         if( $query->getRow()) return true;
         else return false;
     }
-    
+    public function validateMacroprocesoModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_macroproceso_modify(?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['macroproceso'],
+            $data[0]['idempresa'],
+            $data[0]['idarea'],
+            $data[0]['idunidad'],
+           
+            
+        ]);
+        return $query->getResultArray();
+
+    }
     //retorna todos MacroProcesos
     public function getMacroproceso($dato){
 
@@ -121,7 +139,7 @@ class Mmacroprocesos extends Model
  
         return $query->getResultArray();
     }
-    public function deleteMacroproceso($valor,$id){
+    public function deleteMacroproceso($valor,$id){ 
         $sql = "CALL eliminar_general(?)";
         // $valor = 'macroproceso';
         $query = $this->db->query($sql, [$valor]);
@@ -179,15 +197,6 @@ class Mmacroprocesos extends Model
 
         //probar
         //SET group_concat_max_len=(1024*1024);
-//         SET @cmd_export=CONCAT("SELECT ",@body," ");
-// PREPARE cmd FROM @cmd_export ;
-// EXECUTE cmd;
-// DEALLOCATE PREPARE cmd;
-    }
 
-//     SET group_concat_max_len=(1024*1024);
-// SET @cmd_export=CONCAT('SELECT ',tabla_hija,'.is_deleted FROM ',tabla_padre,'INNER JOIN ',tabla_hija,' on ',tabla_padre,'.id=',tabla_hija,'.id',tabla_padre,') where ',tabla_padre,'.id=',id_padre);
-// PREPARE cmd FROM @cmd_export ;
-//  EXECUTE @cmd;
-// DEALLOCATE PREPARE @cmd;
+    }
 }

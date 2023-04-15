@@ -354,6 +354,18 @@ class Activo extends BaseController
             $posicionpuestoModel = new MPosicion();
             $procesoModel = new Mproceso();
             $unidadesModel = new Munidades();
+            $found = $model->validateAreaModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Área ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
+
             $model->updateArea($input);
         
             $macroprocesos = $macroprocesoModel->where('idarea',$input[0]['id'])->findAll();
@@ -391,15 +403,15 @@ class Activo extends BaseController
 
             return $this->getResponse(
                 [
-                'msg' => $msg,
-                'error' =>  $error
+                    'msg' =>  'Modificado Correctamente',
+                    // 'error' =>  
                 ]
             );
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
-                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                    'error' => $ex->getMessage(),
+                    //'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
             );
@@ -674,11 +686,22 @@ class Activo extends BaseController
 
       
             $model = new Mvaloractivo();
+            $found = $model->validateValorActivoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Valor de activo ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+             }
             $result = $model->updateValorActivo($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
@@ -882,7 +905,17 @@ class Activo extends BaseController
       
             $model = new Mtipoactivo();
             $categoriaActivoModel = new MCatActivo();
-        
+            $found = $model->validateTipoActivoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Tipo de activo ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+             }
             $result = $model->updateTipoActivo($input);
             $categorias = $categoriaActivoModel->where('idtipo',$input[0]['id'])->findAll();
             if($categorias != null){
@@ -892,7 +925,7 @@ class Activo extends BaseController
             }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
             
@@ -1019,7 +1052,7 @@ class Activo extends BaseController
                 $msg = 'Registrado Correctamente';
                 $error = 1;
             }else{
-                $msg = 'Clasificaicon de Información ya registrada';
+                $msg = 'Clasificaicon de información ya registrada';
                 $error = 0;
             }
             return $this->getResponse(
@@ -1049,11 +1082,22 @@ class Activo extends BaseController
 
       
         $model = new MclasInformacion();
+        $found = $model->validateClasInformacionModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>'Clasificación de información ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+        }
         $result = $model->updateClasInformacion($input);
     
         return $this->getResponse(
             [
-                'msg' =>  true
+                'msg' =>  'Modificado Correctamente'
             ]
         );
         } catch (Exception $ex) {
@@ -1213,10 +1257,21 @@ class Activo extends BaseController
 
         
             $model = new MaspectoSeg();
+            $found = $model->validateAspectoSegModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Aspecto de seguridad ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+             }
             $result = $model->updateAspectoSeg($input);
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
@@ -1371,6 +1426,17 @@ class Activo extends BaseController
         try{
             $input = $this->getRequestInput($this->request);
             $model = new Munidades();
+            $found = $model->validateUnidadModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Unidad ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $model->updateUnidades($input);
             
             $macroprocesoModel = new Mmacroprocesos();
@@ -1396,7 +1462,7 @@ class Activo extends BaseController
             }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
@@ -1600,6 +1666,17 @@ class Activo extends BaseController
 
         
             $model = new Mmacroprocesos();
+            $found = $model->validateMacroprocesoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Macroproceso ya registrado'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateMacroproceso($input);
             $procesoModel = new Mproceso();
             $procesos = $procesoModel->where('idmacroproceso',$input[0]['id'])->findAll();
@@ -1610,7 +1687,7 @@ class Activo extends BaseController
             }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
@@ -1787,17 +1864,28 @@ class Activo extends BaseController
 
         
             $model = new Mproceso();
+            $found = $model->validateProcesoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Proceso ya registrado'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateProceso($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
+                    //'error' => $ex->getMessage(),
                     'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
@@ -2005,11 +2093,22 @@ class Activo extends BaseController
 
             
                 $model = new MPosicion();
+                $found = $model->validatePosicionModify($input);
+
+                if(count($found) > 0){
+                    return $this->getResponse(
+                        [
+                            'error' =>true,
+                            'msg' =>'Posición ya registrado'
+                        ],
+                        ResponseInterface::HTTP_OK
+                    );
+                }
                 $result = $model->updatePosicion($input);
             
                 return $this->getResponse(
                     [
-                        'msg' =>  true
+                        'msg' =>  'Modificado Correctamente'
                     ]
                 );
             } catch (Exception $ex) {
@@ -2164,11 +2263,22 @@ class Activo extends BaseController
 
         
             $model = new MValoracionActivo();
+            $found = $model->validateValActivoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Valoración de activo ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+             }
             $result = $model->updateValActivo($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
@@ -2321,11 +2431,22 @@ class Activo extends BaseController
         try{
             $input = $this->getRequestInput($this->request);
             $model = new MCatActivo();
+            $found = $model->validateCatActivoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Categoría de activo ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+             }
             $result = $model->updateCatActivo($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {
@@ -2480,11 +2601,22 @@ class Activo extends BaseController
 
         
             $model = new MUbicActivo();
+            $found = $model->validateUbiActivoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Ubicacion de activo ya registrado'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateUbiActivo($input);
         
             return $this->getResponse(
                 [
-                    'msg' => true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
         } catch (Exception $ex) {

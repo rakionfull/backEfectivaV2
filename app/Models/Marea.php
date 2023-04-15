@@ -45,7 +45,7 @@ class Marea extends Model
             if( $query->getRow()) return true;
             else return false;
     }
-    public function validaAreaModify($data){
+    public function validateAreaModify($data){
           
         // $query = $this->db->query("SELECT * from empresa  
         // where empresa ='{$data['empresa']}' and is_deleted=0;");
@@ -55,10 +55,10 @@ class Marea extends Model
         
             $data[0]['id'],
             $data[0]['area'],
-            $data[0]['empresa']
+            $data[0]['idempresa']
         ]);
-        if( $query->getRow()) return true;
-        else return false;
+        return $query->getResultArray();
+
     }
         //retorna        
         public function getArea($dato){

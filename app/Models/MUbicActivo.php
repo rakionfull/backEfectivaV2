@@ -27,19 +27,7 @@ class MUbicActivo extends Model
     ];
     public function validarUbiActivo($data){
         
-            // $query = $this->db->query("SELECT * FROM ubicacion_activo 
-            // where 
-            // continente='{$data['idcontinente']}' 
-            // and pais='{$data['idpais']}'
-            // and ciudad='{$data['idciudad']}' 
-            // and direccion='{$data['direccion_ubi']}'
-            // and descripcion='{$data['desc_ubi']}'");
-            // $query = $this->db->query("EXEC validaUbiActivo
-            // @continente= '{$data[0]['idcontinente']}',
-            // @pais= '{$data[0]['idpais']}' ,
-            // @ciudad= '{$data[0]['idciudad']}',
-            // @direccion = '{$data[0]['direccion_ubi']}',
-            // @descripcion= '{$data[0]['desc_ubi']}'");
+          
             $sql = "call validaUbiActivo(?,?,?,?,?)";
 
             $query = $this->db->query($sql, [
@@ -52,6 +40,25 @@ class MUbicActivo extends Model
             ]);
             if( $query->getRow()) return true;
             else return false;
+    }
+    public function validateUbiActivoModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_ubi_activo_modify(?,?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+           
+            $data[0]['idcontinente'],
+            $data[0]['idpais'],
+            $data[0]['idciudad'],
+            $data[0]['direccion_ubi'], 
+            $data[0]['desc_ubi'],
+            $data[0]['id'],
+        ]);
+        return $query->getResultArray();
+
     }
     public function getUbiActivo(){
 

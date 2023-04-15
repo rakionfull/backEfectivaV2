@@ -42,6 +42,21 @@ class MCatActivo extends Model
             if( $query->getRow()) return true;
             else return false;
     }
+    public function validateCatActivoModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_cat_activo_modify(?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['categoria'],
+            $data[0]['idtipo'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getCatActivo(){
 
           //  $query = $this->db->query("EXEC listarcatactivo ");

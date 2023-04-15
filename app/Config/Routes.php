@@ -106,9 +106,6 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->delete('deleteArea', 'Activo::deleteArea',['filter' => 'authFilter']);
 
     $routes->get('getAreasEmpresa/(:num)', 'Activo::getAreasEmpresa/$1',['filter' => 'authFilter']);
-    // $routes->post('addAreaEmpresa', 'Activo::addAreaEmpresa',['filter' => 'authFilter']);
-    // $routes->post('updateAreaEmpresa', 'Activo::updateAreaEmpresa',['filter' => 'authFilter']);
-
 
     //CRUD Valor Activo
     $routes->post('validarValorActivo', 'Activo::validarValorActivo',['filter' => 'authFilter']);

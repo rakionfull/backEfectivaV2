@@ -52,7 +52,25 @@ class MPosicion extends Model
             if( $query->getRow()) return true;
             else return false;
     }
-   
+    public function validatePosicionModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_puesto_modify(?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['posicion'],
+            $data[0]['idempresa'],
+            $data[0]['idarea'],
+            $data[0]['idunidad'],
+           
+            
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getPosicion($dato){
 
         if($dato == 0){

@@ -36,6 +36,21 @@ class Mvaloractivo extends Model
             if( $query->getRow()) return true;
             else return false;
     }
+    public function validateValorActivoModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_valor_activo_modify(?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['valor'],
+              
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getValorActivo(){
 
      

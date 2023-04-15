@@ -51,6 +51,27 @@ class Mproceso extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateProcesoModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_proceso_modify(?,?,?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['proceso'],
+           
+            $data[0]['idempresa'],
+            $data[0]['idarea'],
+            $data[0]['idunidad'],
+            $data[0]['idmacroproceso'],
+           
+            
+        ]);
+        return $query->getResultArray();
+
+    }
     //retorna todos Proceso
     public function getProceso($dato){
         if($dato == 0){

@@ -39,6 +39,21 @@ class Mtipoactivo extends Model
         if( $query->getRow()) return true;
         else return false;
     } 
+    public function validateTipoActivoModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_tipo_activo_modify(?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['tipo'],
+              
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getTipoActivoByActivo(){
         // $query = $this->db->query("EXEC getTipoActivoByActivo");
         $sql = "CALL getTipoActivoByActivo()";

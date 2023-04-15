@@ -27,9 +27,7 @@ class MclasInformacion extends Model
     ];
     public function validarClasInfo($data){
             
-            // $query = $this->db->query("SELECT * FROM clasificacion_informacion 
-            // where clasificacion='{$data}'");
-
+       
            $sql = "CALL validaClasInfo(?)";
 
            $query = $this->db->query($sql, [
@@ -38,6 +36,20 @@ class MclasInformacion extends Model
 
             if( $query->getRow()) return true;
             else return false;
+    }
+    public function validateClasInformacionModify($data){
+          
+        
+        $sql = "CALL sp_validate_clasi_info_modify(?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['clasificacion'],
+          
+        ]);
+        return $query->getResultArray();
+
     }
     public function getClasInformacion(){
 
@@ -53,11 +65,6 @@ class MclasInformacion extends Model
     public function saveClasInformacion($data){       
 
      
-        // $query = $this->db->query("EXEC agregar_clasinfo
-        // @clasificacion = '{$data[0]['clasificacion']}',
-        // @descripcion= '{$data[0]['descripcion']}',
-        // @estado= '{$data[0]['estado']}',
-        // @idUserAdd= '{$data['user']}'");
 
         $sql = "CALL agregar_clasinfo(?,?,?,?)";
 
@@ -72,14 +79,7 @@ class MclasInformacion extends Model
     }
     public function updateClasInformacion($data){  
         
-       
-        //  $query = $this->db->query("EXEC editar_clasinfo
-        //  @idclasi = '{$data[0]['id']}',
-        //  @clasificacion = '{$data[0]['clasificacion']}',
-        //  @descripcion= '{$data[0]['descripcion']}',
-        //  @estado= '{$data[0]['estado']}',
-        //  @idUserAdd= '{$data['user']}'");
-
+      
          $sql = "CALL editar_clasinfo(?,?,?,?,?)";
 
          $query = $this->db->query($sql, [
