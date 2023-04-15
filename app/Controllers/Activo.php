@@ -1631,7 +1631,13 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                    $result = $model->join('procesos',"procesos.idmacroproceso=$input[0]['id']")->where('procesos.is_deleted',1)->delete($input[0]['id']);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  $result
+                        ]
+                    );
                     if($result){
                         $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");

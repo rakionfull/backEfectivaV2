@@ -146,6 +146,15 @@ class EvaluacionRiesgoController extends BaseController
             }
 
             $model = new EvaluacionRiesgo();
+            $found = $model->where('riesgo',$input['riesgo'])->where('idempresa',$input['idempresa'])->where('is_deleted',0)->findAll();
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Evaluación de riesgo ya registrado'
+                    ]
+                );
+            }
             $modelERC = new EvaluacionRiesgosControles();
             $result = $model->store($input);
             if($result){
@@ -191,6 +200,15 @@ class EvaluacionRiesgoController extends BaseController
             $input = $this->getRequestInput($this->request);
     
             $model = new EvaluacionRiesgo();
+            $found = $model->validateModify($id,$input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Evaluación de riesgo ya registrado'
+                    ]
+                );
+            }
             $result = $model->edit($id,$input);
             if($result){
                 $modelERC = new EvaluacionRiesgosControles();

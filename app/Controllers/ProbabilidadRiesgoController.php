@@ -316,7 +316,18 @@ class ProbabilidadRiesgoController extends BaseController
                     }
                 }
             }
-
+            if(intval($input['estado']) == 1){
+                $activesScene1 = $model->getActivesScene1Modfiy($input['id']);
+                if(count($activesScene1) > 0){
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'type' => 'escenario',
+                            'msg' =>  'Para este tipo de escenario ya se tiene una configuracion establecida, por lo que no puede crear otra.'
+                        ]
+                    );
+                }
+            }
             $result = $model->edit_1($input);
            
             $registrosProbabilidad = count($model->where('estado','1')->where('is_deleted','0')->findAll());

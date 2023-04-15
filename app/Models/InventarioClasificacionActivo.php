@@ -271,5 +271,14 @@ class InventarioClasificacionActivo extends Model
         }
     }
 
+    public function validateModify($id,$data){
+        $sql = "call sp_validate_inventario_modify(?,?,?)";
+        $query = $this->db->query($sql,[
+            $id,
+            $data['activo'],
+            $data['idempresa']
+        ]);
+        return $query->getResultArray();
+    }
  
 }

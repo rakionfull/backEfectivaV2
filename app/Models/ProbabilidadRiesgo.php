@@ -154,6 +154,11 @@ class ProbabilidadRiesgo extends Model
         $result = $this->db->query($sql)->getResultArray();
         return $result;
     }
+    public function getActivesScene1Modfiy($id){
+        $sql = "call sp_get_active_escenario_1_modify(?)";
+        $result = $this->db->query($sql,[$id])->getResultArray();
+        return $result;
+    }
     public function validateCombinatoria($data){
         $sql = "call sp_validate_combinatoria_probabilidad(?,?,?,?)";
         $result = $this->db->query($sql,[

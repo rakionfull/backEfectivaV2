@@ -50,6 +50,7 @@ $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
 $routes->get('listEvaluacionRiesgosExtra','EvaluacionRiesgoController::index');
   $routes->get('Task','Task::mensaje');
 // $routes->post('addProbabilidadRiesgo1','ProbabilidadRiesgoController::store_escenario_1');
+// $routes->delete('deleteMacroproceso', 'Activo::deleteMacroproceso',['filter' => 'authFilter']);
 
 // http://localhost:8080/api/
 $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {

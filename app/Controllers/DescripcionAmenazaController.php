@@ -52,12 +52,12 @@ class DescripcionAmenazaController extends BaseController
         }
 
         $model = new DescripcionAmenaza();
-        $found = $model->where('amenaza',$input['amenaza'])->where('idtipo_amenaza',$input['idtipo_amenaza'])->where('is_deleted','0')->findAll();
+        $found = $model->where('amenaza',$input['amenaza'])->where('idtipo_amenaza',$input['idtipo_amenaza'])->where('is_deleted',0)->findAll();
         if(count($found) > 0){
             return $this->getResponse(
                 [
                     'error' => true,
-                    'msg' =>  'Ya existe este tipo de amenaza'
+                    'msg' =>  'Descripción de amenaza ya registrada'
                 ]
             );
         }
