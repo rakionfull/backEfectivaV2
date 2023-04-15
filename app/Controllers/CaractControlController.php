@@ -91,6 +91,17 @@ class CaractControlController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new MCaractControl();
+            $found = $model->validateCaractControlModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Característica  ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateCaractControl($input);
         
             return $this->getResponse(
@@ -125,6 +136,8 @@ class CaractControlController extends BaseController
                     $data['id_user_deleted'] = $input['user'];
                     $data['is_deleted'] = 1;
                     $model->update($input[0]['id_op'],$data);
+                    $model->updateGeneral($input,$data);
+                   // $result = $model->where('idOpcion',1)->update($input[0]['id']);
                     return $this->getResponse(
                         [
                             'error' => false,

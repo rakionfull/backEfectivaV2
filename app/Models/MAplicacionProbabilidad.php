@@ -42,6 +42,21 @@ class MAplicacionProbabilidad extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateApliProbaModify($data){
+          
+       
+        $sql = "CALL sp_validate_apli_proba_modify(?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['disenio'],
+            $data[0]['posicion'],
+            $data[0]['escenario'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getAplicacionProbabilidad($escenario){
         
         //$query = $this->db->query("EXEC listar_AplicacionProbabilidad @escenario='{$escenario}'");

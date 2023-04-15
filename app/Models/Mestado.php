@@ -39,7 +39,18 @@ class Mestado extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateEstadoModify($data){
+      
+        $sql = "CALL sp_validate_estado_modify(?,?)";
 
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['estado'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getEstado(){
 
      

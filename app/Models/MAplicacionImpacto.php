@@ -42,6 +42,21 @@ class MAplicacionImpacto extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateApliImpacModify($data){
+          
+       
+        $sql = "CALL sp_validate_apli_impac_modify(?,?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['disenio'],
+            $data[0]['posicion'],
+            $data[0]['escenario'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getAplicacionImpacto($escenario){
         
         //$query = $this->db->query("EXEC listar_AplicacionImpacto @escenario='{$escenario}'");

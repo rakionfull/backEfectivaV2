@@ -72,11 +72,22 @@ class AplicacionProbabilidadController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new MAplicacionProbabilidad();
+            $found = $model->validateApliProbaModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Aplicación de Probabilidad ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateAplicacionProbabilidad($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado correctamente'
                 ]
             );
             

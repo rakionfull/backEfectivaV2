@@ -2818,11 +2818,22 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
         
             $model = new Mestado();
+            $found = $model->validateEstadoModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Estado ya registrado'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateEstado($input);
         
             return $this->getResponse([
-                'msg' => 'Estado actualizado correctamente',
-                'error' => 1
+                'msg' => 'Modificado correctamente',
+               
             ]);
         
         } catch (Exception $ex) {
@@ -2957,11 +2968,22 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
         
             $model = new Mprioridad();
+            $found = $model->validatePriodidadModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Priodidad ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updatePrioridad($input);
         
             return $this->getResponse([
-                'msg' => 'Prioridad actualizada correctamente',
-                'error' => 1
+                'msg' => 'Modificado correctamente',
+             
             ]);
         
         } catch (Exception $ex) {
@@ -3098,19 +3120,30 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
         
             $model = new Malerta_seguimiento();
+            $found = $model->validateAlertaModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Alerta de Seguimiento ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateAlerta_seguimiento($input);
         
             return $this->getResponse([
-                'msg' => 'Alerta actualizada correctamente',
-                'error' => 1
+                'msg' => 'Modificado correctamente',
+               
             ]);
         
         } catch (Exception $ex) {
             
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
-                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                     'error' => $ex->getMessage(),
+                    //'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ], ResponseInterface::HTTP_OK);
         }
           

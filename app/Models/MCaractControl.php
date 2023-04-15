@@ -39,6 +39,21 @@ class MCaractControl extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateCaractControlModify($data){
+          
+       
+        $sql = "CALL sp_validate_caract_control_modify(?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id_op'],
+            $data[0]['caracteristica'],
+            $data[0]['id'],
+        
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getCaractControl($id,$tipo,$calificacion){
         
         // $query = $this->db->query("EXEC listar_caractControl");
@@ -118,7 +133,6 @@ class MCaractControl extends Model
             $data[0]['condicion'],
             $data[0]['check_tabla'],
             $data[0]['nom_tabla'],
-           
             $data[0]['calificacion'],
             $data[0]['seleccionable'],
             $data['user'],
@@ -128,17 +142,17 @@ class MCaractControl extends Model
 
         return $query;
     }
-    public function deleteCaractControl($data){
-            
-        // $query=$this->db->query("EXEC eliminar_caractControl @idUserAdd={$data['user']}, @idCaractControl={$data[0]['id_op']}") ;
-        $sql = "CALL eliminar_caractControl(?,?)";
+    public function updateGeneral($input,$data){
+        $sql = "CALL update_caractControl_general(?,?)";
 
 	    $query = $this->db->query($sql, [
-
-            $data['user'],
-            $data[0]['id_op']
+            $input[0]['id_op'],
+            $data['id_user_deleted'],
+            
         
         ]);
+
         return $query;
     }
+    
 }

@@ -38,7 +38,19 @@ class Malerta_seguimiento extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateAlertaModify($data){
+          
+       
+        $sql = "CALL sp_validate_alerta_modify(?,?)";
 
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['alerta'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getAlerta_seguimiento(){
 
       
@@ -70,7 +82,7 @@ class Malerta_seguimiento extends Model
             $data['user'],
             $data[0]['id'],
         ]);
-        return $query;
+        return $result;
     }
 
    

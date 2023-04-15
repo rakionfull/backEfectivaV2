@@ -71,11 +71,22 @@ class CoberturaController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new MCobertura();
+            $found = $model->validateCoberturaModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Cobertura ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateCobertura($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
             

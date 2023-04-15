@@ -72,11 +72,22 @@ class AplicacionImpactoController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new MAplicacionImpacto();
+            $found = $model->validateApliImpacModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Aplicación de Impacto ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateAplicacionImpacto($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'msg' =>  'Modificado Correctamente'
                 ]
             );
             

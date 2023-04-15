@@ -38,6 +38,19 @@ class MCobertura extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validateCoberturaModify($data){
+          
+       
+        $sql = "CALL sp_validate_cobertura_modify(?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['cobertura'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getCobertura(){
         
         // $query = $this->db->query("EXEC listar_cobertura");
@@ -78,16 +91,5 @@ class MCobertura extends Model
 
         return $query;
     }
-    // public function deleteCobertura($data){
-            
-    //     //$query=$this->db->query("EXEC eliminar_cobertura @idUserAdd={$data['user']}, @idCobertura={$data[0]['id']}") ;
-    //     $sql = "CALL eliminar_cobertura(?,?)";
-
-	//     $query = $this->db->query($sql, [
-    //         $data['user'],
-    //         $data[0]['id']
-    //     ]);
-
-    //     return $query;
-    // }
+   
 }

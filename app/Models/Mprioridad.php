@@ -37,10 +37,22 @@ class Mprioridad extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validatePriodidadModify($data){
+          
+     
+        $sql = "CALL sp_validate_prioridad_modify(?,?)";
 
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['prioridad'],
+        ]);
+        return $query->getResultArray();
+
+    }
     public function getPrioridad(){
 
-        // $query = $this->db->query("EXEC listar_prioridad");
+       
         $sql = "call listar_prioridad()";
         $query = $this->db->query($sql,[
           
