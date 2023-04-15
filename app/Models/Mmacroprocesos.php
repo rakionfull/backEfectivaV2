@@ -117,6 +117,73 @@ class Mmacroprocesos extends Model
  
         return $query->getResultArray();
     }
-    
+    public function deleteMacroproceso($valor,$id){
+        $sql = "CALL eliminar_general(?)";
+        // $valor = 'macroproceso';
+        $query = $this->db->query($sql, [$valor]);
+        // aqui obtenermos los nombres de las tablas ralacionadas
+        $tablas = $query->getResultArray();
+        $resultado=false;
+        $cont_tablas=0;
+        // $id=20;
+        foreach ($tablas as $key => $value) {
+          
+          // $sql2 = "SELECT {$value['TABLE_NAME']}.is_deleted FROM {$valor} INNER JOIN {$value['TABLE_NAME']} on {$valor}.id={$value['TABLE_NAME']}.id{$valor} where {$valor}.id={$id};";
+           $sql2 = "CALL consulta_eliminar_general(?,?,?)";
+            //$sql = "CALL deleteMacroproceso(?)";
+           // $query2 = $this->db->query($sql2);
 
+            $query2 = $this->db->query($sql2,[
+                $valor,
+                $value['TABLE_NAME'],
+                $id
+            ]);
+            $resultado = $query2->getResultArray();
+            if($resultado){
+                //$resultado = $tablas[4]['TABLE_NAME'];
+                $cont = 0;
+                foreach ($resultado as $key => $value) {
+                    if($value['is_deleted'] == 1){
+                       
+                        $cont++;
+                    }
+
+                 }
+                if($cont == count($resultado)){
+                    $resultado = "esta eliminado el hijo";
+                    $cont_tablas ++ ;
+                }
+            }else{
+                $cont_tablas ++ ;
+            }
+           //entonces si ya paso por todas las tablas
+          
+           
+           
+        }
+        if($cont_tablas == count($tablas)){
+            return true;
+       
+        }else{
+            return false;
+       
+        }
+        
+        // return $resultado;
+       
+        //
+
+        //probar
+        //SET group_concat_max_len=(1024*1024);
+//         SET @cmd_export=CONCAT("SELECT ",@body," ");
+// PREPARE cmd FROM @cmd_export ;
+// EXECUTE cmd;
+// DEALLOCATE PREPARE cmd;
+    }
+
+//     SET group_concat_max_len=(1024*1024);
+// SET @cmd_export=CONCAT('SELECT ',tabla_hija,'.is_deleted FROM ',tabla_padre,'INNER JOIN ',tabla_hija,' on ',tabla_padre,'.id=',tabla_hija,'.id',tabla_padre,') where ',tabla_padre,'.id=',id_padre);
+// PREPARE cmd FROM @cmd_export ;
+//  EXECUTE @cmd;
+// DEALLOCATE PREPARE @cmd;
 }

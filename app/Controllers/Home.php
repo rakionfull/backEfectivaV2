@@ -887,7 +887,7 @@ class Home extends BaseController
             
                 return $this->getResponse(
                     [
-                        'campos' =>  $model->getCamposUser(),
+                        //'campos' =>  $model->getCamposUser(),
                         'datos' =>  $model->getDatosUser(),
                     ]
                 );

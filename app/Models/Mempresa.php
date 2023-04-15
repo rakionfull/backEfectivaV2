@@ -38,6 +38,20 @@ class Mempresa extends Model
         if( $query->getRow()) return true;
         else return false;
     }
+    public function validaEmpresaModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_empresa_modify(?,?)";
+
+        $query = $this->db->query($sql, [
+        
+          $data[0]['id'],
+          $data[0]['empresa'],
+        ]);
+        if( $query->getRow()) return true;
+        else return false;
+    }
     //retorna todos los perfiles
     public function getEmpresas(){
 

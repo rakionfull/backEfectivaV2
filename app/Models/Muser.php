@@ -112,10 +112,11 @@ class Muser extends Model
     public function getUsers($data){
         $consulta = "";
    
-        if($data['estado'] == 'all') {$consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU 
-        left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.is_deleted=0 ORDER BY TU.id_us";}
-        else { $consulta = "SELECT  *,TU.id_us as id FROM tb_users as TU 
-        left join tb_sesiones as TS on TU.id_us=TS.id_us where TU.estado_us={$data['estado']} and TU.is_deleted=0  ORDER BY TU.id_us"; }
+        if($data['estado'] == 'all') {
+            $consulta = "SELECT  *,TU.id_us as id,(select loged from tb_sesiones where id_us=TU.id_us  ORDER BY loged DESC LIMIT 1) as loged FROM tb_users as TU  ORDER BY TU.id_us;";
+        }
+        else { $consulta = "SELECT  *,TU.id_us as id,(select loged from tb_sesiones where id_us=TU.id_us  ORDER BY loged DESC LIMIT 1) as loged FROM tb_users as TU  
+            where TU.estado_us={$data['estado'] } ORDER BY TU.id_us;"; }
 
         $Usuario = $this->db->query($consulta);
         return $Usuario->getResultArray();
@@ -189,7 +190,10 @@ class Muser extends Model
         return $Usuario->getResultArray();
     }
     public function getDatosUser(){
-        $consulta = "SELECT  * FROM tb_users as TU inner join tb_perfiles as TP on TU.perfil_us=TP.id_perfil ";
+        $consulta = "SELECT TU.usuario_us,TU.docident_us,TU.nombres_us, TU.apepat_us,TU.apemat_us,TP.perfil,TU.creacion_us,
+        IF(TU.estado_us=1, 'Activo', 'Inactivo') as estado, IF(bloqueo_us=0, 'Desbloqueado', 'Bloqueado') as bloqueo,
+        (SELECT last_activity FROM tb_sesiones WHERE id_us = TU.id_us ORDER by last_activity DESC LIMIT 1 ) AS ultimo_acceso
+         FROM tb_users as TU inner join tb_perfiles as TP on TU.perfil_us=TP.id_perfil; ";
         $Usuario = $this->db->query($consulta);
         return $Usuario->getResultArray();
     }

@@ -246,6 +246,7 @@ class Login extends BaseController
                     );
                     
                 }else{
+                    $modelSesion->updateLoged($user->id_us);
                     $recordatorio =  false;
                     $fecha_actual = date('Y-m-d');
                     $fecha_creacion = $user->creacion_cl;

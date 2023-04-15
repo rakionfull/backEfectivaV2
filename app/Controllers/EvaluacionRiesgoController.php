@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\EvaluacionRiesgo;
+use App\Models\MriesgoPlanAccion;
 use App\Models\EvaluacionRiesgosControles;
 use App\Models\ImpactoRiesgo;
 use App\Models\MAplicacionImpacto;
@@ -22,11 +23,11 @@ class EvaluacionRiesgoController extends BaseController
 {
     use ResponseTrait;
 
-    public function index(){
+    public function index($id){
         try {
             $model = new EvaluacionRiesgo();
             $response = [
-                'data' =>  $model->getAll(),
+                'data' =>  $model->getAll($id),
             ];
             return $this->respond($response, ResponseInterface::HTTP_OK);
         } catch (Exception $ex) {
@@ -107,7 +108,7 @@ class EvaluacionRiesgoController extends BaseController
                 'valor_impacto' => 'required',
                 // 'impacto' => 'required',
                 'valor' => 'required',
-                'id_control' => 'required',
+                // 'id_control' => 'required',
                 // 'riesgo_controlado_probabilidad' => 'required',
                 // 'riesgo_controlado_impacto' => 'required',
                 // 'riesgo_controlado_valor' => 'required',
@@ -150,16 +151,16 @@ class EvaluacionRiesgoController extends BaseController
             $result = $model->store($input);
             if($result){
                 $id = $model->get_last_id()[0];
-                foreach ($input['controles'] as $control) {
-                    # code...
-                    $data = [
-                        'id_evaluacion_riesgo' => $id,
-                        'id_control' => $control,
-                        'id_user_added' => $input['id_user_added'],
-                        'date_add' => $input['date_add']
-                    ];
-                    $modelERC->store($data);
-                }
+                // foreach ($input['controles'] as $control) {
+                //     # code...
+                //     $data = [
+                //         'id_evaluacion_riesgo' => $id,
+                //         'id_control' => $control,
+                //         'id_user_added' => $input['id_user_added'],
+                //         'date_add' => $input['date_add']
+                //     ];
+                //     $modelERC->store($data);
+                // }
                 return $this->getResponse(
                     [
                         'error' => false,
@@ -397,6 +398,66 @@ class EvaluacionRiesgoController extends BaseController
                 );
         }
     }
+     //agregar los planes de accion
+     public function addPlanAccion(){
+
+        try {
+            $input = $this->getRequestInput($this->request);
+    
+            $model = new MriesgoPlanAccion();
+            $riesgo = new EvaluacionRiesgosControles();
+            $valida =  $model->validaPlanAccion($input[0]);
+            if(!$valida){
+                //registramos el plan de accion
+                $result = $model->savePlanAccion($input);
+                //registramos riesgo con cada control para detectarlo
+                //sacamos todos los riesgos y controles asociados con split
+                $riesgos = explode(",", $input[0]['id_riesgo']);
+                $controles = explode(",", $input[0]['id_control']);
+                //recorremos y agregamos
+                foreach ($riesgos as $key => $value) {
+                    foreach ($controles as $key => $value2) {
+                        $data = [
+                            'id_evaluacion_riesgo' => $value,
+                            'id_control' => $value2,
+                            'id_user_added' => $input['user'],
+                           
+                        ];
+                        $riesgo->store($data);
+                      
+                    }
+                    $result = $this->updateRiesgosControlados($value);
+                }
+                $msg = 'Plan Registrado Correctamente';
+                $error = 1;
+            }else{
+                $result = 0;
+                $msg = 'Plan ya registrado';
+                $error = 0;
+            }
+           
+    
+            return $this->getResponse(
+                [
+                    'id' => $result,   
+                    'msg' =>  $msg,
+                    'error' =>  $error
+                ]
+            );
+        } catch (Exception $ex) {
+            return $this->getResponse(
+                // [
+                //     'error' => $ex->getMessage()." line ".$ex->getLine()." ".$ex->getFile()
+                // ],
+                [
+                    'error' => $ex->getMessage(),
+                    //'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                ],
+                ResponseInterface::HTTP_OK
+            );
+        }
+    }
+    //preguntar tengo que elegir el control mas fuerte?
     public function updateRiesgosControlados($id_riesgo){
         try {
             //code...
@@ -589,7 +650,7 @@ class EvaluacionRiesgoController extends BaseController
         return $riesgo_controlado_impacto;
     }
 
-    public function getRiesgoControladoValor($valorProb = 0,$valorImp = 0,$descripcionProb = "",$descripcionImp = "",$escenario){
+    public function getRiesgoControladoValor($valorProb = 0,$valorImp = 0,$descripcionProb = "",$descripcionImp = "",$escenario = 0){
         if(intval($escenario) == 2){
             $probabilidadModel = new ProbabilidadRiesgo();
             $p1 = $probabilidadModel->getByDescription(['descripcion'=>$descripcionProb])[0];
@@ -725,5 +786,8 @@ class EvaluacionRiesgoController extends BaseController
             return $descripcion;
         }
     }
+
+   
+     
 }
 

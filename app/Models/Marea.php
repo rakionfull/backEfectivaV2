@@ -43,6 +43,21 @@ class Marea extends Model
             if( $query->getRow()) return true;
             else return false;
     }
+    public function validaAreaModify($data){
+          
+        // $query = $this->db->query("SELECT * from empresa  
+        // where empresa ='{$data['empresa']}' and is_deleted=0;");
+        $sql = "CALL sp_validate_area_modify(?,?,?)";
+
+        $query = $this->db->query($sql, [
+        
+            $data[0]['id'],
+            $data[0]['area'],
+            $data[0]['empresa']
+        ]);
+        if( $query->getRow()) return true;
+        else return false;
+    }
         //retorna        
         public function getArea($dato){
 

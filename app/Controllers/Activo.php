@@ -24,6 +24,8 @@ use App\Models\MUbicActivo;
 use App\Models\Mestado;
 use App\Models\Mprioridad;
 use App\Models\Malerta_seguimiento;
+use App\Models\EvaluacionRiesgosControles;
+
 
 
 use App\Models\MriesgoPlanAccion;
@@ -129,11 +131,20 @@ class Activo extends BaseController
 
       
             $model = new Mempresa();
-            $model->updateEmpresa($input);
-        
+          
+            $valida = $model -> validaEmpresaModify($input);
+            if(!$valida){
+                $result = $model->updateEmpresa($input);
+                $msg = 'Modificado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Empresa ya registrada';
+                $error = 0;
+            }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                'msg' => $msg,
+                'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -298,9 +309,19 @@ class Activo extends BaseController
             $model = new Marea();
             $model->updateArea($input);
         
+            $valida = $model -> validaAreaModify($input);
+            if(!$valida){
+                $model->updateArea($input);
+                $msg = 'Modificado Correctamente';
+                $error = 1;
+            }else{
+                $msg = 'Área ya registrada';
+                $error = 0;
+            }
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                'msg' => $msg,
+                'error' =>  $error
                 ]
             );
         } catch (Exception $ex) {
@@ -1509,18 +1530,37 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                    $result = $model->deleteMacroproceso('macroproceso',$input[0]['id']);
                     if($result){
-                        $this->db->transRollback();
+                        //$this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
-                        $model->update($input[0]['id'],$data);
+                        $valor  = $model->update($input[0]['id'],$data);
+                        // if($valor){
+                            // return $this->getResponse(
+                            //     [
+                            //         // 'error' => false,
+                            //         'msg' =>  'Eliminado Correctamente',
+                            //         'dato' => $valor
+                            //     ]
+                            // );
+                        // }else{
+                        //     return $this->getResponse(
+                        //         [
+                        //             'error' => false,
+                        //             'msg' =>  'Error',
+                        //             'dato' => $valor
+                        //         ]
+                        //     );
+                        // }
+                       
+                    }else{
                         return $this->getResponse(
                             [
-                                'error' => false,
-                                'msg' =>  'Eliminado Correctamente'
+                                'error' => true,
+                                'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                             ]
                         );
                     }
@@ -2961,46 +3001,63 @@ public function getActividadByPlan($id_plan)
 
 
 
-public function addPlanAccion(){
+// public function addPlanAccion(){
 
-    try {
-        $input = $this->getRequestInput($this->request);
+//     try {
+//         $input = $this->getRequestInput($this->request);
 
-        $model = new MriesgoPlanAccion();
-    
-        $valida =  $model->validaPlanAccion($input[0]);
-        if(!$valida){
-            $result = $model->savePlanAccion($input);
-
-            $msg = 'Plan Registrado Correctamente';
-            $error = 1;
-        }else{
-            $result = 0;
-            $msg = 'Plan ya registrado';
-            $error = 0;
-        }
+//         $model = new MriesgoPlanAccion();
+//         $riesgo = new EvaluacionRiesgosControles();
+//         $valida =  $model->validaPlanAccion($input[0]);
+//         if(!$valida){
+//             //registramos el plan de accion
+//             $result = $model->savePlanAccion($input);
+//             //registramos riesgo con cada control para detectarlo
+//             //sacamos todos los riesgos y controles asociados con split
+//             $riesgos = explode(",", $input[0]['id_riesgo']);
+//             $controles = explode(",", $input[0]['id_control']);
+//             //recorremos y agregamos
+//             foreach ($riesgos as $key => $value) {
+//                 foreach ($controles as $key => $value2) {
+//                     $data = [
+//                         'id_evaluacion_riesgo' => $value,
+//                         'id_control' => $value2,
+//                         'id_user_added' => $input['user'],
+                       
+//                     ];
+//                     $riesgo->store($data);
+//                 }
+                
+//             }
+//             $msg = 'Plan Registrado Correctamente';
+//             $error = 1;
+//         }else{
+//             $result = 0;
+//             $msg = 'Plan ya registrado';
+//             $error = 0;
+//         }
        
 
-        return $this->getResponse(
-            [
-                'id' => $result,   
-                'msg' =>  $msg,
-                'error' =>  $error
-            ]
-        );
-    } catch (Exception $ex) {
-        return $this->getResponse(
-            // [
-            //     'error' => $ex->getMessage()." line ".$ex->getLine()." ".$ex->getFile()
-            // ],
-            [
-                // 'error' => $ex->getMessage(),
-                'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
-            ],
-            ResponseInterface::HTTP_OK
-        );
-    }
-}
+//         return $this->getResponse(
+//             [
+//                 'id' => $result,   
+//                 'msg' =>  $msg,
+//                 'error' =>  $error
+//             ]
+//         );
+//     } catch (Exception $ex) {
+//         return $this->getResponse(
+//             // [
+//             //     'error' => $ex->getMessage()." line ".$ex->getLine()." ".$ex->getFile()
+//             // ],
+//             [
+//                 // 'error' => $ex->getMessage(),
+//                 'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+//             ],
+//             ResponseInterface::HTTP_OK
+//         );
+//     }
+// }
     
 
 public function updatePlanAccion(){
@@ -3435,6 +3492,27 @@ public function getAlertaByActivo(){
         return $this->getResponse(
                 [
                     'error' => $ex->getMessage(),
+                ],
+                ResponseInterface::HTTP_OK
+            );
+    }
+
+       
+}
+//probando el eliminar
+public function deletePrueba(){
+
+    try {
+        $model = new Mmacroprocesos();
+            $response = [
+                'data' =>  $model->deleteMacroproceso()
+            ];
+            return $this->respond($response, ResponseInterface::HTTP_OK);
+    
+    } catch (Exception $ex) {
+        return $this->getResponse(
+                [
+                    'error' => $ex->getMessage()." line ".$ex->getLine()." file ".$ex->getFile()
                 ],
                 ResponseInterface::HTTP_OK
             );

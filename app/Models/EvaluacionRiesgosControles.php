@@ -29,12 +29,12 @@ class EvaluacionRiesgosControles extends Model
     protected $deletedField  = 'date_deteled';
 
     public function store($data){
-        $sql = "call add_evaluacion_riesgos_controles(?,?,?,?)";
+        $sql = "call add_evaluacion_riesgos_controles(?,?,?)";
         $result = $this->db->query($sql,[
             $data['id_evaluacion_riesgo'],
             $data['id_control'],
             $data['id_user_added'],
-            $data['date_add']
+            // $data['date_add']
         ]);
         if($result){
             return true;

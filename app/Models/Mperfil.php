@@ -176,7 +176,7 @@ class Mperfil extends Model
     public function getItem($data){
         
         $query = $this->db->query("SELECT * FROM tb_detalle_perfil as DP 
-        inner join tb_item as TI on DP.id=TI.id_item where DP.tabla='tb_item' and DP.id_perfil={$data['id_perfil']} order by TI.id_op ASC" );
+        inner join tb_item as TI on DP.id=TI.id_item where DP.tabla='tb_item' and DP.id_perfil={$data['id_perfil']} order by TI.id_op,TI.id_item ASC;" );
         return $query->getResultArray();
 
     }

@@ -49,9 +49,9 @@ class EvaluacionRiesgo extends Model
         'is_deleted'
     ];
 
-    public function getAll(){
-        $sql = "call sp_list_evaluacion_riesgo()" ;
-        $result = $this->db->query($sql)->getResultArray();
+    public function getAll($id){
+        $sql = "call sp_list_evaluacion_riesgo(?)" ;
+        $result = $this->db->query($sql,[$id])->getResultArray();
         return $result;
     }
 

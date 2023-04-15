@@ -43,11 +43,13 @@ $routes->post('/login', 'Login::index');
 $routes->get('/newcaptcha', 'Login::newCaptcha');
 // http://localhost:8080/captcha
 $routes->post('/validaCaptcha', 'Login::validaCaptcha');
+
+$routes->post('/deletePrueba', 'Activo::deletePrueba');
 // http://localhost:8080/register
 $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
 // $routes->post('/register2', 'Register::register');
 // $routes->cli('Task','Task::mensaje');
-$routes->get('listEvaluacionRiesgosExtra','EvaluacionRiesgoController::index');
+//$routes->get('listEvaluacionRiesgosExtra/(:num)','EvaluacionRiesgoController::index/$1');
   $routes->get('Task','Task::mensaje');
 // http://localhost:8080/api/
 $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
@@ -407,7 +409,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
    //    RIESGO PLAN DE ACCIÓN
 
    $routes->get('getPlanAccion', 'Activo::getPlanAccion',['filter' => 'authFilter']);
-   $routes->post('addPlanAccion', 'Activo::addPlanAccion',['filter' => 'authFilter']);
+  $routes->post('addPlanAccion', 'EvaluacionRiesgoController::addPlanAccion',['filter' => 'authFilter']);
    $routes->post('updatePlanAccion', 'Activo::updatePlanAccion',['filter' => 'authFilter']);
    $routes->delete('deletePlanAccion', 'Activo::deletePlanAccion',['filter' => 'authFilter']);
 
@@ -437,7 +439,7 @@ $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
   
 
       // CRUD EVALUACION RIESGO
-      // $routes->get('listEvaluacionRiesgosExtra','EvaluacionRiesgoController::index');
+      $routes->get('listEvaluacionRiesgosExtra/(:num)','EvaluacionRiesgoController::index/$1',['filter' => 'authFilter']);
       $routes->get('getListHistorial/(:num)','EvaluacionRiesgoController::getListHistorial/$1',['filter' => 'authFilter']);
       $routes->get('getEvaluacionRiesgo/(:num)','EvaluacionRiesgoController::show/$1',['filter' => 'authFilter']);
       $routes->get('countByValor','EvaluacionRiesgoController::countByValor',['filter' => 'authFilter']);
