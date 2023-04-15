@@ -72,36 +72,56 @@ class TipoAmenazaController extends BaseController
     }
 
     public function update($id){
-        $rules = [
-            'tipo' => 'required',
-            'estado' => 'required'
-        ];
-        $errors = [
-            'tipo' => [
-                'required' => 'Debe ingresar el tipo'
-            ],
-            'estado' => [
-                'required' => 'Debe ingresar el estado'
-            ]
-        ];
-
-        $input = $this->getRequestInput($this->request);
-        if (!$this->validateRequest($input, $rules, $errors)) {
-            $error = [
-                'error' => true,
-                'msg' => $this->validator->getErrors()
+        try {
+            $rules = [
+                'tipo' => 'required',
+                'estado' => 'required'
             ];
-            return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            $errors = [
+                'tipo' => [
+                    'required' => 'Debe ingresar el tipo'
+                ],
+                'estado' => [
+                    'required' => 'Debe ingresar el estado'
+                ]
+            ];
+    
+            $input = $this->getRequestInput($this->request);
+            if (!$this->validateRequest($input, $rules, $errors)) {
+                $error = [
+                    'error' => true,
+                    'msg' => $this->validator->getErrors()
+                ];
+                return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            }
+    
+            $model = new TipoAmenaza();
+            $input['id'] = $id;
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Tipo de amenaza ya registrado'
+                    ]
+                );
+            }
+            $model->edit($id,$input);
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Tipo de amenaza actualizado correctamente'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
+                ]
+            );
         }
-
-        $model = new TipoAmenaza();
-        $result = $model->edit($id,$input);
-        return $this->getResponse(
-            [
-                'error' => false,
-                'msg' =>  $result
-            ]
-        );
+        
     }
 
     public function destroy($id){

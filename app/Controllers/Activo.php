@@ -128,30 +128,75 @@ class Activo extends BaseController
    
         try {
             $input = $this->getRequestInput($this->request);
-
-      
             $model = new Mempresa();
-          
-            $valida = $model -> validaEmpresaModify($input);
-            if(!$valida){
-                $result = $model->updateEmpresa($input);
-                $msg = 'Modificado Correctamente';
-                $error = 1;
-            }else{
-                $msg = 'Empresa ya registrada';
-                $error = 0;
+            $areaModel = new Marea();
+            $macroprocesoModel = new Mmacroprocesos();
+            $posicionpuestoModel = new MPosicion();
+            $procesoModel = new Mproceso();
+            $unidadesModel = new Munidades();
+            $found = $model->validateEmpresaModify($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Empresa ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
+            $model->updateEmpresa($input);
+            $areas = $areaModel->where('idempresa',$input[0]['id'])->findAll();
+            $macroprocesos = $macroprocesoModel->where('idempresa',$input[0]['id'])->findAll();
+            $posiciones = $posicionpuestoModel->where('idempresa',$input[0]['id'])->findAll();
+            $procesos = $procesoModel->where('idempresa',$input[0]['id'])->findAll();
+            $unidades = $unidadesModel->where('idempresa',$input[0]['id'])->findAll();
+            if(count($areas) > 0){
+                foreach ($areas as $area) {
+                    $areaModel->update($area['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+            if(count($macroprocesos) > 0){
+                foreach ($macroprocesos as $macroproceso) {
+                    $macroprocesoModel->update($macroproceso['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+            if(count($posiciones) > 0){
+                foreach ($posiciones as $posicion) {
+                    $posicionpuestoModel->update($posicion['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+            if(count($procesos) > 0){
+                foreach ($procesos as $proceso) {
+                    $procesoModel->update($proceso['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+            if(count($unidades) > 0){
+                foreach ($unidades as $unidad) {
+                    $unidadesModel->update($unidad['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
             }
             return $this->getResponse(
                 [
-                'msg' => $msg,
-                'error' =>  $error
+                    'error' => false,
+                    'msg' =>  'Empresa modificada correctamente'
                 ]
             );
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    // 'error' => $ex->getMessage(),
-                    'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                    'error' => true,
+                    'msg' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
             );
@@ -304,20 +349,46 @@ class Activo extends BaseController
    
         try {
             $input = $this->getRequestInput($this->request);
-
-      
             $model = new Marea();
+            $macroprocesoModel = new Mmacroprocesos();
+            $posicionpuestoModel = new MPosicion();
+            $procesoModel = new Mproceso();
+            $unidadesModel = new Munidades();
             $model->updateArea($input);
         
-            $valida = $model -> validaAreaModify($input);
-            if(!$valida){
-                $model->updateArea($input);
-                $msg = 'Modificado Correctamente';
-                $error = 1;
-            }else{
-                $msg = 'Área ya registrada';
-                $error = 0;
+            $macroprocesos = $macroprocesoModel->where('idarea',$input[0]['id'])->findAll();
+            $posiciones = $posicionpuestoModel->where('idarea',$input[0]['id'])->findAll();
+            $procesos = $procesoModel->where('idarea',$input[0]['id'])->findAll();
+            $unidades = $unidadesModel->where('idarea',$input[0]['id'])->findAll();
+            if(count($macroprocesos) > 0){
+                foreach ($macroprocesos as $macroproceso) {
+                    $macroprocesoModel->update($macroproceso['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
             }
+            if(count($posiciones) > 0){
+                foreach ($posiciones as $posicion) {
+                    $posicionpuestoModel->update($posicion['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+            if(count($procesos) > 0){
+                foreach ($procesos as $proceso) {
+                    $procesoModel->update($proceso['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+            if(count($unidades) > 0){
+                foreach ($unidades as $unidad) {
+                    $unidadesModel->update($unidad['id'],[
+                        'estado' => $input[0]['estado']
+                    ]);
+                }
+            }
+
             return $this->getResponse(
                 [
                 'msg' => $msg,
@@ -810,8 +881,15 @@ class Activo extends BaseController
 
       
             $model = new Mtipoactivo();
-            $result = $model->updateTipoActivo($input);
+            $categoriaActivoModel = new MCatActivo();
         
+            $result = $model->updateTipoActivo($input);
+            $categorias = $categoriaActivoModel->where('idtipo',$input[0]['id'])->findAll();
+            if($categorias != null){
+                foreach ($categorias as $item) {
+                    $categoriaActivoModel->update($item['id'],['estado' => $input[0]['estado']]);
+                }
+            }
             return $this->getResponse(
                 [
                     'msg' =>  true
@@ -1136,7 +1214,6 @@ class Activo extends BaseController
         
             $model = new MaspectoSeg();
             $result = $model->updateAspectoSeg($input);
-        
             return $this->getResponse(
                 [
                     'msg' =>  true
@@ -1295,7 +1372,28 @@ class Activo extends BaseController
             $input = $this->getRequestInput($this->request);
             $model = new Munidades();
             $model->updateUnidades($input);
-        
+            
+            $macroprocesoModel = new Mmacroprocesos();
+            $posicionpuestoModel = new MPosicion();
+            $procesoModel = new Mproceso();
+            $macroprocesos = $macroprocesoModel->where('idunidad',$input[0]['id'])->findAll();
+            $posiciones = $posicionpuestoModel->where('idunidad',$input[0]['id'])->findAll();
+            $procesos = $procesoModel->where('idunidad',$input[0]['id'])->findAll();
+            if(count($macroprocesos) > 0){
+                foreach ($macroprocesos as $item) {
+                    $macroprocesoModel->update($item['id'],['estado'=>$input[0]['estado']]);
+                }
+            }
+            if(count($posiciones) > 0){
+                foreach ($posiciones as $item) {
+                    $posicionpuestoModel->update($item['id'],['estado'=>$input[0]['estado']]);
+                }
+            }
+            if(count($procesos) > 0){
+                foreach ($procesos as $item) {
+                    $procesoModel->update($item['id'],['estado'=>$input[0]['estado']]);
+                }
+            }
             return $this->getResponse(
                 [
                     'msg' =>  true
@@ -1304,7 +1402,7 @@ class Activo extends BaseController
         } catch (Exception $ex) {
             return $this->getResponse(
                 [
-                    //'error' => $ex->getMessage(),
+                    // 'error' => $ex->getMessage(),
                     'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
                 ],
                 ResponseInterface::HTTP_OK
@@ -1503,7 +1601,13 @@ class Activo extends BaseController
         
             $model = new Mmacroprocesos();
             $result = $model->updateMacroproceso($input);
-        
+            $procesoModel = new Mproceso();
+            $procesos = $procesoModel->where('idmacroproceso',$input[0]['id'])->findAll();
+            if(count($procesos) > 0){
+                foreach ($procesos as $item) {
+                    $procesoModel->update($item['id'],['estado'=>$input[0]['estado']]);
+                }
+            }
             return $this->getResponse(
                 [
                     'msg' =>  true
@@ -1530,7 +1634,13 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->deleteMacroproceso('macroproceso',$input[0]['id']);
+                    $result = $model->join('procesos',"procesos.idmacroproceso=$input[0]['id']")->where('procesos.is_deleted',1)->delete($input[0]['id']);
+                    return $this->getResponse(
+                        [
+                            'error' => false,
+                            'msg' =>  $result
+                        ]
+                    );
                     if($result){
                         //$this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
@@ -3229,8 +3339,8 @@ public function addActividadPlan(){
     } catch (Exception $ex) {
         return $this->getResponse(
             [
-                 'error' => $ex->getMessage(),
-                //'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                //  'error' => $ex->getMessage(),
+                'error' =>'No se pudo agregar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
             ],
             ResponseInterface::HTTP_OK
         );

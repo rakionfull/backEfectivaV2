@@ -51,6 +51,9 @@ $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
 // $routes->cli('Task','Task::mensaje');
 //$routes->get('listEvaluacionRiesgosExtra/(:num)','EvaluacionRiesgoController::index/$1');
   $routes->get('Task','Task::mensaje');
+// $routes->post('addProbabilidadRiesgo1','ProbabilidadRiesgoController::store_escenario_1');
+// $routes->delete('deleteMacroproceso', 'Activo::deleteMacroproceso',['filter' => 'authFilter']);
+
 // http://localhost:8080/api/
 $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('logout/(:num)', 'Login::logout/$1',['filter' => 'authFilter']);

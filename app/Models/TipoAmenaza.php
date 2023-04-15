@@ -69,5 +69,13 @@ class TipoAmenaza extends Model
             return true;
         }
     }
+    public function validateModify($data){
+        $sql = "call sp_validate_tipo_amenaza_modify(?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['tipo']
+        ]);
+        return $query->getResultArray();
+    }
 
 }

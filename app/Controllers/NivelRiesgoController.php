@@ -95,58 +95,80 @@ class NivelRiesgoController extends BaseController
         );
     }
     public function update($id){
-        $rules = [
-            "operador1" => 'required',
-            "valor1" => 'required',
-            "operador2" => 'required',
-            "valor2" => 'required',
-            'descripcion' => 'required',
-            'color' => 'required',
-            'estado' => 'required',
-            'comentario' => 'required'
-        ];
-        $errors = [
-            "operador1" => [
-                'required' => 'Debe ingrear el operador 1'
-            ],
-            "operador2" => [
-                'required' => 'Debe ingrear el operador 2'
-            ],
-            "valor1" => [
-                'required' => 'Debe ingrear el valor 1'
-            ],
-            "valor2" => [
-                'required' => 'Debe ingrear el valor 2'
-            ],
-            "color" => [
-                'required' => 'Debe ingrear el color'
-            ],
-            'descripcion' => [
-                'required' => 'Debe ingresar la descripcion'
-            ],
-            'estado' => [
-                'required' => 'Debe ingresar el estado'
-            ],
-            'comentario' => [
-                'required' => 'Debe ingresar el comentario'
-            ]
-        ];
-
-        $input = $this->getRequestInput($this->request);
-        if (!$this->validateRequest($input, $rules, $errors)) {
-            $error = [
-                'error' => 'validar',
-                'datos' => $this->validator->getErrors()
+        try {
+            $rules = [
+                "operador1" => 'required',
+                "valor1" => 'required',
+                "operador2" => 'required',
+                "valor2" => 'required',
+                'descripcion' => 'required',
+                'color' => 'required',
+                'estado' => 'required',
+                'comentario' => 'required'
             ];
-            return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            $errors = [
+                "operador1" => [
+                    'required' => 'Debe ingrear el operador 1'
+                ],
+                "operador2" => [
+                    'required' => 'Debe ingrear el operador 2'
+                ],
+                "valor1" => [
+                    'required' => 'Debe ingrear el valor 1'
+                ],
+                "valor2" => [
+                    'required' => 'Debe ingrear el valor 2'
+                ],
+                "color" => [
+                    'required' => 'Debe ingrear el color'
+                ],
+                'descripcion' => [
+                    'required' => 'Debe ingresar la descripcion'
+                ],
+                'estado' => [
+                    'required' => 'Debe ingresar el estado'
+                ],
+                'comentario' => [
+                    'required' => 'Debe ingresar el comentario'
+                ]
+            ];
+    
+            $input = $this->getRequestInput($this->request);
+            if (!$this->validateRequest($input, $rules, $errors)) {
+                $error = [
+                    'error' => 'validar',
+                    'datos' => $this->validator->getErrors()
+                ];
+                return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            }
+            $model = new NivelRiesgo();
+            $input['id'] = $id;
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Nivel de riesgo ya registrado'
+                    ]
+                );
+            }
+            $model->edit($id,$input);
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Nivel de riesgo actualizado correctamente'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'e' => $th->getMessage(),
+                    'msg' =>  'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
+                ]
+            );
         }
-        $model = new NivelRiesgo();
-        $result = $model->edit($id,$input);
-        return $this->getResponse(
-            [
-                'msg' =>  $result
-            ]
-        );
+        
     }
 
     public function destroy($id){

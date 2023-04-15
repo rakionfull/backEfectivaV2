@@ -17,6 +17,9 @@ class Munidades extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'idarea',
+        'idempresa',
+        'estado',
         'date_add',
         'date_modify',
         'date_deleted',
@@ -26,11 +29,7 @@ class Munidades extends Model
         'is_deleted'
     ];
     public function validaUnidad($data){
-        
-        // $query = $this->db->query("SELECT * FROM unidades where  
-        // idempresa='{$data['idempresa']}' 
-        // and idarea='{$data['idarea']}' and is_deleted=0 and  
-        // unidad='{$data['unidad']}'");
+   
 
          $sql = "CALL validaUnidad(?,?,?)";
 
@@ -65,15 +64,7 @@ class Munidades extends Model
     }
     
     public function saveUnidades($data){
-       
-
-      
-        // $query=$this->db->query("EXEC agregar_unidad 
-        // @unidad = '{$data[0]['unidad']}',
-        // @empresa= '{$data[0]['idempresa']}',
-        // @area= '{$data[0]['idarea']}',
-        // @estado= '{$data[0]['estado']}',
-        // @idUserAdd= '{$data['user']}'");
+    
         $sql = "CALL agregar_unidad(?,?,?,?,?)";
 
         $query = $this->db->query($sql, [
@@ -87,16 +78,7 @@ class Munidades extends Model
         return $query;
     }
     public function updateUnidades($data){
-              
-       
-        // $query=$this->db->query("EXEC editar_unidad 
-        // @unidad = '{$data[0]['unidad']}',
-        // @empresa= {$data[0]['idempresa']},
-        // @area= {$data[0]['idarea']},
-        // @estado= {$data[0]['estado']},
-        // @idunidad= {$data[0]['id']},
-        // @idUserAdd= {$data['user']}");
-
+  
         $sql = "CALL editar_unidad(?,?,?,?,?,?)";
 
        $query = $this->db->query($sql, [
@@ -109,15 +91,7 @@ class Munidades extends Model
        ]);
         return $query;
     }
-    /*
-    public function getEmpresaAreaUnidades(){
-
-        $query = $this->db->query("SELECT U.id,U.unidad,E.empresa,A.area,U.estado
-        from unidades as U inner join empresa as E on U.idempresa = e.id
-						   inner join area as A on U.idarea = A.id");
-        return $query->getResultArray();
-    }
-    */
+   
     public function getUnidadByActivo($data){
 
     

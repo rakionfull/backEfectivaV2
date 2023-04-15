@@ -56,4 +56,13 @@ class CategoriasVulnerabilidad extends Model
         }
         return false;
     }
+
+    public function validateModify($data){
+        $sql = "call sp_validate_categoria_vulnerabilidad_modify(?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['categoria']
+        ]);
+        return $query->getResultArray();
+    }
 }

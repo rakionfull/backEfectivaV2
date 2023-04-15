@@ -63,39 +63,60 @@ class CategoriasVulnerabilidadController extends BaseController
     }
 
     public function update($id){
-        $rules = [
-            // 'categoria' => 'required|is_unique[categoria_vulnerabilidad.categoria]',
-            'categoria' => 'required',
-            'estado' => 'required',
-        ];
-        $errors = [
-            'categoria' => [
-                'required' => 'Debe ingresar la categoria de la vulnerabilidad',
-                // 'is_unique' => 'Esta categoria de vulnerabilidad ya existe en nuestros registros',
-            ],
-            'estado' => [
-                'required' => 'Debe ingresar el estado'
-            ]
-        ];
-
-        $input = $this->getRequestInput($this->request);
-        if (!$this->validateRequest($input, $rules, $errors)) {
-            $error = [
-                'error' => true,
-                'msg' => $this->validator->getErrors()
+        try {
+            $rules = [
+                // 'categoria' => 'required|is_unique[categoria_vulnerabilidad.categoria]',
+                'categoria' => 'required',
+                'estado' => 'required',
             ];
-            return ($this->getResponse($error,ResponseInterface::HTTP_OK));
-        }
+            $errors = [
+                'categoria' => [
+                    'required' => 'Debe ingresar la categoria de la vulnerabilidad',
+                    // 'is_unique' => 'Esta categoria de vulnerabilidad ya existe en nuestros registros',
+                ],
+                'estado' => [
+                    'required' => 'Debe ingresar el estado'
+                ]
+            ];
+    
+            $input = $this->getRequestInput($this->request);
+            if (!$this->validateRequest($input, $rules, $errors)) {
+                $error = [
+                    'error' => true,
+                    'msg' => $this->validator->getErrors()
+                ];
+                return ($this->getResponse($error,ResponseInterface::HTTP_OK));
+            }
+    
+            $model = new CategoriasVulnerabilidad();
+            $input['id'] = $id;
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Categoria de Vulnerabilidad ya registrado'
+                    ]
+                );
+            }
+            $model->edit($id,$input);
+            
+            return $this->getResponse(
+                [
+                    'error' => false,
+                    'msg' =>  'Categoría de la vulnerabilidad editada correctamente'
+                ]
+            );
+        } catch (\Throwable $th) {
+            return $this->getResponse(
+                [
+                    'error' => true,
+                    'msg' =>  'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema.'
 
-        $model = new CategoriasVulnerabilidad();
-        $result = $model->edit($id,$input);
+                ]
+            );
+        }
         
-        return $this->getResponse(
-            [
-                'error' => false,
-                'msg' =>  $result
-            ]
-        );
     }
 
     public function destroy($id){

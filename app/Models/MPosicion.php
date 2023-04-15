@@ -17,6 +17,10 @@ class MPosicion extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'idarea',
+        'idunidad',
+        'idempresa',
+        'estado',
         'date_add',
         'date_modify',
         'date_deleted',

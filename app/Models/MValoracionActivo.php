@@ -17,6 +17,10 @@ class MValoracionActivo extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'estado',
+        'idaspecto1',
+        'idaspecto2',
+        'idaspecto3',
         'date_add',
         'date_modify',
         'date_deleted',

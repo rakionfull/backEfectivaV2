@@ -68,4 +68,14 @@ class DescripcionVulnerabilidad extends Model
             return true;
         }
     }
+
+    public function validateModify($data){
+        $sql = "call sp_validate_descripcion_vulnerabilidad_modify(?,?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['vulnerabilidad'],
+            $data['idcategoria']
+        ]);
+        return $query->getResultArray();
+    }
 }

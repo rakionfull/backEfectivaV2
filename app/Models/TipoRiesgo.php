@@ -58,5 +58,14 @@ class TipoRiesgo extends Model
         }
         return false;
     }
+
+    public function validateModify($data){
+        $sql = "call sp_validate_tipo_riesgo_modify(?,?)";
+        $query = $this->db->query($sql,[
+            $data['id'],
+            $data['tipo_riesgo']
+        ]);
+        return $query->getResultArray();
+    }
     
 }

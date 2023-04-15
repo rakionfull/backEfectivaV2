@@ -17,6 +17,8 @@ class Marea extends Model
     protected $deletedField  = 'date_deleted';
     protected $allowedFields    = [
         'id',
+        'estado',
+        'idempresa',
         'date_add',
         'date_modify',
         'date_deleted',

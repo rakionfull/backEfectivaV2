@@ -89,6 +89,15 @@ class TipoRiesgosController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new TipoRiesgo();
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Tipo de riesgo ya registrado'
+                    ]
+                );
+            }
             $model->edit($input);
             return $this->getResponse(
                 [

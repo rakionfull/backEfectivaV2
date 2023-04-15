@@ -216,6 +216,15 @@ class InventarioClasificacionActivoController extends BaseController
             }
 
             $model = new InventarioClasificacionActivo();
+            $found = $model->where('activo',$input['activo'])->where('idempresa',$input['idempresa'])->where('is_deleted',0)->findAll();
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Inventario de clasificación y activo ya registrado'
+                    ]
+                );
+            }
             $result = $model->store($input);
             if($result){
                 return $this->getResponse(
@@ -251,6 +260,15 @@ class InventarioClasificacionActivoController extends BaseController
     
             $model = new InventarioClasificacionActivo();
             $modelEvaluarionRiesgo = new EvaluacionRiesgo();
+            $found = $model->validateModify($id,$input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Inventario y clasificación de activo ya registrado'
+                    ]
+                );
+            }
             $ica = $model->find($id);
             if($ica['estado'] != $input['estado']){
                 $input['id_user_added'] = $input['id_user_updated'];

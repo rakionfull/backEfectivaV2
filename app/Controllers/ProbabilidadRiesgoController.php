@@ -137,21 +137,23 @@ class ProbabilidadRiesgoController extends BaseController
                     ]
                 );
             }else{
-                $split_formula = explode(" ",$input['formula']);
-                $array_formula = array();
-                for ($index = 0; $index < count($split_formula); $index=$index+3) {
-                    array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
-                }
-                for ($i=0; $i < count($array_formula); $i++) { 
-                    for ($j=$i+1; $j < count($array_formula); $j++) { 
-                        if($array_formula[$i] == $array_formula[$j]){
-                            return $this->getResponse(
-                                [
-                                    'error' => true,
-                                    'type' => 'escenario',
-                                    'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
-                                ]
-                            );
+                if(isset($input['formula']) && $input['formula'] != ""){
+                    $split_formula = explode(" ",$input['formula']);
+                    $array_formula = array();
+                    for ($index = 0; $index < count($split_formula); $index=$index+3) {
+                        array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+                    }
+                    for ($i=0; $i < count($array_formula); $i++) { 
+                        for ($j=$i+1; $j < count($array_formula); $j++) { 
+                            if($array_formula[$i] == $array_formula[$j]){
+                                return $this->getResponse(
+                                    [
+                                        'error' => true,
+                                        'type' => 'escenario',
+                                        'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
+                                    ]
+                                );
+                            }
                         }
                     }
                 }
@@ -283,28 +285,49 @@ class ProbabilidadRiesgoController extends BaseController
     public function edit_escenario_1(){
         try {
             $input = $this->getRequestInput($this->request);
-
             $model = new ProbabilidadRiesgo();
-
-            $split_formula = explode(" ",$input['formula']);
-            $array_formula = array();
-            for ($index = 0; $index < count($split_formula); $index=$index+3) {
-                array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+            $input['escenario'] = "1";
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Probabilidad de riesgo ya registrado'
+                    ]
+                );
             }
-            for ($i=0; $i < count($array_formula); $i++) { 
-                for ($j=$i+1; $j < count($array_formula); $j++) { 
-                    if($array_formula[$i] == $array_formula[$j]){
-                        return $this->getResponse(
-                            [
-                                'error' => true,
-                                'type' => 'escenario',
-                                'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
-                            ]
-                        );
+            if(isset($input['formula']) && $input['formula'] != ""){
+                $split_formula = explode(" ",$input['formula']);
+                $array_formula = array();
+                for ($index = 0; $index < count($split_formula); $index=$index+3) {
+                    array_push($array_formula,[$split_formula[$index].$split_formula[$index+1]]);
+                }
+                for ($i=0; $i < count($array_formula); $i++) { 
+                    for ($j=$i+1; $j < count($array_formula); $j++) { 
+                        if($array_formula[$i] == $array_formula[$j]){
+                            return $this->getResponse(
+                                [
+                                    'error' => true,
+                                    'type' => 'escenario',
+                                    'msg' =>  'No puede ingresar una fórmula con combinatoria repetida'
+                                ]
+                            );
+                        }
                     }
                 }
             }
-
+            if(intval($input['estado']) == 1){
+                $activesScene1 = $model->getActivesScene1Modfiy($input['id']);
+                if(count($activesScene1) > 0){
+                    return $this->getResponse(
+                        [
+                            'error' => true,
+                            'type' => 'escenario',
+                            'msg' =>  'Para este tipo de escenario ya se tiene una configuracion establecida, por lo que no puede crear otra.'
+                        ]
+                    );
+                }
+            }
             $result = $model->edit_1($input);
            
             $registrosProbabilidad = count($model->where('estado','1')->where('is_deleted','0')->findAll());
@@ -339,6 +362,16 @@ class ProbabilidadRiesgoController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new ProbabilidadRiesgo();
+            $input['escenario'] = "2";
+            $found = $model->validateModify($input);
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' => true,
+                        'msg' =>  'Probabilidad de riesgo ya registrado'
+                    ]
+                );
+            }
             $result = $model->edit_2($input);
 
             $registrosProbabilidad = count($model->where('estado','1')->where('is_deleted','0')->findAll());
