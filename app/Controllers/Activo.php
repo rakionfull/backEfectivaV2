@@ -214,20 +214,21 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                   // $result = $model->delete($input[0]['id']);
+                   $result = $model->deleteEmpresa('empresa',$input[0]['id']);
                     if($result){
-                        $this->db->transRollback();
+                        // $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
-                        return $this->getResponse(
-                            [
-                                'error' => false,
-                                'msg' =>  'Eliminado Correctamente'
-                            ]
-                        );
+                        // return $this->getResponse(
+                        //     [
+                        //         'error' => $input[0]['id'],
+                        //         'msg' =>  'Eliminado Correctamente'
+                        //     ]
+                        // );
                     }
                    
                 } catch (Exception $ex) {
@@ -248,7 +249,7 @@ class Activo extends BaseController
                 );
             }
         
-            
+            $this->db->transCommit();
         } catch (Exception $ex) {
             $data['is_deleted'] = 0;
             $data['date_deleted'] = null;
@@ -429,20 +430,21 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                    //$result = $model->delete($input[0]['id']);
+                    $result = $model->deleteArea('area',$input[0]['id']);
                     if($result){
-                        $this->db->transRollback();
+                        // $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
-                        return $this->getResponse(
-                            [
-                                'error' => false,
-                                'msg' =>  'Eliminado Correctamente'
-                            ]
-                        );
+                        // return $this->getResponse(
+                        //     [
+                        //         'error' => false,
+                        //         'msg' =>  'Eliminado Correctamente'
+                        //     ]
+                        // );
                     }
                    
                 } catch (Exception $ex) {
@@ -454,30 +456,7 @@ class Activo extends BaseController
                     );
                 }
                 
-                // if($model->delete($input['id'])){
-                //     $this->db->transRollback();
-                //     $data['date_deleted'] = date("Y-m-d H:i:s");
-                //     $data['id_user_deleted'] = $input['user'];
-                //     $data['is_deleted'] = 1;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => false,
-                //             'msg' =>  'Eliminado Correctamente'
-                //         ]
-                //     );
-                // }else{
-                //     $data['is_deleted'] = 0;
-                //     $data['date_deleted'] = null;
-                //     $data['id_user_deleted'] = null;
-                //     $model->update($input['id'],$data);
-                //     return $this->getResponse(
-                //         [
-                //             'error' => true,
-                //             'msg' =>  'No se pudo eliminar'
-                //         ]
-                //     );
-                // }
+              
             }else{
                 return $this->getResponse(
                     [
@@ -1442,9 +1421,9 @@ class Activo extends BaseController
             $macroprocesoModel = new Mmacroprocesos();
             $posicionpuestoModel = new MPosicion();
             $procesoModel = new Mproceso();
-            $macroprocesos = $macroprocesoModel->where('idunidad',$input[0]['id'])->findAll();
-            $posiciones = $posicionpuestoModel->where('idunidad',$input[0]['id'])->findAll();
-            $procesos = $procesoModel->where('idunidad',$input[0]['id'])->findAll();
+            $macroprocesos = $macroprocesoModel->where('idunidades',$input[0]['id'])->findAll();
+            $posiciones = $posicionpuestoModel->where('idunidades',$input[0]['id'])->findAll();
+            $procesos = $procesoModel->where('idunidades',$input[0]['id'])->findAll();
             if(count($macroprocesos) > 0){
                 foreach ($macroprocesos as $item) {
                     $macroprocesoModel->update($item['id'],['estado'=>$input[0]['estado']]);
@@ -1487,26 +1466,28 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                    // $result = $model->delete($input[0]['id']);
+                    $result = $model->deleteUnidad('unidades',$input[0]['id']);
                     if($result){
-                        $this->db->transRollback();
+                        // $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
-                        return $this->getResponse(
-                            [
-                                'error' => false,
-                                'msg' =>  'Eliminado Correctamente'
-                            ]
-                        );
+                        // return $this->getResponse(
+                        //     [
+                        //         'error' => false,
+                        //         'msg' =>  'Eliminado Correctamente'
+                        //     ]
+                        // );
                     }
                    
                 } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
+                            'error' => $ex->getMessage(),
                             'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
@@ -1515,6 +1496,7 @@ class Activo extends BaseController
                 return $this->getResponse(
                     [
                         'error' => true,
+                        'error' => $ex->getMessage(),
                         'msg' =>  'No existen registros'
                     ]
                 );
@@ -1711,28 +1693,29 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->join('procesos',"procesos.idmacroproceso=$input[0]['id']")->where('procesos.is_deleted',1)->delete($input[0]['id']);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  $result
-                        ]
-                    );
+                    //$result = $model->join('procesos',"procesos.idmacroproceso=$input[0]['id']")->where('procesos.is_deleted',1)->delete($input[0]['id']);
+                    $result  = $model->deleteMacroproceso('macroproceso',$input[0]['id']);
+                    // return $this->getResponse(
+                    //     [
+                    //         'error' => false,
+                    //         'msg' =>  $result
+                    //     ]
+                    // );
                     if($result){
-                        $this->db->transRollback();
+                        //$this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $valor  = $model->update($input[0]['id'],$data);
                        
-                            return $this->getResponse(
-                                [
-                                    // 'error' => false,
-                                    'msg' =>  'Eliminado Correctamente',
-                                    'dato' => $valor
-                                ]
-                            );
+                            // return $this->getResponse(
+                            //     [
+                            //         // 'error' => false,
+                            //         'msg' =>  'Eliminado Correctamente',
+                            //         'dato' => $valor
+                            //     ]
+                            // );
                      
                        
                     }else{
@@ -1769,7 +1752,8 @@ class Activo extends BaseController
             $model->update($input[0]['id'],$data);
             return $this->getResponse(
                 [
-                    'error' => true,
+                    // 'error' => true,
+                    'error' =>$ex->getMessage(),
                     'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
@@ -1903,20 +1887,21 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                    $result = $model->deleteProceso('proceso',$input[0]['id']);
+                   // $result = $model->delete($input[0]['id']);
                     if($result){
-                        $this->db->transRollback();
+                        //$this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
-                        return $this->getResponse(
-                            [
-                                'error' => false,
-                                'msg' =>  'Eliminado Correctamente'
-                            ]
-                        );
+                        // return $this->getResponse(
+                        //     [
+                        //         'error' => false,
+                        //         'msg' =>  'Eliminado Correctamente'
+                        //     ]
+                        // );
                     }
                    
                 } catch (Exception $ex) {
@@ -2131,26 +2116,28 @@ class Activo extends BaseController
         try{
             if($found){
                 try {
-                    $result = $model->delete($input[0]['id']);
+                    // $result = $model->delete($input[0]['id']);
+                    $result = $model->deletePosicion('posicion_puesto',$input[0]['id']);
                     if($result){
-                        $this->db->transRollback();
+                        // $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");
                         $data['id_user_deleted'] = $input['user'];
                         $data['is_deleted'] = 1;
                        
                         $model->update($input[0]['id'],$data);
-                        return $this->getResponse(
-                            [
-                                'error' => false,
-                                'msg' =>  'Eliminado Correctamente'
-                            ]
-                        );
+                        // return $this->getResponse(
+                        //     [
+                        //         'error' => false,
+                        //         'msg' =>  'Eliminado Correctamente'
+                        //     ]
+                        // );
                     }
                    
                 } catch (Exception $ex) {
                     return $this->getResponse(
                         [
                             'error' => true,
+                            
                             'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );
@@ -2174,6 +2161,7 @@ class Activo extends BaseController
             return $this->getResponse(
                 [
                     'error' => true,
+                    
                     'msg' => 'No se puede eliminar el registro porque esta siendo usado en algún proceso.',
                 ]
             );
@@ -3345,8 +3333,8 @@ public function updatePlanAccion(){
         
         return $this->getResponse(
             [
-                // 'error' => $ex->getMessage(),
-                'error' =>'Hola No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
+                 //'error' => $ex->getMessage(),
+                'error' =>'No se pudo editar, intente de nuevo. Si el problema persiste, contacte con el administrador del sistema',
             ]
         , ResponseInterface::HTTP_OK);
     }

@@ -150,10 +150,8 @@ class Mmacroprocesos extends Model
         // $id=20;
         foreach ($tablas as $key => $value) {
           
-          // $sql2 = "SELECT {$value['TABLE_NAME']}.is_deleted FROM {$valor} INNER JOIN {$value['TABLE_NAME']} on {$valor}.id={$value['TABLE_NAME']}.id{$valor} where {$valor}.id={$id};";
-           $sql2 = "CALL consulta_eliminar_general(?,?,?)";
-            //$sql = "CALL deleteMacroproceso(?)";
-           // $query2 = $this->db->query($sql2);
+            $sql2 = "CALL consulta_eliminar_general(?,?,?)";
+          
 
             $query2 = $this->db->query($sql2,[
                 $valor,
@@ -162,7 +160,7 @@ class Mmacroprocesos extends Model
             ]);
             $resultado = $query2->getResultArray();
             if($resultado){
-                //$resultado = $tablas[4]['TABLE_NAME'];
+               
                 $cont = 0;
                 foreach ($resultado as $key => $value) {
                     if($value['is_deleted'] == 1){
@@ -172,15 +170,13 @@ class Mmacroprocesos extends Model
 
                  }
                 if($cont == count($resultado)){
-                    $resultado = "esta eliminado el hijo";
+               
                     $cont_tablas ++ ;
                 }
             }else{
                 $cont_tablas ++ ;
             }
-           //entonces si ya paso por todas las tablas
-          
-           
+         
            
         }
         if($cont_tablas == count($tablas)){
@@ -190,13 +186,6 @@ class Mmacroprocesos extends Model
             return false;
        
         }
-        
-        // return $resultado;
-       
-        //
-
-        //probar
-        //SET group_concat_max_len=(1024*1024);
 
     }
 }
