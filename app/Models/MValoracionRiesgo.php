@@ -31,9 +31,7 @@ class MValoracionRiesgo extends Model
     public function validaValoracionRiesgo($data){
         
       
-      
-        // $query = $this->db->query("SELECT *  FROM valoracion_riesgo where 
-        // idProbabilidad={$data['probabilidad']} and IdImpacto={$data['impacto']} and is_deleted=0");
+    
 
         $sql = "call valida_ValoracionRiesgo(?,?)";
 
@@ -45,6 +43,18 @@ class MValoracionRiesgo extends Model
 
         if( $query->getRow()) return true;
         else return false;
+    }
+    public function validateValoracionRiesgo($data){
+        
+        $sql = "call sp_validate_valoracion_riesgo_modify(?,?,?)";
+
+        $query=$this->db->query($sql,[
+            $data[0]['probabilidad'],
+            $data[0]['impacto'],
+            $data[0]['id'],
+        ]);
+
+        return $query->getResultArray();
     }
     public function getValoracionRiesgo(){
         

@@ -402,14 +402,18 @@ class ProbabilidadRiesgoController extends BaseController
     public function destroy($id){
         $input = $this->getRequestInput($this->request);
         $model = new ProbabilidadRiesgo();
-        $model->find($id);
+        $found=$model->find($id);
         $this->db->transBegin();
         try {
-            if($model){
-                if($model->delete($id)){
-                    $this->db->transRollback();
+            if($found){
+                $result = $model->deleteProbabilidadRiesgo('probabilidad_riesgo',$id);
+                //if($model->delete($id)){
+                if($result){
+                    // $this->db->transRollback();
                     $input['estado'] = 2;
                     $input['is_deleted'] = 1;
+                   
+
                     $model->update($id,$input);
 
                     // $result = $model->destroy($id,$input);
@@ -419,12 +423,12 @@ class ProbabilidadRiesgoController extends BaseController
                     if($registrosImpacto == 0 && $registrosProbabilidad == 0){
                         $model->updateScene($input,null);
                     }
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Probabilidad eliminada'
-                        ]
-                    );
+                    // return $this->getResponse(
+                    //     [
+                    //         'error' => false,
+                    //         'msg' =>  'Probabilidad eliminada'
+                    //     ]
+                    // );
                 }else{
                     $input['estado'] = 1;
                     $input['is_deleted'] = 0;
@@ -433,6 +437,7 @@ class ProbabilidadRiesgoController extends BaseController
                     $model->update($id,$input);
                     return $this->getResponse(
                         [
+                            'error2' => $ex->getMessage(),
                             'error' => true,
                             'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]

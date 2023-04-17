@@ -43,10 +43,10 @@ class ValoracionRiesgoController extends BaseController
             $valida = $model -> validaValoracionRiesgo($input[0]);
             if(!$valida){
                 $result = $model->saveValoracionRiesgo($input);
-                $msg = 'Registrado Correctamente';
+                $msg = 'Registrado correctamente';
                 $error = 1;
             }else{
-                $msg = 'Valoracion de Riesgo ya registrada';
+                $msg = 'Valoracion de riesgo ya registrada';
                 $error = 0;
             }
             return $this->getResponse(
@@ -71,11 +71,23 @@ class ValoracionRiesgoController extends BaseController
         try {
             $input = $this->getRequestInput($this->request);
             $model = new MValoracionRiesgo();
+            $found = $model->validateValoracionRiesgo($input);
+
+            if(count($found) > 0){
+                return $this->getResponse(
+                    [
+                        'error' =>true,
+                        'msg' =>'Valoracion de riesgo ya registrada'
+                    ],
+                    ResponseInterface::HTTP_OK
+                );
+            }
             $result = $model->updateValoracionRiesgo($input);
         
             return $this->getResponse(
                 [
-                    'msg' =>  true
+                    'error' => false,
+                    'msg' =>  'Modificado correctamente'
                 ]
             );
             
@@ -101,6 +113,7 @@ class ValoracionRiesgoController extends BaseController
             if($found){
                 try {
                     $result = $model->delete($input[0]['id']);
+                    
                     if($result){
                         $this->db->transRollback();
                         $data['date_deleted'] = date("Y-m-d H:i:s");

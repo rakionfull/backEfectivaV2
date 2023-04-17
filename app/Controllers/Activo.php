@@ -896,7 +896,7 @@ class Activo extends BaseController
                 );
              }
             $result = $model->updateTipoActivo($input);
-            $categorias = $categoriaActivoModel->where('idtipo',$input[0]['id'])->findAll();
+            $categorias = $categoriaActivoModel->where('idtipo_activo',$input[0]['id'])->findAll();
             if($categorias != null){
                 foreach ($categorias as $item) {
                     $categoriaActivoModel->update($item['id'],['estado' => $input[0]['estado']]);
@@ -931,16 +931,20 @@ class Activo extends BaseController
         $this->db->transBegin();
         try{
             if($found){
-                if($model->delete($input[0]['id'])){
-                    $this->db->transRollback();
+                $result = $model->deleteTipoActivo('tipo_activo',$input[0]['id']);
+                //if($model->delete($input[0]['id'])){
+                if($result){
+                    // $this->db->transRollback();
+                    $data['date_deleted'] = date("Y-m-d H:i:s");
+                    $data['id_user_deleted'] = $input['user'];
                     $data['is_deleted'] = 1;
                     $model->update($input[0]['id'],$data);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Eliminado Correctamente'
-                        ]
-                    );
+                    // return $this->getResponse(
+                    //     [
+                    //         'error' => false,
+                    //         'msg' =>  'Eliminado Correctamente'
+                    //     ]
+                    // );
                 }else{
                     $data['is_deleted'] = 0;
                     $data['date_deleted'] = null;
@@ -949,6 +953,7 @@ class Activo extends BaseController
                     return $this->getResponse(
                         [
                             'error' => true,
+                            // 'error2' =>  $ex->getMessage(),
                             'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
                     );

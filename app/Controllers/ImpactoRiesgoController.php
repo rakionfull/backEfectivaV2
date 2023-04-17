@@ -406,8 +406,10 @@ class ImpactoRiesgoController extends BaseController
 
         try {
             if($model){
-                if($model->delete($id)){
-                    $this->db->transRollback();
+                $result = $model->deleteImpactoRiesgo('impacto_riesgo',$id);
+                // if($model->delete($id)){
+                    if($result){
+                    // $this->db->transRollback();
                     $input['estado'] = 2;
                     $input['is_deleted'] = 1;
                     $model->update($id,$input);
@@ -418,12 +420,12 @@ class ImpactoRiesgoController extends BaseController
                     if($registrosProbabilidad == 0 && $registrosImpacto == 0){
                         $modelProbabilidad->updateScene($input,null);
                     }
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Impacto de riesgo eliminado'
-                        ]
-                    );
+                    // return $this->getResponse(
+                    //     [
+                    //         'error' => false,
+                    //         'msg' =>  'Impacto de riesgo eliminado'
+                    //     ]
+                    // );
                 }else{
                     $input['estado'] = 1;
                     $input['is_deleted'] = 0;

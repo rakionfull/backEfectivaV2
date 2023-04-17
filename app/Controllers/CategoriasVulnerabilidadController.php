@@ -126,16 +126,17 @@ class CategoriasVulnerabilidadController extends BaseController
         $this->db->transBegin();
         try {
             if($found){
-                if($model->delete($id)){
-                    $this->db->transRollback();
+                $result = $model->deleteCategoriaVulnerabilidad('categoria_vulnerabilidad',$id);
+                if($result){
+                    // $this->db->transRollback();
                     $input['is_deleted'] = 1;
                     $model->update($id,$input);
-                    return $this->getResponse(
-                        [
-                            'error' => false,
-                            'msg' =>  'Categoria de vulnerabilidad eliminado'
-                        ]
-                    );
+                    // return $this->getResponse(
+                    //     [
+                    //         'error' => false,
+                    //         'msg' =>  'Categoria de vulnerabilidad eliminado'
+                    //     ]
+                    // );
                 }else{
                     $input['is_deleted'] = 0;
                     $input['date_deleted'] = null;
@@ -143,7 +144,7 @@ class CategoriasVulnerabilidadController extends BaseController
                     $model->update($id,$input);
                     
                     return $this->getResponse(
-                        [
+                        [   'error2' =>  $ex->getMessage(),
                             'error' => true,
                             'msg' =>  'No se puede eliminar el registro porque esta siendo usado en algún proceso.'
                         ]
