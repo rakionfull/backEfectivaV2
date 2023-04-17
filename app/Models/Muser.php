@@ -208,6 +208,11 @@ class Muser extends Model
         $query = $this->db->query("SELECT * FROM tb_users where estado_us='1' and idempresa={$data}");
         return $query->getResultArray();
     }
+    public function getUserByArea($id_area){
+
+        $query = $this->db->query("SELECT * FROM tb_users where estado_us='1' and idarea={$id_area}");
+        return $query->getResultArray();
+    }
     public function getUserNombreByActivo(){
 
         $query = $this->db->query("SELECT * FROM tb_users where estado_us='1'");

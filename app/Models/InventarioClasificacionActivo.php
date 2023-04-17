@@ -99,7 +99,15 @@ class InventarioClasificacionActivo extends Model
             if($data['estado'] == '2'){
                 // return $data;
                 //recuperar el correo del usuario?
-                $response = $this->sendMail($result[0]->id,"jbazant@valtx.pe");
+                $mUser = new Muser();
+                $user = $mUser->getUserbyId($data['id_user_added']);
+                $usersbyarea = $mUser->getUserByArea($data['idarea']);
+                $bcc = array();
+                foreach ($usersbyarea as $item) {
+                    array_push($bcc,$item['email_us']);
+                }
+
+                $response = $this->sendMail($result[0]->id,$user->email_us,$bcc);
                 return $response;
             }
             return true;
@@ -166,18 +174,34 @@ class InventarioClasificacionActivo extends Model
             $data['estado_2']
         ]);
         if($result){
-            if($data['estado'] == '2' || $data['estado'] == '3'){
-                // return $data;
-                // send email area seguridad informacion
-                $response = $this->sendMail($id,"jbazant@valtx.pe");
-                return $response;
+            $mUser = new Muser();
+            $ica = $this->getById($id);
+            if($ica[0]['id_user_added'] != $data['id_user_updated']){
+                if($data['estado'] == '3' || $data['estado'] == '4' ){ //estado observar - aprobar
+                    $mUser = new Muser();
+                    $user = $mUser->getUserbyId($ica[0]['id_user_added']);
+                    $this->sendMail($id,$user->email_us);
+                }
+            }else{
+                if($data['estado'] == '2' || $data['estado'] == '3'){
+                    // return $data;
+                    // send email area seguridad informacion
+                    $user = $mUser->getUserbyId($data['id_user_added']);
+                    $usersbyarea = $mUser->getUserByArea($data['idarea']);
+                    $bcc = array();
+                    foreach ($usersbyarea as $item) {
+                        array_push($bcc,$item['email_us']);
+                    }
+                    $response = $this->sendMail($id,$user->email_us,$bcc);
+                    return $response;
+                }
             }
             return true;
         }
         return false;
     }
 
-    public function sendMail($id,$mail){
+    public function sendMail($id,$mail,$bcc = array()){
         try {
             $sql = "call sp_get_info_to_email(?)";
             $result = $this->db->query($sql,[
@@ -187,7 +211,9 @@ class InventarioClasificacionActivo extends Model
                 log_message('info','Aquie sta');
                 $email = \Config\Services::email();
                 $email->setTo($mail);
-                $email->setBCC($mail);
+                if(count($bcc)>0){
+                    $email->setBCC($bcc);
+                }
                 $email->setFrom('jbazant@valtx.pe', 'Inventario Clasificacion Activo registrado');
                 $email->setSubject('Inventario Clasificacion Activo registrado');
                 $email->setMessage(
@@ -244,6 +270,7 @@ class InventarioClasificacionActivo extends Model
                 $data['id_valor_val']
             ]);
             if($result){
+               
                 return true;
             }
             return false;
@@ -262,6 +289,12 @@ class InventarioClasificacionActivo extends Model
                 $data['id_user_updated'],
             ]);
             if($result){
+                $ica = $this->getById($id);
+                if($ica[0]['estado'] == '3' || $ica[0]['estado'] == '4'){
+                    $mUser = new Muser();
+                    $user = $mUser->getUserbyId($ica[0]['id_user_added']);
+                    $this->sendMail($id,$user->email_us);
+                }
                 return true;
             }
             return false;

@@ -29,7 +29,7 @@ class BaseController extends Controller
      * @var CLIRequest|IncomingRequest
      */
     protected $request;
-    protected $helpers = ['tools','jwt','log','calificar'];
+    // protected $helpers = ['tools','jwt','log','calificar'];
     public $db;
 
     /**

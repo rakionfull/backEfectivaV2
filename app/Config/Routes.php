@@ -53,8 +53,10 @@ $routes->post('/register', 'Register::register', ['filter' => 'authFilter']);
   $routes->get('Task','Task::mensaje');
 // $routes->post('addProbabilidadRiesgo1','ProbabilidadRiesgoController::store_escenario_1');
 // $routes->delete('deleteMacroproceso', 'Activo::deleteMacroproceso',['filter' => 'authFilter']);
-
+// $routes->post('addInventarioClasificacionActivo','InventarioClasificacionActivoController::store');
 // http://localhost:8080/api/
+// $routes->post('updateStatus/(:num)','InventarioClasificacionActivoController::updateStatus/$1');
+
 $routes->group('/api',['namespace' => 'App\Controllers'], function ($routes) {
     $routes->post('logout/(:num)', 'Login::logout/$1',['filter' => 'authFilter']);
     
